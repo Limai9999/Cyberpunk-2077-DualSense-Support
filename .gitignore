@@ -1,0 +1,4 @@
+*.log
+*.sqlite3
+dataFromDSX.json
+settings.json
