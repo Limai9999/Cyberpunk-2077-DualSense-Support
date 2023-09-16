@@ -1,0 +1,14 @@
+LeftTrigger=Resistance
+RightTrigger=Resistance
+VibrateTriggerIntensity=0
+CustomTriggerValueLeftMode=OFF
+CustomTriggerValueRightMode=OFF
+ForceLeftTrigger=(1)(1)
+ForceRightTrigger=(1)(1)
+TouchpadLED=(161)(161)(0)
+PlayerLED=(True)(True)(True)(True)(True)
+PlayerLEDNewRevision=(Five)
+TriggerThreshold=(0)(0)
+MicLED=(Pulse)
+UDPSplit=true
+UDPLogs=true
