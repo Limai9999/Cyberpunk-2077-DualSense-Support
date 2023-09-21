@@ -16,6 +16,7 @@ local function SetupNativeSettings()
     local weaponsList = modName..'/weaponsList'
     local vehicles = modName..'/vehicles'
     local vehiclesList = modName..'/vehiclesList'
+    local menu = modName..'/menu'
     local braindance = modName..'/braindance'
     local extraSettings = modName..'/extraSettings'
     local fixProblems = modName..'/fixProblems'
@@ -109,6 +110,18 @@ local function SetupNativeSettings()
 
     NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-Notifications'), GetText('Mod-DualSense-NS-Notifications-Description') .. ' ' .. GetText('Mod-DualSense-NS-OnlySteamDSX'), config.showNotifications, true, function(state)
         config.showNotifications = state
+        ManageSettings.saveFile(config)
+    end)
+
+    -- TODO, TRANSLATE
+    local menuLoc = 'Menu'
+    local enableTriggersLoc = 'Enable Trigger Effects'
+    local enableTriggersDescriptionLoc = 'Enable Trigger Effects for'
+
+    NS.addSubcategory(menu, menuLoc)
+
+    NS.addSwitch(menu, enableTriggersLoc, enableTriggersDescriptionLoc .. ' ' .. menuLoc, config.menuTriggers, true, function(state)
+        config.menuTriggers = state
         ManageSettings.saveFile(config)
     end)
 
@@ -289,6 +302,11 @@ local function SetupNativeSettings()
 
     -- debug
     NS.addSubcategory(debug, GetText('Mod-DualSense-NS-Subcategory-Debug'))
+
+    NS.addSwitch(debug, 'show weapon states', 'xyeta', config.showWeaponStates, false, function(state)
+        config.showWeaponStates = state
+        ManageSettings.saveFile(config)
+    end)
 
     NS.addSwitch(debug, GetText('Mod-DualSense-NS-EnableDebugLogs'), GetText('Mod-DualSense-NS-EnableDebugLogs-Descr'), config.debugLogs, false, function(state)
         config.debugLogs = state

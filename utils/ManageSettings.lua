@@ -27,6 +27,8 @@ local defaultConfig = {
     flickerOnCollisionsPlayerLED = true,
     vehiclePlayerLEDValue = 1,
     micLED = true,
+    menuTriggers = true,
+    showWeaponStates = false,
 }
 
 local filePath = 'config/settings.json'

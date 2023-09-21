@@ -1,14 +1,16 @@
-local function MenuMode(data, menu, subMenu)
+local function MenuMode(data, config, menu, subMenu)
     if (menu == 'NetworkBreach') then
         data.touchpadLED = '(192)(236)(7)'
     elseif (menu == 'Hub') then
         if (subMenu == 'Credits') then
             data.touchpadLED = '(0)(0)(0)'
         elseif (subMenu == 'Customization' or subMenu == 'Attributes' or subMenu == 'Summary' or subMenu == 'Map' or subMenu == 'Inventory') then
-            data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(1)(1)'
-            data.rightTriggerType = 'Resistance'
-            data.rightForceTrigger = '(1)(1)'
+            if (config.menuTriggers) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(1)(1)'
+                data.rightTriggerType = 'Resistance'
+                data.rightForceTrigger = '(1)(1)'
+            end
 
             if (subMenu == 'Summary') then
                 data.touchpadLED = '(59)(218)(255)'

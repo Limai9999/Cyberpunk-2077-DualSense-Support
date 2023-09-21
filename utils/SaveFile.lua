@@ -159,6 +159,7 @@ local function SaveFile(type, data, weaponType, weaponName, vehicleVal)
         '\nPlayerLEDNewRevision=' .. objData.playerLEDNewRevision ..
         '\nTriggerThreshold=' .. objData.triggerThreshold ..
         '\nMicLED=' .. objData.micLED ..
+        '\nResetToUserSettings=' .. tostring(not settings.enableMod) ..
         '\nUDPSplit=true' .. -- not used in dsx
         '\nUDPLogs=' .. tostring(settings.UDPdebugLogs) -- not used in dsx
 

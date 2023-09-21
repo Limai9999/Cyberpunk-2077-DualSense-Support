@@ -144,7 +144,7 @@ registerForEvent('onInit', function()
     -- saves default config on game launch
     SaveFile('default', {}, 'noWeaponType', 'noWeaponName', 'noVehicle')
 
-    Cron.Every(6, function()
+    Cron.Every(4, function()
         local config = ManageSettings.openFile()
         if (not UDPClientInstalled or UDPDataExists or not config.UDPautostart) then return end
         if (not UDPDataExists) then
@@ -272,6 +272,7 @@ registerForEvent('onUpdate', function(delta)
         overwriteRGB = true,
         overwritePlayerLED = true,
         canUseWeaponReloadEffect = true,
+        canUseNoAmmoWeaponEffect = true,
         overrideDefault = true,
         vehicleModeIndex = 0,
         type = 'default'
@@ -297,9 +298,9 @@ registerForEvent('onUpdate', function(delta)
         data.micLED = '(Pulse)'
     end
 
-    if (isMainMenu) then
-        local config = ManageSettings.openFile()
+    local config = ManageSettings.openFile()
 
+    if (isMainMenu) then
         local val = SettingsCheckData[config.weaponsSettings['default'].value]
 
         data.micLED = '(On)'
@@ -322,16 +323,17 @@ registerForEvent('onUpdate', function(delta)
 
     if (inMenu) then
         data.touchpadLED = '(170)(0)(0)'
-        if (menu or subMenu) then data = HandleMenu(data, menu, subMenu) end
-        return SaveFile('menu', data, tostring(menu)..tostring(subMenu), 'menu', 'noVehicle')
+        if (menu or subMenu) then data = HandleMenu(data, config, menu, subMenu) end
+
+        local sendString = data.micLED .. data.touchpadLED .. data.playerLED .. tostring(config.enableMod) .. tostring(config.UDPdebugLogs) .. tostring(menu)..tostring(subMenu)
+
+        return SaveFile('menu', data, sendString, 'menu', 'noVehicle')
     end
 
     -- player object
     local player = Game.GetPlayer()
     -- if no player obj, code doesn't execute
     if (player == nil) then return end
-
-    local config = ManageSettings.openFile()
 
     local inCombat = player.inCombat
     local inCrouch = player.inCrouch
@@ -340,7 +342,6 @@ registerForEvent('onUpdate', function(delta)
     local inCyberspace = GameUI.IsCyberspace()
     local isPhotoMode = GameUI.IsPhoto()
     local isNCPDChasing = GetWantedLevel() > 0
-
 
     if (isPhotoMode) then
         data.touchpadLED = '(243)(230)(0)'
