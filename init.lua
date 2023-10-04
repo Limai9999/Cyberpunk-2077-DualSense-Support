@@ -680,6 +680,9 @@ registerForEvent('onUpdate', function(delta)
     local noAmmoCheckList = Array {'Wea_Rifle', 'Wea_ShotgunDual', 'Wea_LightMachineGun', 'Wea_HeavyMachineGun', 'Wea_SubmachineGun', 'Wea_Shotgun', 'Wea_Revolver', 'Wea_Handgun', 'Wea_SniperRifle', 'Wea_PrecisionRifle'}
 
     local weapon = WeaponsList[weaponType]
+    local stamina = GetState('Stamina')
+
+    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina) end
 
     if (not weapon) then
         weapon = WeaponsList['default']
@@ -703,11 +706,11 @@ registerForEvent('onUpdate', function(delta)
         sendingWeaponType = sendingWeaponType .. 'IsAiming'
     end
 
-    if (weaponState == 4) then weaponState = 0 end
+    if (weaponState == 4 and data.canUseNoAmmoWeaponEffect) then weaponState = 0 end
 
     if (weaponType ~= 'default') then
         local magazineAmmo = weaponHand:GetMagazineAmmoCount()
-        if (magazineAmmo == 0) then
+        if (magazineAmmo == 0 and data.canUseNoAmmoWeaponEffect) then
             data.canUseWeaponReloadEffect = true
         end
 
@@ -717,7 +720,7 @@ registerForEvent('onUpdate', function(delta)
         end
     end
 
-    if (noAmmoCheckList[weaponType]) then
+    if (noAmmoCheckList[weaponType] and data.canUseNoAmmoWeaponEffect) then
         local isEmpty = IsMagazineEmpty(weaponHand)
 
         if (isEmpty and weaponState ~= 2) then
