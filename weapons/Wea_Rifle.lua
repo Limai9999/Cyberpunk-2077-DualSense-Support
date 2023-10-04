@@ -77,6 +77,28 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
         end
+    elseif (name == 'w_special__militech_hercules') then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(3)(6)(5)'
+
+        if (isAiming) then
+            if (state == 8) then
+                freq = GetFrequency(6, dilated)
+
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
+
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
+            end
+        else
+            if (state == 8) then
+                freq = GetFrequency(10, dilated)
+
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+            end
+        end
     else
         freq = GetFrequency(11, dilated)
 

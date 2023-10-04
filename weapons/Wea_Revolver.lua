@@ -15,7 +15,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             end
         end
 
-        if (triggerType == 'Charge') then
+        if (triggerType == 'Charge' or triggerType == 'FullAuto') then
             if (state == 1) then
                 data.rightTriggerType = 'Galloping'
 
@@ -67,13 +67,43 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             data.leftForceTrigger = '(1)(4)'
         end
 
-        if (state == 8) then
-            data.leftForceTrigger = '(1)(6)'
-            data.rightForceTrigger = '(0)(7)(7)(7)'
+        if (triggerType == 'SemiAuto') then
+            if (state == 8) then
+                data.leftForceTrigger = '(1)(6)'
+                data.rightForceTrigger = '(0)(8)(7)(7)'
+            end
+        elseif (triggerType == 'Charge') then
+            if (state == 1) then
+                freq = GetFrequency(12, dilated)
+                data.rightTriggerType = 'Galloping'
+                data.rightForceTrigger = '(3)(9)(5)(7)('.. freq ..')'
+            end
+
+            if (state == 2 or state == 4 or state == 8) then
+                data.leftForceTrigger = '(1)(6)'
+
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(0)(8)(8)(8)'
+            end
         end
 
         data.canUseWeaponReloadEffect = false
         data.canUseNoAmmoWeaponEffect = false
+    elseif (name == 'w_revolver_techtronika_metel') then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(1)(1)'
+
+        if (isAiming) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(3)(5)(8)'
+        else
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(3)(4)(6)'
+        end
+
+        if (state == 8) then
+            data.leftForceTrigger = '(1)(4)'
+        end
     end
 
     return data

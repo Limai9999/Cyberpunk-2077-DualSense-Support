@@ -4,34 +4,11 @@ local function Weapon(data, name, isAiming, _, dilated)
     data.leftTriggerType = 'Normal'
     data.rightTriggerType = 'Normal'
 
-    local state = GetState('MeleeWeapon')
+    local bodyCarryingState = GetState('BodyCarrying')
 
-    if (name == 'w_melee_one_hand_blunt') then
-        data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(1)(1)'
+    if (bodyCarryingState == 1 or bodyCarryingState == 5 or bodyCarryingState == 6) then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(3)(5)(5)'
-
-        if (state == 9 or state == 7) then
-            local freq = GetFrequency(8, dilated)
-
-            data.leftTriggerType = 'Machine'
-            data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
-        end
-
-        if (state == 7) then
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(2)(7)(1)'
-        elseif (state == 6) then
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(6)(7)(7)'
-        elseif (state == 14) then
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(4)(7)(8)'
-        elseif (state == 18) then
-            data.leftTriggerType = 'Choppy'
-            data.rightTriggerType = 'Normal'
-        end
+        data.rightForceTrigger = '(0)(4)(5)(5)'
 
         data.overrideDefault = false
     end

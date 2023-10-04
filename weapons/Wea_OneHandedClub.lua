@@ -23,7 +23,7 @@ local function Weapon(data, name, isAiming, _, dilated)
     local freq = 0
 
     if (name == 'w_melee_baton') then
-        if (state == 6) then
+        if (state == 6 or state == 7) then
             if (isAiming) then
                 freq = GetFrequency(7, dilated)
             else

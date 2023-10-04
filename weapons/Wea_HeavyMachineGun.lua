@@ -3,12 +3,11 @@ local function Weapon(data, name, isAiming, state, dilated)
 
     local freq = 0
 
-    if (state ~= 7) then
-        freq = GetFrequency(6, dilated)
-        data.leftTriggerType = 'Choppy'
-        data.rightTriggerType = 'Machine'
-        data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
-    else
+    data.leftTriggerType = 'Choppy'
+    data.rightTriggerType = 'Bow'
+    data.rightForceTrigger = '(0)(4)(5)(4)'
+
+    if (state == 7) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(8)'
         freq = GetFrequency(25, dilated)
@@ -17,9 +16,12 @@ local function Weapon(data, name, isAiming, state, dilated)
     end
 
     if (state == 8) then
-        freq = GetFrequency(2, dilated)
         data.leftTriggerType = 'Galloping'
-        data.leftForceTrigger = '(4)(9)(6)(7)('.. freq ..')'
+        data.leftForceTrigger = '(4)(9)(2)(3)(2)'
+
+        freq = GetFrequency(6, dilated)
+        data.rightTriggerType = 'Machine'
+        data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
     end
 
     return data

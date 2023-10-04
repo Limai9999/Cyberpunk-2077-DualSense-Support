@@ -10,13 +10,15 @@ local function Weapon(data, name, isAiming, state, dilated)
 
     if (name == 'w_lmg_constitutional_defender') then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(3)(5)(6)'
+        data.rightForceTrigger = '(0)(3)(7)(7)'
 
         if (state == 8) then
-            freq = GetFrequency(8, dilated)
+            freq = GetFrequency(10, dilated)
             local leftFreq = math.floor(freq / 2)
+
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(4)(9)(1)(2)('.. leftFreq ..')(0)'
+
             data.rightTriggerType = 'AutomaticGun'
             data.rightForceTrigger = '(4)(8)('.. freq ..')'
         end

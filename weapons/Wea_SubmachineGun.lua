@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated)
+local function Weapon(data, name, isAiming, state, dilated, triggerType)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SubmachineGun')
 
     local freq = 0
@@ -37,7 +37,7 @@ local function Weapon(data, name, isAiming, state, dilated)
         data.rightForceTrigger = '(2)(4)(4)'
 
         if (state == 8) then
-            freq = GetFrequency(10, dilated)
+            freq = GetFrequency(9, dilated)
 
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(4)(9)(1)(1)('.. freq ..')(0)'
@@ -68,6 +68,36 @@ local function Weapon(data, name, isAiming, state, dilated)
             freq = GetFrequency(15, dilated)
             data.rightTriggerType = 'AutomaticGun'
             data.rightForceTrigger = '(4)(6)('.. freq ..')'
+        end
+    elseif (name == 'w_submachinegun_krausser_warden') then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(1)(4)(4)(4)'
+
+        if (triggerType == 'FullAuto') then
+            if (state == 8) then
+                freq = GetFrequency(7, dilated)
+    
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'
+            end
+        elseif (triggerType == 'Burst') then
+            freq = GetFrequency(16, dilated)
+
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+        end
+    elseif (name == 'w_smg_midnight_borg') then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(1)(4)(6)(6)'
+
+        if (state == 8) then
+            freq = GetFrequency(7, dilated)
+
+            data.leftTriggerType = 'Machine'
+            data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
+
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
         end
     else
         freq = GetFrequency(15, dilated)

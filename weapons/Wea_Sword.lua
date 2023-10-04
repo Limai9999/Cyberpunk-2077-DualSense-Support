@@ -2,33 +2,51 @@ local function Weapon(data, name, isAiming, _, dilated)
     data.type = 'Sword'
 
     local stamina = GetState('Stamina')
-    local meleeState = GetState('MeleeWeapon')
+    local state = GetState('MeleeWeapon')
 
-    data.leftTriggerType = 'Resistance'
-    data.leftForceTrigger = '(1)(1)'
-    data.rightTriggerType = 'Choppy'
-    -- data.rightForceTrigger = '(1)(1)'
-
-    if (stamina == 1) then
-        data.leftForceTrigger = '(1)(5)'
-        data.rightForceTrigger = '(1)(5)'
-    end
-
-    if (meleeState == 7) then
-        data.rightTriggerType = 'Resistance'
-        data.rightForceTrigger = '(2)(4)'
-        if (stamina == 1) then data.rightForceTrigger = '(2)(7)' end
-    end
+    data.leftTriggerType = 'Bow'
+    data.leftForceTrigger = '(0)(2)(4)(1)'
+    data.rightTriggerType = 'Bow'
+    data.rightForceTrigger = '(0)(3)(4)(1)'
 
     if (isAiming) then
-        data.rightTriggerType = 'Resistance'
-        data.rightForceTrigger = '(1)(5)'
-        if (stamina == 1) then data.rightForceTrigger = '(1)(8)' end
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(5)(2)(1)'
     end
 
-    if (meleeState == 19) then
-      data.leftTriggerType = 'Resistance'
-      data.leftForceTrigger = '(2)(7)'
+    if (state == 7 or state == 13) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(6)(4)(6)'
+    end
+
+    if (state == 8) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(6)(1)'
+    end
+
+    if (state == 10) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(0)(3)'
+    end
+
+    if (state == 11) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(5)(3)(1)'
+    end
+
+    if (state == 12) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(7)(3)(5)'
+    end
+
+    if (state == 15) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(0)(4)'
+    end
+
+    if (state == 19 or state == 20) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(2)(7)'
     end
 
     return data

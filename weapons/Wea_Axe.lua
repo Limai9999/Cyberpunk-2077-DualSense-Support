@@ -19,7 +19,7 @@ local function Weapon(data, name, isAiming, _, dilated)
     end
 
     if (name == 'w_melee_one_hand_blunt') then
-        if (state == 7) then
+        if (state == 7 or state == 13) then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(3)(8)(1)(3)'
         end
@@ -41,6 +41,16 @@ local function Weapon(data, name, isAiming, _, dilated)
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(0)(2)'
             end
+        end
+
+        if (state == 11) then
+            data.rightTriggerType = 'Resistance'
+            data.rightForceTrigger = '(0)(2)'
+        end
+
+        if (state == 12) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(3)(6)(6)'
         end
 
         if (state == 19) then

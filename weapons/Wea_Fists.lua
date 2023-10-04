@@ -21,7 +21,7 @@ local function Weapon(data, name, isAiming)
         data.rightForceTrigger = '(0)(2)(7)(8)'
     end
 
-    if (state == 6) then
+    if (state == 6 or state == 7) then
         data.rightTriggerType = 'Resistance'
         data.rightForceTrigger = '(2)(6)'
         if (stamina == 1) then data.rightForceTrigger = '(2)(8)' end
@@ -33,7 +33,12 @@ local function Weapon(data, name, isAiming)
         if (stamina == 1) then data.rightForceTrigger = '(0)(7)(8)(8)' end
     end
 
-    if (state == 19) then
+    if (state == 15) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(1)(4)'
+    end
+
+    if (state == 19 or state == 20) then
       data.leftTriggerType = 'Resistance'
       data.leftForceTrigger = '(2)(7)'
     end

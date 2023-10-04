@@ -264,6 +264,8 @@ local function SetupNativeSettings()
     for key, value in pairs(config.weaponsSettings) do
         local weaponName = WeaponsList[key]({}).type
 
+        -- print('Gameplay-RPG-Items-Types-' .. key, GetText('Gameplay-RPG-Items-Types-' .. key))
+
         local list = {}
 
         if (GameLanguage ~= 'en-us') then
