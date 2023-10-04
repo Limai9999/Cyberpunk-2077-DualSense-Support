@@ -12,10 +12,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightForceTrigger = '(0)(3)(5)(6)'
 
         if (triggerType == 'FullAuto') then
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(4)(2)'
+
             if (state == 8) then
                 freq = GetFrequency(9, dilated)
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
                 data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(2)(9)(7)(7)('.. freq ..')(0)'
+                data.rightForceTrigger = '(3)(9)(7)(7)('.. freq ..')(0)'
             end
         elseif (triggerType == 'SemiAuto') then
             data.rightTriggerType = 'Bow'
@@ -29,17 +34,39 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
     elseif (name == 'w_rifle_assault_arasaka_masamune') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(5)(5)'
+
+        if (isAiming) then
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(5)(3)'
+        end
+
         if (state == 8) then
             freq = GetFrequency(10, dilated)
+            data.leftTriggerType = 'Machine'
+            data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
         end
     elseif (name == 'w_rifle_assault_nokota_sidewinder') then
-        freq = GetFrequency(9, dilated)
-        data.rightForceTrigger = '(5)(9)(7)(7)('.. freq ..')(0)'
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(2)(5)(4)(6)'
+
+        if (state == 8) then
+            freq = GetFrequency(10, dilated)
+
+            data.leftTriggerType = 'Machine'
+            data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(5)(9)(6)(6)('.. freq ..')(0)'
+        end
     elseif (name == 'w_rifle_assault_nokota_copperhead') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(4)(5)'
+
+        if (isAiming) then
+          data.leftTriggerType = 'Resistance'
+          data.leftForceTrigger = '(6)(2)'
+        end
 
         if (state == 8) then
             freq = GetFrequency(11, dilated)

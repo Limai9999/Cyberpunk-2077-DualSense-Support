@@ -9,7 +9,7 @@ local function Weapon(data, name, isAiming, state, dilated)
 
     if (meleeState == 7) then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(2)(7)(1)'
+        data.rightForceTrigger = '(0)(4)(7)(1)'
     elseif (meleeState == 6) then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(6)(3)'

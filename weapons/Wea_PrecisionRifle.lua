@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated)
+local function Weapon(data, name, isAiming, state, dilated, triggerType)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_PrecisionRifle')
 
     data.leftTriggerType = 'Resistance'
@@ -17,18 +17,32 @@ local function Weapon(data, name, isAiming, state, dilated)
             data.rightForceTrigger = '(1)(7)(7)(8)'
         end
     elseif (name == 'w_rifle_precision_militech_achilles') then
+        data.canUseWeaponReloadEffect = false
+        data.canUseNoAmmoWeaponEffect = false
+
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(1)(6)(6)(6)'
-        if (state == 1) then
-            data.leftTriggerType = 'Galloping'
-            data.leftForceTrigger = '(3)(9)(3)(7)(3)'
-            freq = GetFrequency(18, dilated)
-            data.rightTriggerType = 'Galloping'
-            data.rightForceTrigger = '(3)(9)(3)(7)('.. freq ..')'
-        elseif (isAiming and state == 8) then
-            freq = GetFrequency(2, dilated)
-            data.rightTriggerType = 'AutomaticGun'
-            data.rightForceTrigger = '(4)(8)('.. freq ..')'
+        data.rightForceTrigger = '(1)(6)(3)(1)'
+
+        if (triggerType == 'Burst' and state == 8) then
+            freq = GetFrequency(5, dilated)
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(2)(9)(7)(7)('.. freq ..')(0)'
+        end
+
+        if (triggerType == 'Charge') then
+            if (state == 1) then
+                data.leftTriggerType = 'Galloping'
+                data.leftForceTrigger = '(3)(9)(3)(7)(3)'
+                freq = GetFrequency(18, dilated)
+                data.rightTriggerType = 'Galloping'
+                data.rightForceTrigger = '(3)(9)(3)(7)('.. freq ..')'
+            end
+
+            if (state == 8) then
+                freq = GetFrequency(5, dilated)
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+            end
         end
     elseif (name == 'w_rifle_precision_midnight_sor22') then
         data.leftTriggerType = 'Resistance'
