@@ -262,7 +262,10 @@ local function SetupNativeSettings()
     NS.addSubcategory(weaponsList, GetText('Mod-DualSense-NS-Subcategory-WeaponsList') .. ' - ' .. 'Not recommended')
 
     for key, value in pairs(config.weaponsSettings) do
-        local weaponName = WeaponsList[key]({}).type
+        local weapon = WeaponsList[key]
+        if (weapon == nil) then goto continue end
+
+        local weaponName = weapon({}).type
 
         -- print('Gameplay-RPG-Items-Types-' .. key, GetText('Gameplay-RPG-Items-Types-' .. key))
 
@@ -300,6 +303,8 @@ local function SetupNativeSettings()
             config.weaponsSettings[key].value = v
             ManageSettings.saveFile(config)
         end)
+
+        ::continue::
     end
 
     -- debug
