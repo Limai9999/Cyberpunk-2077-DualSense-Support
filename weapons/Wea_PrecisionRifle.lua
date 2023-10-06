@@ -45,10 +45,18 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             end
         end
     elseif (name == 'w_rifle_precision_midnight_sor22') then
+        data.canUseNoAmmoWeaponEffect = false
+
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(3)'
+
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(1)(4)(6)(6)'
+        data.rightForceTrigger = '(1)(3)(8)(6)'
+
+        if (state == 8) then
+            data.leftForceTrigger = '(1)(6)'
+            data.rightForceTrigger = '(3)(7)(8)(6)'
+        end
     end
 
     return data

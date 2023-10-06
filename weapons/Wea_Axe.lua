@@ -30,7 +30,6 @@ local function Weapon(data, name, isAiming, _, dilated)
             if (flipTriggerActive and savedFlipTriggerTimes <= maxFlipTriggerTimes) then
                 if (savedFlipTriggerTimes >= maxFlipTriggerTimes / 2) then
                     data.leftTriggerType = 'Normal'
-                    data.rightTriggerType = 'Normal'
                 else
                     data.leftTriggerType = 'Resistance'
                     data.leftForceTrigger = '(0)(5)'

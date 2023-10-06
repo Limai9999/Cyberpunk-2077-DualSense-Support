@@ -1,3 +1,7 @@
+local weaponFireTriggerAppliedTimes = 0
+local savedWeaponName = ''
+local savedWeaponState = 0
+
 local function Weapon(data, name, isAiming, state, dilated, triggerType)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SniperRifle')
 
@@ -5,6 +9,13 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
     data.leftForceTrigger = '(1)(3)'
     data.rightTriggerType = 'SemiAutomaticGun'
     data.rightForceTrigger = '(2)(5)(8)'
+
+    if (savedWeaponName ~= name or savedWeaponState ~= state) then
+        weaponFireTriggerAppliedTimes = 0
+    end
+
+    savedWeaponName = name
+    savedWeaponState = state
 
     local freq = 0
 
@@ -15,7 +26,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         if (state == 8) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(7)'
-            data.rightForceTrigger = '(7)(8)(8)(8)'
+            data.rightForceTrigger = '(5)(8)(8)(8)'
         end
 
         if (state == 2 or state == 4) then
@@ -87,22 +98,34 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(8)(7)'
 
+        if (state ~= 1) then GetChargeTrigger(name, dilated, true) end
+
         if (triggerType == 'SemiAuto') then
             if (state == 8) then
-                data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(0)(8)(3)(8)'
+                if (weaponFireTriggerAppliedTimes <= 20 or (weaponFireTriggerAppliedTimes <= 40 and dilated)) then
+                    freq = GetFrequency(2, dilated)
+                    data.rightTriggerType = 'AutomaticGun'
+                    data.rightForceTrigger = '(4)(8)('.. freq ..')'
+
+                    weaponFireTriggerAppliedTimes = weaponFireTriggerAppliedTimes + 1
+                end
             end
         elseif (triggerType == 'Charge') then
             if (state == 1) then
-                freq = GetFrequency(15, dilated)
+                freq = GetChargeTrigger(name, dilated, false)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
             elseif (state == 8 or state == 4) then
-                data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(1)(8)'
+                if (weaponFireTriggerAppliedTimes <= 25 or (weaponFireTriggerAppliedTimes <= 50 and dilated)) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(1)(8)'
+    
+                    freq = GetFrequency(2, dilated)
+                    data.rightTriggerType = 'AutomaticGun'
+                    data.rightForceTrigger = '(4)(8)('.. freq ..')'
 
-                data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(0)(8)(8)(8)'
+                    weaponFireTriggerAppliedTimes = weaponFireTriggerAppliedTimes + 1
+                end
             end
         end
     end

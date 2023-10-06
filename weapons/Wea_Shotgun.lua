@@ -1,3 +1,8 @@
+local savedWeaponName = ''
+local resistanceEnabled = true
+local resistanceTimes = 0
+local maxResistanceTimes = 10
+
 local function Weapon(data, name, isAiming, state, dilated, triggerType)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Shotgun')
 
@@ -12,6 +17,13 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
 
     data.canUseWeaponReloadEffect = false
     data.canUseNoAmmoWeaponEffect = false
+
+    if (savedWeaponName ~= name or state ~= 8) then
+        resistanceEnabled = true
+        resistanceTimes = 0
+    end
+
+    savedWeaponName = name
 
     if (name == 'w_shotgun_budget_carnage') then
         data.leftForceTrigger = '(1)(3)'
@@ -50,15 +62,27 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(2)(6)(6)'
 
-        if (dilated) then
-          freq = GetFrequency(5, dilated)
-        else
-          freq = GetFrequency(4, dilated)
-        end
-
         if (state == 8) then
-            data.leftTriggerType = 'Galloping'
-            data.leftForceTrigger = '(2)(9)(0)(1)(1)'
+            if (dilated) then
+                freq = GetFrequency(5, dilated)
+            else
+                freq = GetFrequency(4, dilated)
+            end
+
+            if (resistanceEnabled) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(4)(1)'
+            else
+                data.leftTriggerType = 'Normal'
+            end
+
+            resistanceTimes = resistanceTimes + 1
+
+            if (dilated and resistanceTimes > maxResistanceTimes * 10 * TimeDilation or not dilated and resistanceTimes > maxResistanceTimes) then
+                resistanceEnabled = not resistanceEnabled
+                resistanceTimes = 0
+            end
+
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
         end

@@ -32,14 +32,14 @@ local function Weapon(data, name, isAiming, _, dilated)
 
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(3)(9)(3)(7)('.. freq ..')'
+        end
 
-            if (isAiming) then
-                data.leftTriggerType = 'Galloping'
-                data.leftForceTrigger = '(3)(9)(3)(7)('.. freq ..')'
-                data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(2)(4)(8)(5)'
-                if (stamina == 1) then data.rightForceTrigger = '(2)(4)(8)(8)' end
-            end
+        if (isAiming) then
+            data.leftTriggerType = 'Galloping'
+            data.leftForceTrigger = '(3)(9)(3)(7)('.. freq ..')'
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(2)(8)(5)'
+            if (stamina == 1) then data.rightForceTrigger = '(0)(2)(8)(8)' end
         end
     end
 

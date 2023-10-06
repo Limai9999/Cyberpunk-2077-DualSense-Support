@@ -13,14 +13,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.leftForceTrigger = '(0)(2)(3)(3)'
 
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(4)(4)(6)'
+        data.rightForceTrigger = '(0)(4)(3)(6)'
 
         if (state == 8) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(1)'
 
             data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(1)(6)(4)(6)'
+            data.rightForceTrigger = '(1)(7)(2)(6)'
         end
     elseif (name == 'w_handgun_tsunami_nue') then
         if (state == 8) then
@@ -33,9 +33,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
     elseif (name == 'w_handgun_militech_lexington') then
         if (state == 8) then
             if (dilated) then
-                freq = GetFrequency(7, dilated)
+                freq = GetFrequency(11, dilated)
             else
-                freq = GetFrequency(8, dilated)
+                freq = GetFrequency(10, dilated)
             end
 
             local freqHalf = math.floor(freq / 2)

@@ -5,6 +5,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
     data.leftForceTrigger = '(2)(1)'
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(1)(4)(6)(7)'
+    data.canUseNoAmmoWeaponEffect = false
 
     local freq = 0
 

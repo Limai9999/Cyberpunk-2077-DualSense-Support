@@ -17,7 +17,6 @@ local function Weapon(data, name, isAiming, _, dilated)
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(0)(2)'
     end
-
     if (state == 7) then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(4)(5)(3)'
