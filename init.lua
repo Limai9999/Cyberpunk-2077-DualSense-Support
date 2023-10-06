@@ -26,6 +26,7 @@ SetupNativeSettings = require('utils/SetupNativeSettings')
 CheckRGB = require('utils/CheckRGB')
 HandleZoneChange = require('utils/HandleZoneChange')
 GetRandomPlayerLED = require('utils/GetRandomPlayerLED')
+GetChargeTrigger = require('utils/GetChargeTrigger')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
