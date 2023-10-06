@@ -7,7 +7,7 @@ local function Weapon(data, name, isAiming, state, dilated)
     data.leftForceTrigger = '(0)(1)(4)(4)'
     data.rightTriggerType = 'Medium'
 
-    if (stamina == 1) then
+    if (stamina == 2) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(5)'
         data.rightTriggerType = 'Hardest'
@@ -16,7 +16,7 @@ local function Weapon(data, name, isAiming, state, dilated)
     if (isAiming) then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(4)(4)'
-        if (stamina == 1) then
+        if (stamina == 2) then
             data.rightForceTrigger = '(0)(3)(8)(8)'
         end
     end

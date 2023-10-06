@@ -29,10 +29,10 @@ local function Weapon(data, name, isAiming)
 
     if (isAiming) then
         data.rightForceTrigger = '(0)(1)(4)(6)'
-        if (stamina == 1) then data.rightForceTrigger = '(0)(1)(6)(8)' end
+        if (stamina == 2) then data.rightForceTrigger = '(0)(1)(6)(8)' end
     end
 
-    if (stamina == 1) then
+    if (stamina == 2) then
         data.leftTriggerType = 'Bow'
         data.leftForceTrigger = '(0)(1)(6)(4)'
         data.rightTriggerType = 'Bow'
@@ -42,13 +42,13 @@ local function Weapon(data, name, isAiming)
     if (state == 5) then
         data.rightTriggerType = 'Resistance'
         data.rightForceTrigger = '(2)(6)'
-        if (stamina == 1) then data.rightForceTrigger = '(2)(8)' end
+        if (stamina == 2) then data.rightForceTrigger = '(2)(8)' end
     end
 
     if (state == 6) then
         data.rightTriggerType = 'Machine'
         data.rightForceTrigger = '(1)(9)(1)(2)('..gallopingFreq..')(0)'
-        if (stamina == 1) then data.rightForceTrigger = '(1)(9)(3)(4)('..gallopingFreq..')(0)' end
+        if (stamina == 2) then data.rightForceTrigger = '(1)(9)(3)(4)('..gallopingFreq..')(0)' end
     else
         savedTime = 0
         prevGallopingFreq = 10
@@ -57,7 +57,7 @@ local function Weapon(data, name, isAiming)
     if (state == 12 or state == 14) then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(7)(6)(8)'
-        if (stamina == 1) then data.rightForceTrigger = '(0)(7)(8)(8)' end
+        if (stamina == 2) then data.rightForceTrigger = '(0)(7)(8)(8)' end
     end
 
     if (state == 19) then

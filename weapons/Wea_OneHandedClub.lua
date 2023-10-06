@@ -8,14 +8,14 @@ local function Weapon(data, name, isAiming, _, dilated)
 
     local stamina = GetState('Stamina')
 
-    if (stamina == 1) then
+    if (stamina == 2) then
         data.leftForceTrigger = '(1)(4)(8)(8)'
         data.rightForceTrigger = '(0)(2)(8)(8)'
     end
 
     if (isAiming) then
         data.rightTriggerType = 'Hard'
-        if (stamina == 1) then data.rightTriggerType = 'Hardest' end
+        if (stamina == 2) then data.rightTriggerType = 'Hardest' end
     end
 
     local state = GetState('MeleeWeapon')
@@ -39,7 +39,7 @@ local function Weapon(data, name, isAiming, _, dilated)
             data.leftForceTrigger = '(3)(9)(3)(7)('.. freq ..')'
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(2)(8)(5)'
-            if (stamina == 1) then data.rightForceTrigger = '(0)(2)(8)(8)' end
+            if (stamina == 2) then data.rightForceTrigger = '(0)(2)(8)(8)' end
         end
     end
 

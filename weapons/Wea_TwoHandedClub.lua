@@ -7,11 +7,11 @@ local function Weapon(data, weaponName, isAiming)
 
     local stamina = GetState('Stamina')
 
-    if (stamina == 1) then data.rightForceTrigger = '(1)(8)' end
+    if (stamina == 2) then data.rightForceTrigger = '(1)(8)' end
 
     if (isAiming) then
         data.rightTriggerType = 'Medium'
-        if (stamina == 1) then
+        if (stamina == 2) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(6)'
             data.rightTriggerType = 'Hardest'
