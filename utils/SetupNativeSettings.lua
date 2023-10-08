@@ -47,9 +47,9 @@ local function SetupNativeSettings()
 		RemoveInfoText()
 	end)
 
-    NS.addCustom(modName, function()
-		UpdateInfoText()
-	end)
+    -- NS.addCustom(modName, function()
+	-- 	UpdateInfoText()
+	-- end)
 
     -- main
     NS.addSubcategory(modName..'/notice', GetText('Mod-DualSense-NS-NSBug'))

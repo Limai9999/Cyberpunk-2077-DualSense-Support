@@ -33,9 +33,12 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             if (state == 1) then
                 data.leftTriggerType = 'Galloping'
                 data.leftForceTrigger = '(3)(9)(3)(7)(3)'
-                freq = GetFrequency(18, dilated)
+
+                freq = GetChargeTrigger(name, dilated, false, 0.3, 3, 35)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(3)(9)(3)(7)('.. freq ..')'
+            else
+                GetChargeTrigger(name, dilated, true)
             end
 
             if (state == 8) then

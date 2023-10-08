@@ -37,10 +37,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightForceTrigger = '(0)(3)(8)(8)'
 
         if (state == 1) then
-            freq = GetFrequency(15, dilated)
+            freq = GetChargeTrigger(name, dilated, false, 0.37, 2, 35)
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
-        elseif (state == 8) then
+        else
+            GetChargeTrigger(name, dilated, true)
+        end
+
+        if (state == 8) then
             freq = GetFrequency(2, dilated)
             data.rightTriggerType = 'AutomaticGun'
             data.rightForceTrigger = '(4)(8)('.. freq ..')'
@@ -61,10 +65,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             end
         else
             if (state == 1) then
-                freq = GetFrequency(15, dilated)
+                freq = GetChargeTrigger(name, dilated, false, 0.3, 1, 35)
+
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
-            elseif (state == 8 or state == 4) then
+            else
+                GetChargeTrigger(name, dilated, true)
+            end
+
+            if (state == 8 or state == 4) then
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(1)(8)'
 
@@ -112,7 +121,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             end
         elseif (triggerType == 'Charge') then
             if (state == 1) then
-                freq = GetChargeTrigger(name, dilated, false)
+                freq = GetChargeTrigger(name, dilated, false, 0.3, 0, 50)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
             elseif (state == 8 or state == 4) then

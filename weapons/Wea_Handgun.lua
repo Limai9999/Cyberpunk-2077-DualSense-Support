@@ -104,9 +104,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightForceTrigger = '(0)(4)(6)(8)'
 
         if (state == 1) then
-            freq = GetFrequency(15, dilated)
+            freq = GetChargeTrigger(name, dilated, false, 0.4, 2, 15)
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(3)(9)(1)(2)('.. freq ..')'
+        else
+            GetChargeTrigger(name, dilated, true)
         end
 
         if (state == 8) then
@@ -122,13 +124,17 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             data.rightTriggerType = 'Galloping'
 
             if (dilated) then
-                freq = GetFrequency(8, dilated)
+                freq = GetChargeTrigger(name, dilated, false, 0.2, 1, 10)
                 data.rightForceTrigger = '(3)(9)(2)(5)('.. freq ..')'
             else
-                freq = GetFrequency(10, dilated)
+                freq = GetChargeTrigger(name, dilated, false, 0.3, 1, 12)
                 data.rightForceTrigger = '(3)(9)(3)(4)('.. freq ..')'
             end
-        elseif (state == 8 or state == 4) then
+        else
+            GetChargeTrigger(name, dilated, true)
+        end
+
+        if (state == 8 or state == 4) then
             if (isAiming) then
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(4)(1)'
@@ -163,12 +169,17 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(7)(5)'
         if (state == 1) then
-            freq = GetFrequency(13, dilated)
+            freq = GetChargeTrigger(name, dilated, false, 0.1, 4, 20)
+
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(3)(9)(1)(1)('.. freq ..')(0)'
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(3)(9)(1)(2)('.. freq ..')'
-        elseif (state == 8) then
+        else
+            GetChargeTrigger(name, dilated, true)
+        end
+
+        if (state == 8) then
             if (triggerType == 'Charge') then
                 freq = GetFrequency(20, dilated)
                 data.leftTriggerType = 'Machine'
@@ -208,19 +219,19 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
                 data.rightTriggerType = 'Galloping'
 
                 if (dilated) then
-                    freq = GetFrequency(8, dilated)
+                    freq = GetChargeTrigger(name, dilated, false, 0.3, 2, 20)
                     data.rightForceTrigger = '(3)(9)(1)(3)('.. freq ..')'
                 else
-                    freq = GetFrequency(10, dilated)
+                    freq = GetChargeTrigger(name, dilated, false, 0.3, 2, 25)
                     data.rightForceTrigger = '(3)(9)(1)(4)('.. freq ..')'
                 end
+            else
+                GetChargeTrigger(name, dilated, true)
             end
 
             if (state == 8) then
                 freq = GetFrequency(6, dilated)
 
-                data.leftTriggerType = 'Machine'
-                data.leftForceTrigger = '(6)(9)(1)(1)('.. freq ..')(1)'
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(3)(9)(5)(5)('.. freq ..')(1)'
             end
@@ -238,12 +249,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
                 data.rightTriggerType = 'Galloping'
             
                 if (dilated) then
-                    freq = GetFrequency(8, dilated)
+                    freq = GetChargeTrigger(name, dilated, false, 0.4, 2, 30)
                     data.rightForceTrigger = '(3)(9)(1)(3)('.. freq ..')'
                 else
-                    freq = GetFrequency(10, dilated)
+                    freq = GetChargeTrigger(name, dilated, false, 0.5, 2, 35)
                     data.rightForceTrigger = '(3)(9)(1)(4)('.. freq ..')'
                 end
+            else
+                GetChargeTrigger(name, dilated, true)
             end
 
             if (state == 8) then

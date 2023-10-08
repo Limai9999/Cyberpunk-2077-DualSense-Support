@@ -9,10 +9,12 @@ local function Weapon(data, name, isAiming, _, dilated)
     data.rightForceTrigger = '(0)(3)(5)(5)'
 
     if (state == 8 or state == 10) then
-        local freq = GetFrequency(8, dilated)
+        local freq = GetChargeTrigger(name, dilated, false, 0.1, 2, 10)
 
         data.leftTriggerType = 'Machine'
         data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
+    else
+        GetChargeTrigger(name, dilated, true)
     end
 
     if (state == 7) then

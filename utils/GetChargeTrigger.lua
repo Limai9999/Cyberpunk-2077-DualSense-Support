@@ -2,18 +2,23 @@ local savedWeaponName = ''
 local savedFrequency = 0
 local maxFrequency = 50
 
-local function GetChargeTrigger(weaponName, isTimeDilated, reset, initValue)
+local function GetChargeTrigger(weaponName, isTimeDilated, reset, stepValue, initValue, maxValue)
     if (savedWeaponName ~= weaponName) then savedFrequency = 0 end
     if (reset) then savedFrequency = 0 return 0 end
 
     if (initValue and savedFrequency <= 0) then savedFrequency = initValue end
 
     savedWeaponName = weaponName
-    savedFrequency = savedFrequency + 0.3
+    savedFrequency = savedFrequency + stepValue
 
-    if (savedFrequency > maxFrequency) then savedFrequency = maxFrequency end
+    if (maxValue) then
+        if (savedFrequency > maxValue) then savedFrequency = maxValue end
+    else
+        if (savedFrequency > maxFrequency) then savedFrequency = maxFrequency end
+    end
 
     local freq = GetFrequency(math.floor(savedFrequency), isTimeDilated)
+    print(freq)
 
     return freq
 end

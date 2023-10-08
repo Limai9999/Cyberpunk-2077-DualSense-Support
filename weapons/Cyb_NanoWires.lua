@@ -3,7 +3,7 @@ local function Weapon(data, name, isAiming)
 
     data.leftTriggerType = 'Choppy'
     data.rightTriggerType = 'Bow'
-    data.rightForceTrigger = '(1)(3)(5)(5)'
+    data.rightForceTrigger = '(1)(3)(4)(5)'
 
     local stamina = GetState('Stamina')
     local state = GetState('MeleeWeapon');
@@ -13,11 +13,11 @@ local function Weapon(data, name, isAiming)
     if (stamina == 2) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(3)'
-        data.rightForceTrigger = '(0)(3)(8)(8)'
+        data.rightForceTrigger = '(0)(3)(7)(8)'
     end
 
     if (state == 6) then
-        local freq = GetChargeTrigger(name, false, false, 8)
+        local freq = GetChargeTrigger(name, false, false, 1, 8)
 
         data.rightTriggerType = 'Galloping'
         data.rightForceTrigger = '(2)(9)(2)(3)('.. freq ..')'
@@ -25,11 +25,11 @@ local function Weapon(data, name, isAiming)
 
     if (state == 7 or state == 13) then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(2)(7)(3)(7)'
+        data.rightForceTrigger = '(2)(7)(2)(7)'
     end
 
     if (state == 10) then
-        local freq = GetChargeTrigger(name, false, false, 4)
+        local freq = GetChargeTrigger(name, false, false, 0.3, 4)
 
         data.leftTriggerType = 'Galloping'
         data.leftForceTrigger = '(2)(9)(1)(2)('.. freq ..')'
@@ -37,8 +37,8 @@ local function Weapon(data, name, isAiming)
 
     if (state == 8) then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(1)(3)(7)(7)'
-        if (stamina == 2) then data.rightForceTrigger = '(0)(3)(8)(8)' end
+        data.rightForceTrigger = '(1)(3)(6)(7)'
+        if (stamina == 2) then data.rightForceTrigger = '(0)(3)(7)(8)' end
     end
 
     if (state == 11) then
@@ -52,7 +52,10 @@ local function Weapon(data, name, isAiming)
     end
 
     if (state == 15) then
-        local freq = GetChargeTrigger(name, false, false, 20)
+        local freq = GetChargeTrigger(name, false, false, 0.5, 20)
+
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(3)(1)'
 
         data.rightTriggerType = 'Galloping'
         data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')'

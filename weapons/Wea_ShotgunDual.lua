@@ -24,10 +24,12 @@ local function Weapon(data, name, isAiming, state, dilated)
       data.rightForceTrigger = '(0)(3)(6)(8)'
 
         if (state == 1) then
-            freq = GetFrequency(14, dilated)
+            freq = GetChargeTrigger(name, dilated, false, 0.5, 3, 40)
 
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(4)(9)(6)(7)('.. freq ..')'
+        else
+            GetChargeTrigger(name, dilated, true)
         end
 
         -- if (state == 5) then

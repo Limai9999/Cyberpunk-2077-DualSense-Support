@@ -43,10 +43,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             data.leftForceTrigger = '(4)(9)(1)(1)('.. freq ..')(0)'
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(4)(7)('.. freq ..')(0)'
-        elseif (state == 1) then
-            freq = GetFrequency(14, dilated)
+        end
+
+        if (state == 1) then
+            freq = GetChargeTrigger(name, dilated, false, 0.5, 6, 23)
+
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')(0)'
+        else
+            GetChargeTrigger(name, dilated, true)
         end
     elseif (name == 'w_special_kangtao_dian') then
         freq = GetFrequency(13, dilated)

@@ -23,14 +23,28 @@ local function Weapon(data, name, isAiming)
 
     if (state == 6 or state == 7) then
         data.rightTriggerType = 'Resistance'
-        data.rightForceTrigger = '(2)(6)'
-        if (stamina == 2) then data.rightForceTrigger = '(2)(8)' end
+        data.rightForceTrigger = '(2)(4)'
+        if (stamina == 2) then data.rightForceTrigger = '(2)(6)' end
+    end
+
+    if (state == 13) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(2)(1)(7)'
+
+        if (stamina == 2) then data.rightForceTrigger = '(0)(2)(3)(8)' end
+    end
+
+    if (state == 11) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(5)(2)(3)'
+
+        if (stamina == 2) then data.rightForceTrigger = '(0)(6)(4)(5)' end
     end
 
     if (state == 12 or state == 14) then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(7)(6)(8)'
-        if (stamina == 2) then data.rightForceTrigger = '(0)(7)(8)(8)' end
+        data.rightForceTrigger = '(0)(7)(3)(8)'
+        if (stamina == 2) then data.rightForceTrigger = '(0)(7)(5)(8)' end
     end
 
     if (state == 15) then

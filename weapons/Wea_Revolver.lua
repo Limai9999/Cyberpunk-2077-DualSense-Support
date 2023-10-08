@@ -21,12 +21,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
                 data.rightTriggerType = 'Galloping'
 
                 if (dilated) then
-                    freq = GetFrequency(8, dilated)
+                    freq = GetChargeTrigger(name, dilated, false, 0.3, 2, 10)
                     data.rightForceTrigger = '(3)(9)(1)(3)('.. freq ..')'
                 else
-                    freq = GetFrequency(10, dilated)
+                    freq = GetChargeTrigger(name, dilated, false, 0.3, 2, 12)
                     data.rightForceTrigger = '(3)(9)(1)(4)('.. freq ..')'
                 end
+            else
+                GetChargeTrigger(name, dilated, true)
             end
 
             if (state == 8) then
@@ -41,10 +43,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
     elseif (name == 'w_revolver_darra_quasar') then
         if (isAiming) then
             if (state == 1) then
-                freq = GetFrequency(12, dilated)
+                freq = GetChargeTrigger(name, dilated, false, 0.35, 2, 24)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(3)(9)(5)(7)('.. freq ..')'
-            elseif (state == 8) then
+            else
+                GetChargeTrigger(name, dilated, true)
+            end
+
+            if (state == 8) then
                 if (dilated) then
                     freq = GetFrequency(7, dilated)
                 else
@@ -75,9 +81,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             end
         elseif (triggerType == 'Charge') then
             if (state == 1) then
-                freq = GetFrequency(12, dilated)
+                freq = GetChargeTrigger(name, dilated, false, 2, 3, 50)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(3)(9)(5)(7)('.. freq ..')'
+            else
+                GetChargeTrigger(name, dilated, true)
             end
 
             if (state == 2 or state == 4 or state == 8) then
