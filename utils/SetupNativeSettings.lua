@@ -47,9 +47,9 @@ local function SetupNativeSettings()
 		RemoveInfoText()
 	end)
 
-    -- NS.addCustom(modName, function()
-	-- 	UpdateInfoText()
-	-- end)
+    NS.addCustom(modName, function()
+		UpdateInfoText()
+	end)
 
     -- main
     NS.addSubcategory(modName..'/notice', GetText('Mod-DualSense-NS-NSBug'))
@@ -113,10 +113,9 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    -- TODO, TRANSLATE
-    local menuLoc = 'Menu'
-    local enableTriggersLoc = 'Enable Trigger Effects'
-    local enableTriggersDescriptionLoc = 'Enable Trigger Effects for'
+    local menuLoc = GetText('Mod-DualSense-NS-Menu')
+    local enableTriggersLoc = GetText('Mod-DualSense-NS-EnableTriggers')
+    local enableTriggersDescriptionLoc = GetText('Mod-DualSense-NS-EnableTriggersFor')
 
     NS.addSubcategory(menu, menuLoc)
 
@@ -259,7 +258,7 @@ local function SetupNativeSettings()
     end
 
     -- weapons list
-    NS.addSubcategory(weaponsList, GetText('Mod-DualSense-NS-Subcategory-WeaponsList') .. ' - ' .. 'Not recommended')
+    NS.addSubcategory(weaponsList, GetText('Mod-DualSense-NS-Subcategory-WeaponsList') .. ' - ' .. GetText('Mod-DualSense-NS-NotRecommended'))
 
     for key, value in pairs(config.weaponsSettings) do
         local weapon = WeaponsList[key]
@@ -310,10 +309,10 @@ local function SetupNativeSettings()
     -- debug
     NS.addSubcategory(debug, GetText('Mod-DualSense-NS-Subcategory-Debug'))
 
-    NS.addSwitch(debug, 'show weapon states', 'xyeta', config.showWeaponStates, false, function(state)
-        config.showWeaponStates = state
-        ManageSettings.saveFile(config)
-    end)
+    -- NS.addSwitch(debug, 'show weapon states', 'xyeta', config.showWeaponStates, false, function(state)
+    --     config.showWeaponStates = state
+    --     ManageSettings.saveFile(config)
+    -- end)
 
     NS.addSwitch(debug, GetText('Mod-DualSense-NS-EnableDebugLogs'), GetText('Mod-DualSense-NS-EnableDebugLogs-Descr'), config.debugLogs, false, function(state)
         config.debugLogs = state
