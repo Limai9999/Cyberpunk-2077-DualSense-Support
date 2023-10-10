@@ -1,5 +1,5 @@
 local function Weapon(data, name, isAiming, _, dilated)
-    data.type = 'Sword'
+    data.type = GetText('Gameplay-Items-Item Type-Wea_Sword')
 
     local stamina = GetState('Stamina')
     local state = GetState('MeleeWeapon')

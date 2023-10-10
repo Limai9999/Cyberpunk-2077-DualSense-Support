@@ -3,7 +3,7 @@ local savedFlipTriggerTimes = 0
 local maxFlipTriggerTimes = 20
 
 local function Weapon(data, name, isAiming, _, dilated)
-    data.type = 'Axe'
+    data.type = GetText('Gameplay-Items-Item Type-Wea_Axe')
 
     local stamina = GetState('Stamina')
     local state = GetState('MeleeWeapon')

@@ -1,5 +1,5 @@
 local function Weapon(data, name, isAiming, _, dilated)
-    data.type = 'Machete'
+    data.type = GetText('Gameplay-Items-Item Type-Wea_Machete')
 
     local state = GetState('MeleeWeapon')
 
