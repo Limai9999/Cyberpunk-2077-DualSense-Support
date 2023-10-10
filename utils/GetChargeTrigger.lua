@@ -18,7 +18,6 @@ local function GetChargeTrigger(weaponName, isTimeDilated, reset, stepValue, ini
     end
 
     local freq = GetFrequency(math.floor(savedFrequency), isTimeDilated)
-    print(freq)
 
     return freq
 end
