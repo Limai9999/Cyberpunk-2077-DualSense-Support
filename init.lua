@@ -627,15 +627,14 @@ registerForEvent('onUpdate', function(delta)
             local weaponType = entity.weapon.GetWeaponType(itemId).value
 
             local weapon = WeaponsList[weaponType]
-            local weaponObj = weapon(data, weaponName, isAiming, 0, ifTimeDilated)
-
-            data = weaponObj
 
             local isShooting = entity.isShootingOngoing
-            if (not isShooting) then
-                data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(4)(8)(5)(5)'
-            end
+            local weaponState = 0
+
+            if (isShooting) then weaponState = 8 end
+
+            local weaponObj = weapon(data, weaponName, isAiming, weaponState, ifTimeDilated)
+            data = weaponObj
 
             local saveString = 'turret' .. tostring(isShooting)
 
