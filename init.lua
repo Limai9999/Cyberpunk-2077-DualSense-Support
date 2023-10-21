@@ -621,6 +621,8 @@ registerForEvent('onUpdate', function(delta)
         local entity = Game.FindEntityByID(playerControllingDeviceID)
         local gameObjName = tostring(Game.NameToString(entity:GetClassName()))
 
+        local isShooting = entity.isShootingOngoing
+
         if (gameObjName == 'SecurityTurret') then
             local weaponName = entity.weapon:GetItemData():GetNameAsString()
             local itemId = entity.weapon:GetItemID()
@@ -628,18 +630,28 @@ registerForEvent('onUpdate', function(delta)
 
             local weapon = WeaponsList[weaponType]
 
-            local isShooting = entity.isShootingOngoing
             local weaponState = 0
 
             if (isShooting) then weaponState = 8 end
 
             local weaponObj = weapon(data, weaponName, isAiming, weaponState, ifTimeDilated)
             data = weaponObj
+        elseif (gameObjName == 'SniperNest') then
+            local isShooting = entity.isShootingOngoing
 
-            local saveString = 'turret' .. tostring(isShooting)
-
-            return SaveFile('weapon', data, saveString, 'turret', 'noVehicle')
+            if (isShooting) then
+                local freq = GetFrequency(1, false)
+                data.rightTriggerType = 'AutomaticGun'
+                data.rightForceTrigger = '(4)(8)('.. freq ..')'
+            else
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(0)(3)(8)(7)'
+            end
         end
+
+        local saveString = gameObjName .. tostring(isShooting)
+
+        return SaveFile('weapon', data, saveString, gameObjName, 'noVehicle')
     end
 
     -- ADAPTIVE TRIGGERS FOR WEAPONS
