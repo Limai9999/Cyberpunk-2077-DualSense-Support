@@ -65,6 +65,21 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
+    -- fix problems
+    NS.addSubcategory(fixProblems, GetText('Mod-DualSense-NS-Subcategory-ProblemsBugs'))
+
+    NS.addButton(fixProblems, GetText('Mod-DualSense-NS-RedoSettingsFile'), GetText('Mod-DualSense-NS-RedoSettingsFile-Descr'), GetText('Mod-DualSense-NS-Button-Execute'), 45, function()
+        ManageSettings.RedoConfig()
+        savedData = 'notSaved'
+    end)
+
+    NS.addButton(fixProblems, GetText('Mod-DualSense-NS-RestartUDP'), GetText('Mod-DualSense-NS-RestartUDP-Descr'), GetText('Mod-DualSense-NS-Button-Execute'), 45, function()
+        TriedStartUDPDate = os.date()
+        CloseClientProcess()
+        StartClientProcess()
+        savedData = 'notSaved'
+    end)
+
     -- Extra Settings
     NS.addSubcategory(extraSettings, GetText('Mod-DualSense-NS-Subcategory-ExtraSettings'))
 
@@ -190,7 +205,7 @@ local function SetupNativeSettings()
     local resistanceTitle = string.format(GetText('Mod-DualSense-NS-MaxResistanceValue'), GetText('Mod-DualSense-NS-TriggerType-Resistance'));
     local resistanceDescr = string.format(GetText('Mod-DualSense-NS-MaxResistanceValue-Descr'), GetText('Mod-DualSense-NS-TriggerType-Resistance'));
 
-    NS.addRangeInt(vehicles, resistanceTitle, resistanceDescr, 1, 8, 1, config.vehicleResistanceValue, 6, function(value)
+    NS.addRangeInt(vehicles, resistanceTitle, resistanceDescr, 1, 8, 1, config.vehicleResistanceValue, 4, function(value)
         config.vehicleResistanceValue = value
         ManageSettings.saveFile(config)
     end)
@@ -211,7 +226,7 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    NS.addSwitch(vehicles, GetText('Mod-DualSense-NS-EnableGearbox'), GetText('Mod-DualSense-NS-EnableGearbox-Descr'), config.gearboxEmulation, true, function(state)
+    NS.addSwitch(vehicles, GetText('Mod-DualSense-NS-EnableGearbox'), GetText('Mod-DualSense-NS-EnableGearbox-Descr') .. ' - Not recommended to use at low FPS.', config.gearboxEmulation, true, function(state)
         config.gearboxEmulation = state
         ManageSettings.saveFile(config)
     end)
@@ -322,21 +337,6 @@ local function SetupNativeSettings()
     NS.addSwitch(debug, GetText('Mod-DualSense-NS-EnableUDPDebugLogs'), GetText('Mod-DualSense-NS-EnableUDPDebugLogs-Descr'), config.UDPdebugLogs, true, function(state)
         config.UDPdebugLogs = state
         ManageSettings.saveFile(config)
-    end)
-
-    -- fix problems
-    NS.addSubcategory(fixProblems, GetText('Mod-DualSense-NS-Subcategory-ProblemsBugs'))
-
-    -- NS.addButton(fixProblems, GetText('Mod-DualSense-NS-RedoSettingsFile'), GetText('Mod-DualSense-NS-RedoSettingsFile-Descr'), GetText('Mod-DualSense-NS-Button-Execute'), 45, function()
-    --     ManageSettings.RedoConfig()
-    --     savedData = 'notSaved'
-    -- end)
-
-    NS.addButton(fixProblems, GetText('Mod-DualSense-NS-RestartUDP'), GetText('Mod-DualSense-NS-RestartUDP-Descr'), GetText('Mod-DualSense-NS-Button-Execute'), 45, function()
-        TriedStartUDPDate = os.date()
-        CloseClientProcess()
-        StartClientProcess()
-        savedData = 'notSaved'
     end)
 
     return true
