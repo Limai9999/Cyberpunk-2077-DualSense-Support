@@ -27,6 +27,7 @@ CheckRGB = require('utils/CheckRGB')
 HandleZoneChange = require('utils/HandleZoneChange')
 GetRandomPlayerLED = require('utils/GetRandomPlayerLED')
 GetChargeTrigger = require('utils/GetChargeTrigger')
+IsWeaponGlitched = require('utils/IsWeaponGlitched')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
@@ -694,7 +695,7 @@ registerForEvent('onUpdate', function(delta)
     local weapon = WeaponsList[weaponType]
     local stamina = GetState('Stamina')
 
-    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina) end
+    -- if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina) end
 
     if (not weapon) then
         weapon = WeaponsList['default']
@@ -702,8 +703,13 @@ registerForEvent('onUpdate', function(delta)
     end
 
     local weaponState = GetState('Weapon')
+    if (weaponState == 6) then weaponState = 4 end
 
-    local weaponObj = weapon(data, weaponName, isAiming, weaponState, ifTimeDilated, triggerType)
+    local isWeaponGlitched = IsWeaponGlitched()
+
+    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched) end
+
+    local weaponObj = weapon(data, weaponName, isAiming, weaponState, ifTimeDilated, triggerType, isWeaponGlitched)
 
     local v = config.weaponsSettings[weaponType].value
 

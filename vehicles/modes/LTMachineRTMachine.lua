@@ -18,10 +18,10 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
 
     if (dividedRpmA > maxMachine) then dividedRpmA = maxMachine end
     frequency = tostring(dividedRpmA)
-    data.rightTriggerType = 'Galloping'
-    data.rightForceTrigger = '(0)(9)(0)(7)(' .. frequency .. ')'
-    data.leftTriggerType = 'Galloping'
-    data.leftForceTrigger = '(0)(9)(0)(7)(' .. frequency .. ')'
+    data.rightTriggerType = 'Machine'
+    data.rightForceTrigger = '(1)(9)(2)(2)(' .. frequency .. ')(0)'
+    data.leftTriggerType = 'Machine'
+    data.leftForceTrigger = '(1)(9)(2)(2)(' .. frequency .. ')(0)'
 
     if (data.overwriteRGB) then
         local red = math.floor(dividedRpmA * (255 / maxMachine))
