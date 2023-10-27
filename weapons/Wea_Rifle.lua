@@ -1,7 +1,20 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched)
     data.type = GetText('Story-base-journal-quests-main_quest-prologue-q000_tutorial-01a_pick_weapon_Rifle_mappin')
 
     local freq = 0
+
+    if (isWeaponGlitched and triggerType ~= 'SemiAuto' and triggerType ~= 'Charge') then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(4)(6)(6)'
+
+        if (state == 8) then
+            freq = GetFrequency(3, dilated)
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
+        end
+
+        return data
+    end
 
     data.leftTriggerType = 'Bow'
     data.leftForceTrigger = '(0)(3)(1)(2)'
