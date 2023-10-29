@@ -99,10 +99,12 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'
             end
         elseif (triggerType == 'Burst') then
-            freq = GetFrequency(16, dilated)
+            if (state == 8) then
+                freq = GetFrequency(16, dilated)
 
-            data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+            end
         end
     elseif (name == 'w_smg_midnight_borg') then
         data.rightTriggerType = 'Bow'
