@@ -155,7 +155,7 @@ registerForEvent('onInit', function()
             TriedStartUDPDate = nowDate
             CloseClientProcess()
             StartClientProcess()
-            Warn(GetText('Mod-DualSense-UDPStarted'))
+            -- Warn(GetText('Mod-DualSense-UDPStarted'))
         end
     end, {})
 
@@ -202,7 +202,7 @@ registerForEvent('onInit', function()
                 local statusString = dsxData.isDSXLaunched and GetText('Mod-DualSense-IsLaunched') or GetText('Mod-DualSense-IsDisabled')
                 local oldCheckString = IsOldDSXLaunched and ' - ' .. GetText('Mod-DualSense-OldVersion') or ''
 
-                Warn('DualSenseX ' .. statusString .. oldCheckString)
+                -- Warn('DualSenseX ' .. statusString .. oldCheckString)
 
                 Cron.After(5, function()
                     if (dsxData.BatteryLevel ~= BatteryLevel) then
@@ -218,10 +218,10 @@ registerForEvent('onInit', function()
             IsOldDSXLaunched = dsxData.isOldDSX
             BatteryLevel = dsxData.BatteryLevel
 
-            if (IsOldDSXLaunched) then
-                config.UDPautostart = false
-                ManageSettings.saveFile(config)
-            end
+            -- if (IsOldDSXLaunched) then
+            --     config.UDPautostart = false
+            --     ManageSettings.saveFile(config)
+            -- end
         end
     end, {})
 

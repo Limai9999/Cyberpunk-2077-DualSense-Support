@@ -54,16 +54,16 @@ local function StartObservers()
         data.guide = 'DualSenseSupport'
         this:AsyncSpawnFromLocal(inkWidgetRef.Get(this.containersRef), 'dlcDescription', this, 'OnDescriptionSpawned', data)
     end)
-    Override('DlcDescriptionController', 'SetData', function (this, data, wrapped)
-        if data.guide.value == "DualSenseSupport" then
-            inkTextRef.SetText(this.titleRef, GetText('Mod-DualSense-DLC-Title'))
-            inkTextRef.SetText(this.descriptionRef, GetText('Mod-DualSense-DLC-Description'))
-            inkTextRef.SetText(this.guideRef, GetText('Mod-DualSense-DLC-Guide'))
-            inkImageRef.SetTexturePart(this.imageRef, 'none')
-        else
-            wrapped(data)
-        end
-    end)
+    -- Override('DlcDescriptionController', 'SetData', function (this, data, wrapped)
+    --     if data.guide.value == "DualSenseSupport" then
+    --         inkTextRef.SetText(this.titleRef, GetText('Mod-DualSense-DLC-Title'))
+    --         inkTextRef.SetText(this.descriptionRef, GetText('Mod-DualSense-DLC-Description'))
+    --         inkTextRef.SetText(this.guideRef, GetText('Mod-DualSense-DLC-Guide'))
+    --         inkImageRef.SetTexturePart(this.imageRef, 'none')
+    --     else
+    --         wrapped(data)
+    --     end
+    -- end)
 
     Observe('CollisionExitingDecisions', 'EnterCondition', function (_, scriptContext, scriptInterface)
         local config = ManageSettings.openFile()
