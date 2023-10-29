@@ -19,10 +19,10 @@ local function Weapon(data, name, isAiming, _, dilated)
         data.rightForceTrigger = '(0)(6)(4)(6)'
     end
 
-    if (state == 8) then
-        data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(6)(1)'
-    end
+    -- if (state == 8) then
+    --     data.leftTriggerType = 'Resistance'
+    --     data.leftForceTrigger = '(6)(1)'
+    -- end
 
     if (state == 10) then
         data.leftTriggerType = 'Resistance'
@@ -47,6 +47,11 @@ local function Weapon(data, name, isAiming, _, dilated)
     if (state == 19 or state == 20) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(7)'
+    end
+
+    if (IsBlockedBullet) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(3)(3)'
     end
 
     return data

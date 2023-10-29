@@ -7,7 +7,7 @@ local function Weapon(data, name, isAiming)
     data.leftTriggerType = 'Bow'
     data.leftForceTrigger = '(0)(1)(4)(5)'
     data.rightTriggerType = 'Bow'
-    data.rightForceTrigger = '(1)(3)(7)(3)'
+    data.rightForceTrigger = '(1)(3)(6)(3)'
 
     if (state == 0) then
         data.leftTriggerType = 'Resistance'
@@ -18,12 +18,12 @@ local function Weapon(data, name, isAiming)
 
     if (stamina == 2) then
         data.leftForceTrigger = '(0)(1)(8)(8)'
-        data.rightForceTrigger = '(1)(3)(8)(8)'
+        data.rightForceTrigger = '(1)(3)(7)(8)'
     end
 
     if (state == 5 or state == 6 or state == 7 or state == 13) then
-        data.rightForceTrigger = '(1)(5)(5)(6)'
-        if (stamina == 2) then data.rightForceTrigger = '(1)(6)(8)(8)' end
+        data.rightForceTrigger = '(1)(5)(4)(6)'
+        if (stamina == 2) then data.rightForceTrigger = '(1)(6)(7)(8)' end
     end
 
     if (state == 10) then
@@ -37,7 +37,7 @@ local function Weapon(data, name, isAiming)
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(6)(1)(5)'
 
-        if (stamina == 2) then data.rightForceTrigger = '(0)(7)(3)(7)' end
+        if (stamina == 2) then data.rightForceTrigger = '(0)(7)(2)(7)' end
     end
 
     if (isAiming) then
@@ -56,6 +56,11 @@ local function Weapon(data, name, isAiming)
             data.leftForceTrigger = '(5)(5)'
             data.rightForceTrigger = '(5)(5)'
         end
+    end
+
+    if (IsBlockedBullet) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(3)(3)'
     end
 
     return data

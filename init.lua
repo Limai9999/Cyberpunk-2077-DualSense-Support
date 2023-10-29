@@ -28,6 +28,7 @@ HandleZoneChange = require('utils/HandleZoneChange')
 GetRandomPlayerLED = require('utils/GetRandomPlayerLED')
 GetChargeTrigger = require('utils/GetChargeTrigger')
 IsWeaponGlitched = require('utils/IsWeaponGlitched')
+HandleBlockingBullet = require('utils/HandleBlockingBullet')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
@@ -79,6 +80,7 @@ TimeDilation = 0.5
 GameLanguage = 'en-us'
 IsScene = false
 VehicleCollisionForce = 0
+IsBlockedBullet = false
 
 VehicleModeDefaultIndex = 0
 
@@ -251,6 +253,8 @@ registerForEvent('onUpdate', function(delta)
     if (not handleUpdates) then return end
     Cron.Update(delta)
     UDPManualStartHandler()
+
+    HandleBlockingBullet()
     
     local isInScene = GameUI.IsScene()
     IsScene = isInScene

@@ -7,7 +7,7 @@ local function Weapon(data, name, isAiming, _, dilated)
     data.leftTriggerType = 'Bow'
     data.leftForceTrigger = '(0)(2)(3)(1)'
     data.rightTriggerType = 'Bow'
-    data.rightForceTrigger = '(0)(3)(3)(1)'
+    data.rightForceTrigger = '(0)(3)(2)(1)'
 
     if (isAiming) then
         data.rightTriggerType = 'Bow'
@@ -16,13 +16,13 @@ local function Weapon(data, name, isAiming, _, dilated)
 
     if (state == 7 or state == 13) then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(6)(3)(6)'
+        data.rightForceTrigger = '(0)(6)(2)(6)'
     end
 
-    if (state == 8) then
-        data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(6)(1)'
-    end
+    -- if (state == 8) then
+    --     data.leftTriggerType = 'Resistance'
+    --     data.leftForceTrigger = '(6)(1)'
+    -- end
 
     if (state == 10) then
         data.leftTriggerType = 'Resistance'
@@ -47,6 +47,11 @@ local function Weapon(data, name, isAiming, _, dilated)
     if (state == 19 or state == 20) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(7)'
+    end
+
+    if (IsBlockedBullet) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(3)(2)'
     end
 
     return data

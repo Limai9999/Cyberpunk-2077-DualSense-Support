@@ -3,15 +3,15 @@ local function Weapon(data, name, isAiming, _, dilated)
 
     local state = GetState('MeleeWeapon')
 
-    data.leftTriggerType = 'Resistance'
-    data.leftForceTrigger = '(1)(1)'
+    data.leftTriggerType = 'Bow'
+    data.leftForceTrigger = '(0)(2)(4)(2)'
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(0)(3)(3)(4)'
 
-    if (state == 8) then
-        data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(6)(1)'
-    end
+    -- if (state == 8) then
+    --     data.leftTriggerType = 'Resistance'
+    --     data.leftForceTrigger = '(6)(1)'
+    -- end
 
     if (state == 10) then
         data.leftTriggerType = 'Resistance'
@@ -35,6 +35,11 @@ local function Weapon(data, name, isAiming, _, dilated)
     elseif (state == 19 or state == 20) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(7)'
+    end
+
+    if (IsBlockedBullet) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(3)(2)'
     end
 
     return data

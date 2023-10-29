@@ -93,6 +93,21 @@ local function StartObservers()
         -- print(VehicleCollisionForce)
     end)
 
+    Observe('gameObject', 'OnHit', function (_, hitEvent)
+        if (hitEvent.attackData.attackType ~= gamedataAttackType.Ranged) then return end
+
+        local currentWeapon = Game.GetActiveWeapon(GetPlayer())
+        if (currentWeapon == nil) then return end
+
+        local canBlockBullet = DamageManager.CanBlockBullet(hitEvent)
+        local hasBulletBlockPerk = PlayerDevelopmentSystem.GetData(Game.GetPlayer()):IsNewPerkBought(gamedataNewPerkType.Reflexes_Right_Milestone_2)
+        local currentStamina = Game.GetStatPoolsSystem():GetStatPoolValue(Game.GetPlayer():GetEntityID(), gamedataStatPoolType.Stamina, false)
+
+        if (not canBlockBullet or hasBulletBlockPerk < 2 or currentStamina <= 0) then return end
+
+        IsBlockedBullet = true
+    end)
+
     GameSession.OnLoad(function ()
         IsLoading = true
     end)

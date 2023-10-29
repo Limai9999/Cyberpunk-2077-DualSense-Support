@@ -21,6 +21,11 @@ local function Weapon(data, name, isAiming, state, dilated)
         end
     end
 
+    if (IsBlockedBullet) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(3)(3)'
+    end
+
     return data
 end
 
