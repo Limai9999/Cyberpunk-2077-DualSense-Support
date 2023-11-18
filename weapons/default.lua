@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, _, dilated)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Mod-DualSense-VehicleType-Default')
 
     data.leftTriggerType = 'Normal'

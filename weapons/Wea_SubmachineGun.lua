@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SubmachineGun')
 
     local freq = 0
@@ -8,7 +8,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(0)(4)(6)(6)'
 
         if (state == 8) then
-            freq = GetFrequency(4, dilated)
+            freq = GetFrequency(4, dilated, name)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
         end
@@ -23,7 +23,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(1)(4)(4)(4)'
 
         if (state == 8) then
-            freq = GetFrequency(14, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(5)(6)('.. freq ..')(0)'
         end
@@ -39,7 +39,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'SemiAutomaticGun'
         data.rightForceTrigger = '(2)(4)(4)'
         if (state == 8) then
-            freq = GetFrequency(10, dilated)
+            freq = GetFrequency(attackSpeed + 3, dilated, name)
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
             data.rightTriggerType = 'Machine'
@@ -49,25 +49,32 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'SemiAutomaticGun'
         data.rightForceTrigger = '(2)(4)(4)'
 
-        if (state == 8) then
-            freq = GetFrequency(9, dilated)
+        if (triggerType == 'Burst') then
+            if (state == 8) then
+                freq = GetFrequency(attackSpeed * 2, dilated, name)
+    
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(4)(7)('.. freq ..')(0)'
+            end
+        elseif (triggerType == 'Charge') then
+            if (state == 1) then
+                freq = GetChargeTrigger(name, dilated, false, 0.5, 6, 23)
+    
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')(0)'
+            else
+                GetChargeTrigger(name, dilated, true)
+            end
 
-            data.leftTriggerType = 'Machine'
-            data.leftForceTrigger = '(4)(9)(1)(1)('.. freq ..')(0)'
-            data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(4)(9)(4)(7)('.. freq ..')(0)'
-        end
-
-        if (state == 1) then
-            freq = GetChargeTrigger(name, dilated, false, 0.5, 6, 23)
-
-            data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')(0)'
-        else
-            GetChargeTrigger(name, dilated, true)
+            if (state == 8) then
+                freq = GetFrequency(attackSpeed, dilated, name)
+    
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(5)(7)('.. freq ..')(0)'
+            end
         end
     elseif (name == 'w_special_kangtao_dian') then
-        freq = GetFrequency(13, dilated)
+        freq = GetFrequency(attackSpeed, dilated, name)
         data.rightTriggerType = 'SemiAutomaticGun'
         data.rightForceTrigger = '(2)(4)(4)'
 
@@ -83,7 +90,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(3)(4)(5)(4)'
         if (state == 8) then
-            freq = GetFrequency(15, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
             data.rightTriggerType = 'AutomaticGun'
             data.rightForceTrigger = '(4)(6)('.. freq ..')'
         end
@@ -93,14 +100,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         if (triggerType == 'FullAuto') then
             if (state == 8) then
-                freq = GetFrequency(7, dilated)
+                freq = GetFrequency(attackSpeed, dilated, name)
     
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'
             end
         elseif (triggerType == 'Burst') then
             if (state == 8) then
-                freq = GetFrequency(16, dilated)
+                freq = GetFrequency(attackSpeed * 4, dilated, name)
 
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
@@ -111,7 +118,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(1)(4)(6)(6)'
 
         if (state == 8) then
-            freq = GetFrequency(7, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
 
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
@@ -120,7 +127,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
         end
     else
-        freq = GetFrequency(15, dilated)
+        freq = GetFrequency(15, dilated, name)
         data.rightTriggerType = 'AutomaticGun'
         data.rightForceTrigger = '(4)(8)('.. freq ..')'
     end

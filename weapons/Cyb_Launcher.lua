@@ -1,4 +1,4 @@
-local function Weapon(data)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetLocalizedText("LocKey#3722")
 
     data.rightTriggerType = 'Bow'

@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Revolver')
 
     data.leftTriggerType = 'Resistance'
@@ -32,7 +32,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8) then
-                freq = GetFrequency(2, dilated)
+                freq = GetFrequency(attackSpeed, dilated, name)
 
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(4)(9)(1)(1)('.. freq ..')(1)'
@@ -51,11 +51,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8) then
-                if (dilated) then
-                    freq = GetFrequency(7, dilated)
-                else
-                    freq = GetFrequency(6, dilated)
-                end
+                freq = GetFrequency(attackSpeed, dilated, name)
+
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
                 data.rightTriggerType = 'Machine'
@@ -120,7 +117,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(2)(4)(6)(6)'
 
         if (state == 8) then
-            freq = GetFrequency(1, dilated)
+            freq = GetFrequency(1, dilated, name)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'
         end

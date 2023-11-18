@@ -17,7 +17,7 @@ local function GetChargeTrigger(weaponName, isTimeDilated, reset, stepValue, ini
         if (savedFrequency > maxFrequency) then savedFrequency = maxFrequency end
     end
 
-    local freq = GetFrequency(math.floor(savedFrequency), isTimeDilated)
+    local freq = GetFrequency(math.floor(savedFrequency), isTimeDilated, weaponName)
 
     return freq
 end

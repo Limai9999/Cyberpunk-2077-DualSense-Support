@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-Weapons-Melee-DisplayName-Preset_Machete')
 
     local stamina = GetState('Stamina')

@@ -324,10 +324,10 @@ local function SetupNativeSettings()
     -- debug
     NS.addSubcategory(debug, GetText('Mod-DualSense-NS-Subcategory-Debug'))
 
-    -- NS.addSwitch(debug, 'show weapon states', 'xyeta', config.showWeaponStates, false, function(state)
-    --     config.showWeaponStates = state
-    --     ManageSettings.saveFile(config)
-    -- end)
+    NS.addSwitch(debug, 'show weapon states', 'xyeta', config.showWeaponStates, false, function(state)
+        config.showWeaponStates = state
+        ManageSettings.saveFile(config)
+    end)
 
     NS.addSwitch(debug, GetText('Mod-DualSense-NS-EnableDebugLogs'), GetText('Mod-DualSense-NS-EnableDebugLogs-Descr'), config.debugLogs, false, function(state)
         config.debugLogs = state

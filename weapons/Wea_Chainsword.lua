@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, _, dilated)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-Items-Item Type-Wea_Chainsword')
 
     local state = GetState('MeleeWeapon')

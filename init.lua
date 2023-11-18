@@ -435,7 +435,7 @@ registerForEvent('onUpdate', function(delta)
     end
 
     -- ADAPTIVE TRIGGERS FOR VEHICLES
-    local ifTimeDilated = Game.GetTimeSystem():IsTimeDilationActive()
+    local isTimeDilated = Game.GetTimeSystem():IsTimeDilationActive()
 
     -- veh documentation https://nativedb.red4ext.com/vehicleBaseObject
     local veh = Game.GetMountedVehicle(GetPlayer())
@@ -487,7 +487,7 @@ registerForEvent('onUpdate', function(delta)
         end
 
         if (vehType.data.hasOwnMode) then
-            vehData = VehiclesList[vehicleType](data, vehType.value, ifTimeDilated)
+            vehData = VehiclesList[vehicleType](data, vehType.value, isTimeDilated)
             data = vehData
             if not (data.overwriteRGB) then data.touchpadLED = prevRGB end
             if not (data.overwritePlayerLED) then
@@ -525,7 +525,7 @@ registerForEvent('onUpdate', function(delta)
                 local isGearboxEmulationEnabled = config.gearboxEmulation
                 local gearChangeForce = config.gearChangeForce
 
-                vehData = VehiclesModesList[list[vehType.value]](data, veh, false, GearboxValue, ifTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled)
+                vehData = VehiclesModesList[list[vehType.value]](data, veh, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled)
 
                 if (vehData) then
                     if (vehData.frequency == -1) then vehData.frequency = 0 end
@@ -554,7 +554,7 @@ registerForEvent('onUpdate', function(delta)
                     end
 
                     local chosenPlayerLED = config.vehiclePlayerLEDValue
-                    local vehiclePlayerLED = VehiclePlayerLEDModeList[vehiclePlayerLEDList[chosenPlayerLED]](data, false, veh, GearboxValue, ifTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, VehicleCollisionForce)
+                    local vehiclePlayerLED = VehiclePlayerLEDModeList[vehiclePlayerLEDList[chosenPlayerLED]](data, false, veh, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, VehicleCollisionForce)
 
                     data = vehiclePlayerLED
 
@@ -632,20 +632,23 @@ registerForEvent('onUpdate', function(delta)
             local weaponName = entity.weapon:GetItemData():GetNameAsString()
             local itemId = entity.weapon:GetItemID()
             local weaponType = entity.weapon.GetWeaponType(itemId).value
+            local triggerType = entity.weapon:GetCurrentTriggerMode():Name()
+            local cycleTime = Game.GetStatsSystem():GetStatValue(entity.weapon:GetEntityID(), gamedataStatType.CycleTime)
+            local attackSpeed = math.floor(1 / cycleTime + 0.5)
 
             local weapon = WeaponsList[weaponType]
 
             local weaponState = 0
 
-            if (isShooting) then weaponState = 8 end
+            if (isShooting) then weaponState = 'turretShooting' end
 
-            local weaponObj = weapon(data, weaponName, isAiming, weaponState, ifTimeDilated)
+            local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, false, attackSpeed)
             data = weaponObj
         elseif (gameObjName == 'SniperNest') then
             local isShooting = entity.isShootingOngoing
 
             if (isShooting) then
-                local freq = GetFrequency(1, false)
+                local freq = GetFrequency(1, false, gameObjName)
                 data.rightTriggerType = 'AutomaticGun'
                 data.rightForceTrigger = '(4)(8)('.. freq ..')'
             else
@@ -661,7 +664,7 @@ registerForEvent('onUpdate', function(delta)
 
     -- ADAPTIVE TRIGGERS FOR WEAPONS
 
-    local weaponHand = Game.GetActiveWeapon(GetPlayer())
+    local usingWeapon = Game.GetActiveWeapon(GetPlayer())
 
     if (Game.GetMountedVehicle(GetPlayer()) ~= nil) then
         if (Game.GetMountedVehicle(GetPlayer()):IsPlayerDriver() == true) then return end
@@ -672,57 +675,54 @@ registerForEvent('onUpdate', function(delta)
     local triggerType = 'no'
     local isMeleeWeapon = false
     local isCyberwareWeapon = false
+    local cycleTime = 0
+    local attackSpeed = 0
 
-    if (weaponHand) then
-        weaponName = weaponHand:GetItemData():GetNameAsString()
+    if (usingWeapon) then
+        weaponName = usingWeapon:GetItemData():GetNameAsString()
 
         -- type of item
-        local itemType = weaponHand.GetClassName(weaponHand).value
+        local itemType = usingWeapon.GetClassName(usingWeapon).value
         -- checking what item in right hand, grenade or weapon. It doesn't really matter. This is done only so that the script does not break.
         if (itemType == 'BaseGrenade') then
             weaponType = 'default'
         else
             -- (thanks to keanuWheeze) getting type of equipped weapon, full list of game item types: https://nativedb.red4ext.com/gamedataItemType
-            local itemId = weaponHand:GetItemID()
-            weaponType = weaponHand.GetWeaponType(itemId).value
-            isMeleeWeapon = weaponHand.isMeleeWeapon
-            isCyberwareWeapon = weaponHand.IsCyberwareWeapon(itemId)
-            triggerType = weaponHand:GetCurrentTriggerMode():Name()
+            local itemId = usingWeapon:GetItemID()
+            weaponType = usingWeapon.GetWeaponType(itemId).value
+            isMeleeWeapon = usingWeapon.isMeleeWeapon
+            isCyberwareWeapon = usingWeapon.IsCyberwareWeapon(itemId)
+            triggerType = usingWeapon:GetCurrentTriggerMode():Name()
+            cycleTime = Game.GetStatsSystem():GetStatValue(usingWeapon:GetEntityID(), gamedataStatType.CycleTime)
+            attackSpeed = math.floor(1 / cycleTime + 0.5)
         end
     else
         -- SaveFile('RGBChange', data, 'noWeaponType', 'noWeaponName', 'noVehicle')
     end
 
-    -- list of weapons which should be tested for no ammo
-    local noAmmoCheckList = Array {'Wea_Rifle', 'Wea_ShotgunDual', 'Wea_LightMachineGun', 'Wea_HeavyMachineGun', 'Wea_SubmachineGun', 'Wea_Shotgun', 'Wea_Revolver', 'Wea_Handgun', 'Wea_SniperRifle', 'Wea_PrecisionRifle'}
-
     local weapon = WeaponsList[weaponType]
     local stamina = GetState('Stamina')
-
-    -- if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina) end
+    local weaponState = GetState('Weapon')
+    local isWeaponGlitched = IsWeaponGlitched()
 
     if (not weapon) then
         weapon = WeaponsList['default']
         weaponType = 'default'
     end
-
-    local weaponState = GetState('Weapon')
     if (weaponState == 6) then weaponState = 4 end
 
-    local isWeaponGlitched = IsWeaponGlitched()
+    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime) end
 
-    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched) end
+    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed)
 
-    local weaponObj = weapon(data, weaponName, isAiming, weaponState, ifTimeDilated, triggerType, isWeaponGlitched)
+    local weaponModeValue = config.weaponsSettings[weaponType].value
 
-    local v = config.weaponsSettings[weaponType].value
+    if (weaponType == 'default' and data.overrideDefault) then weaponObj.leftTriggerType = SettingsCheckData[weaponModeValue] weaponObj.rightTriggerType = SettingsCheckData[weaponModeValue] end
 
-    if (weaponType == 'default' and data.overrideDefault) then weaponObj.leftTriggerType = SettingsCheckData[v] weaponObj.rightTriggerType = SettingsCheckData[v] end
+    if (weaponModeValue ~= 1) then weaponObj.rightTriggerType = SettingsCheckData[weaponModeValue] end
+    if (weaponModeValue == 2) then weaponObj.leftTriggerType = 'Normal' weaponObj.rightTriggerType = 'Normal' end
 
-    if (v ~= 1) then weaponObj.rightTriggerType = SettingsCheckData[v] end
-    if (v == 2) then weaponObj.leftTriggerType = 'Normal' weaponObj.rightTriggerType = 'Normal' end
-
-    local sendingWeaponType = weaponType .. data.touchpadLED .. 'L' .. weaponObj.leftTriggerType .. 'R' .. weaponObj.rightTriggerType .. weaponObj.leftForceTrigger .. weaponObj.rightForceTrigger .. tostring(ifTimeDilated) .. additionalString .. data.micLED .. weaponState
+    local sendingWeaponType = weaponType .. data.touchpadLED .. 'L' .. weaponObj.leftTriggerType .. 'R' .. weaponObj.rightTriggerType .. weaponObj.leftForceTrigger .. weaponObj.rightForceTrigger .. tostring(isTimeDilated) .. additionalString .. data.micLED .. weaponState
 
     if (isAiming) then
         sendingWeaponType = sendingWeaponType .. 'IsAiming'
@@ -731,7 +731,7 @@ registerForEvent('onUpdate', function(delta)
     if (weaponState == 4 and data.canUseNoAmmoWeaponEffect) then weaponState = 0 end
 
     if (weaponType ~= 'default') then
-        local magazineAmmo = weaponHand:GetMagazineAmmoCount()
+        local magazineAmmo = usingWeapon:GetMagazineAmmoCount()
         if (magazineAmmo == 0 and data.canUseNoAmmoWeaponEffect) then
             data.canUseWeaponReloadEffect = true
         end
@@ -742,8 +742,8 @@ registerForEvent('onUpdate', function(delta)
         end
     end
 
-    if (noAmmoCheckList[weaponType] and data.canUseNoAmmoWeaponEffect) then
-        local isEmpty = IsMagazineEmpty(weaponHand)
+    if (not isMeleeWeapon and usingWeapon ~= nil and data.canUseNoAmmoWeaponEffect) then
+        local isEmpty = IsMagazineEmpty(usingWeapon)
 
         if (isEmpty and weaponState ~= 2) then
             sendingWeaponType = sendingWeaponType .. 'NoAmmo'

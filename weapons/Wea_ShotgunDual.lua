@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_ShotgunDual')
 
     data.leftTriggerType = 'Resistance'

@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-Items-Item Type-Cyb_NanoWires')
 
     data.leftTriggerType = 'Choppy'

@@ -1,13 +1,13 @@
-local savedFreq = 0
+local savedExecutorString = ''
 local savedDilation = false
 
 local currentFreq = 0
 
 local getIndex = 0
 
-local function GetFrequency(freq, dilation)
-    if (savedFreq ~= freq or dilation ~= savedDilation) then
-        savedFreq = freq
+local function GetFrequency(freq, dilation, executorString)
+    if (savedExecutorString ~= executorString or dilation ~= savedDilation) then
+        savedExecutorString = executorString
         currentFreq = freq
         savedDilation = dilation
         getIndex = 0
@@ -42,7 +42,7 @@ local function GetFrequency(freq, dilation)
 end
 
 local function FormatFrequency(freq, dilation)
-    local frequency = GetFrequency(freq, dilation)
+    local frequency = GetFrequency(freq, dilation, 'format')
     frequency = math.floor(frequency)
 
     if (frequency < 1) then frequency = 1 end

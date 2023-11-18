@@ -2,7 +2,7 @@ local weaponFireTriggerAppliedTimes = 0
 local savedWeaponName = ''
 local savedWeaponState = 0
 
-local function Weapon(data, name, isAiming, state, dilated, triggerType)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SniperRifle')
 
     data.leftTriggerType = 'Resistance'
@@ -45,7 +45,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         end
 
         if (state == 8) then
-            freq = GetFrequency(2, dilated)
+            freq = GetFrequency(2, dilated, name)
             data.rightTriggerType = 'AutomaticGun'
             data.rightForceTrigger = '(4)(8)('.. freq ..')'
         end
@@ -87,20 +87,24 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
 
         if (triggerType == 'FullAuto') then
             if (state == 8 or state == 4) then
-                freq = GetFrequency(3, dilated)
+                freq = GetFrequency(attackSpeed, dilated, name)
 
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(1)'
             end
         elseif (triggerType == 'Burst') then
             if (state == 8) then
-                freq = GetFrequency(15, dilated)
+                if (weaponFireTriggerAppliedTimes <= 20 or (weaponFireTriggerAppliedTimes <= 40 and dilated)) then
+                    freq = GetFrequency(12, dilated, name)
             
-                data.leftTriggerType = 'Machine'
-                data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
+                    data.leftTriggerType = 'Machine'
+                    data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
+    
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(1)'
 
-                data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(1)'
+                    weaponFireTriggerAppliedTimes = weaponFireTriggerAppliedTimes + 1
+                end
             end
         end
     elseif (name == 'w_rifle_sniper_tsunami_rasetsu') then
@@ -112,7 +116,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         if (triggerType == 'SemiAuto') then
             if (state == 8) then
                 if (weaponFireTriggerAppliedTimes <= 20 or (weaponFireTriggerAppliedTimes <= 40 and dilated)) then
-                    freq = GetFrequency(2, dilated)
+                    freq = GetFrequency(2, dilated, name)
                     data.rightTriggerType = 'AutomaticGun'
                     data.rightForceTrigger = '(4)(8)('.. freq ..')'
 
@@ -129,7 +133,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
                     data.leftTriggerType = 'Resistance'
                     data.leftForceTrigger = '(1)(8)'
     
-                    freq = GetFrequency(2, dilated)
+                    freq = GetFrequency(2, dilated, name)
                     data.rightTriggerType = 'AutomaticGun'
                     data.rightForceTrigger = '(4)(8)('.. freq ..')'
 

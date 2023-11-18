@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_PrecisionRifle')
 
     data.leftTriggerType = 'Resistance'
@@ -24,7 +24,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightForceTrigger = '(1)(6)(3)(1)'
 
         if (triggerType == 'Burst' and state == 8) then
-            freq = GetFrequency(5, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(2)(9)(7)(7)('.. freq ..')(0)'
         end
@@ -42,7 +42,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
             end
 
             if (state == 8) then
-                freq = GetFrequency(5, dilated)
+                freq = GetFrequency(attackSpeed, dilated, name)
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
             end

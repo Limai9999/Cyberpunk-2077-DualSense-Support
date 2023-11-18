@@ -3,7 +3,7 @@ local resistanceEnabled = true
 local resistanceTimes = 0
 local maxResistanceTimes = 10
 
-local function Weapon(data, name, isAiming, state, dilated, triggerType)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Shotgun')
 
     if (state == 4 or state == 0 or state == 6) then return data end
@@ -39,7 +39,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightForceTrigger = '(0)(3)(5)(5)'
 
         if (state == 8) then
-            freq = GetFrequency(2, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(2)(9)(2)(2)('.. freq ..')(0)'
             data.rightTriggerType = 'Machine'
@@ -63,11 +63,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType)
         data.rightForceTrigger = '(1)(2)(6)(6)'
 
         if (state == 8) then
-            if (dilated) then
-                freq = GetFrequency(5, dilated)
-            else
-                freq = GetFrequency(4, dilated)
-            end
+            freq = GetFrequency(attackSpeed, dilated, name)
 
             if (resistanceEnabled) then
                 data.leftTriggerType = 'Resistance'

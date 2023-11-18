@@ -4,7 +4,7 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     data.description = 'L2 - ' .. typeLoc .. '; ' .. 'R2 - ' .. typeLoc .. ' (' .. NALoc .. ')'
     data.isHiddenMode = false
     data.vehicleModeIndex = 8
-    if (nUI) then return data end
+    if (nUI or not veh) then return data end
 
     data.leftTriggerType = 'Rigid'
     data.rightTriggerType = 'Rigid'

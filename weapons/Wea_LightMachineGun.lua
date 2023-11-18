@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_LightMachineGun')
 
     local freq = 0
@@ -13,7 +13,7 @@ local function Weapon(data, name, isAiming, state, dilated)
         data.rightForceTrigger = '(0)(3)(7)(7)'
 
         if (state == 8) then
-            freq = GetFrequency(10, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
             local leftFreq = math.floor(freq / 2)
 
             data.leftTriggerType = 'Machine'

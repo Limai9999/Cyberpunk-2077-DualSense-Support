@@ -3,7 +3,7 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     data.description = 'L2 - ' .. typeGalLoc .. '; ' .. 'R2 - ' .. typeGalLoc
     data.isHiddenMode = false
     data.vehicleModeIndex = 2
-    if (nUI) then return data end
+    if (nUI or not veh) then return data end
 
     local config = ManageSettings.openFile()
 
@@ -14,7 +14,7 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     local frequency = '1'
 
     local dividedRpmA = math.floor(rpm / (9500 / maxGalloping))
-    dividedRpmA = GetFrequency(dividedRpmA, dilated)
+    dividedRpmA = GetFrequency(dividedRpmA, dilated, veh:GetDisplayName() .. data.description)
 
     if (dividedRpmA > maxGalloping) then dividedRpmA = maxGalloping end
     frequency = tostring(dividedRpmA)

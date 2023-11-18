@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Story-base-journal-quests-main_quest-prologue-q000_tutorial-01a_pick_weapon_Rifle_mappin')
 
     local freq = 0
@@ -8,7 +8,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(0)(4)(6)(6)'
 
         if (state == 8) then
-            freq = GetFrequency(3, dilated)
+            freq = GetFrequency(3, dilated, name)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
         end
@@ -29,7 +29,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.leftForceTrigger = '(4)(2)'
 
             if (state == 8) then
-                freq = GetFrequency(9, dilated)
+                freq = GetFrequency(attackSpeed, dilated, name)
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
                 data.rightTriggerType = 'Machine'
@@ -54,7 +54,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 8) then
-            freq = GetFrequency(10, dilated)
+            freq = GetFrequency(attackSpeed * 2, dilated, name)
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
             data.rightTriggerType = 'Machine'
@@ -65,7 +65,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(2)(5)(4)(6)'
 
         if (state == 8) then
-            freq = GetFrequency(10, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
 
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
@@ -82,7 +82,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 8) then
-            freq = GetFrequency(11, dilated)
+            freq = GetFrequency(attackSpeed, dilated, name)
 
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'
@@ -96,7 +96,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         if (isAiming) then
             if (state == 8) then
-                freq = GetFrequency(6, dilated)
+                freq = GetFrequency(attackSpeed, dilated, name)
 
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
@@ -106,14 +106,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         else
             if (state == 8) then
-                freq = GetFrequency(10, dilated)
+                freq = GetFrequency(attackSpeed, dilated, name)
 
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
             end
         end
     else
-        freq = GetFrequency(11, dilated)
+        freq = GetFrequency(11, dilated, name)
 
         data.rightTriggerType = 'Machine'
         data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'

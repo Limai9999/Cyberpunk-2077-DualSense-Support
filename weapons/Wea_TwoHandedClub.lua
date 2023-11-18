@@ -1,4 +1,4 @@
-local function Weapon(data, weaponName, isAiming)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_TwoHandedClub')
 
     data.leftTriggerType = 'Choppy'

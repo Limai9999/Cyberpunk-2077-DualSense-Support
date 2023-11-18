@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, _, dilated)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_OneHandedClub')
 
     data.leftTriggerType = 'Bow'
@@ -25,9 +25,9 @@ local function Weapon(data, name, isAiming, _, dilated)
     if (name == 'w_melee_baton') then
         if (state == 6 or state == 7) then
             if (isAiming) then
-                freq = GetFrequency(7, dilated)
+                freq = GetFrequency(7, dilated, name)
             else
-                freq = GetFrequency(10, dilated)
+                freq = GetFrequency(10, dilated, name)
             end
 
             data.rightTriggerType = 'Galloping'
