@@ -36,12 +36,14 @@ DrawImGUI = require('observers/drawImGui')
 UDPManualStartHandler = require('observers/UDPManualStartHandler')
 
 -- =============== Other Modes ===============
-GetResistanceTrigger = require('OtherModes/Resistance')
-GetBraindanceTrigger = require('OtherModes/Braindance')
-GetScannerTrigger = require('OtherModes/Scanner')
-HandleMenu = require('OtherModes/Menu')
+GetResistanceTrigger = require('otherModes/Resistance')
+GetBraindanceTrigger = require('otherModes/Braindance')
+GetScannerTrigger = require('otherModes/Scanner')
+HandleMenu = require('otherModes/Menu')
+NCPDChaseTouchpadLEDMode = require('otherModes/TouchpadLEDModes/NCPDChase')
+VehicleDestroyedTouchpadLEDMode = require('otherModes/TouchpadLEDModes/VehicleDestroyed')
 
-ModName = '[DualSense Controller Support]'
+ModName = '[Enhanced DualSense Support]'
 
 WeaponsList = {}
 VehiclesList = {}
@@ -403,14 +405,10 @@ registerForEvent('onUpdate', function(delta)
         end
 
         -- ncpd chase
-        -- if (isNCPDChasing) then
-        --     data.overwriteRGB = false
-        --     data.touchpadLED = '(19)(93)(216)'
-        --     -- ncpd chase in crouch
-        --     if (inCrouch) then
-        --         data.touchpadLED = '(4)(63)(186)'
-        --     end
-        -- end
+        if (isNCPDChasing) then
+            data.overwriteRGB = false
+            data = NCPDChaseTouchpadLEDMode(data, inCombat)
+        end
 
         -- cyberspace
         if (inCyberspace) then
@@ -458,6 +456,8 @@ registerForEvent('onUpdate', function(delta)
         local isDestroyed = veh:IsDestroyed()
         local vehicleType = veh:ToString()
 
+        -- print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType)
+
         GearboxValue = veh:GetBlackboard():GetInt(GetAllBlackboardDefs().Vehicle.GearValue)
 
         -- local component = veh.vehicleComponent
@@ -497,8 +497,13 @@ registerForEvent('onUpdate', function(delta)
             SaveFile('vehicle', data, '', '', vehType.name..state)
         else
             if (isDestroyed and not isFlying) then
-                data.leftTriggerType = 'Normal'
-                data.rightTriggerType = 'Normal'
+                local freq = GetFrequency(30, isTimeDilated, 'vehicleDestroyed')
+
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
+    
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
 
                 SaveFile('vehicle', data, '', '', 'vehicleDestroyed'..additionalString)
             elseif (not isVehicleTurnedOn or (not isEngineTurnedOn and not isFlying)) then
@@ -506,6 +511,20 @@ registerForEvent('onUpdate', function(delta)
                 data.leftForceTrigger = '(1)(1)'
                 data.rightTriggerType = 'Resistance'
                 data.rightForceTrigger = '(1)(1)'
+
+                if (not isEngineTurnedOn and isVehicleTurnedOn) then
+                    local freq = GetFrequency(30, isTimeDilated, 'vehicleDestroyed')
+
+                    data.leftTriggerType = 'Machine'
+                    data.leftForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
+        
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
+
+                    data = VehicleDestroyedTouchpadLEDMode(data)
+                end
+
+                additionalString = additionalString .. data.touchpadLED
 
                 SaveFile('vehicle', data, '', '', 'vehicleDisabled'..additionalString)
             elseif (isHaveFlightMod and not veh.isOnGround and not isFlying) then
