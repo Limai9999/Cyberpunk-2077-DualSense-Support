@@ -3,6 +3,7 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     data.description = 'L2 - ' .. typeMachLoc .. '; ' .. 'R2 - ' .. typeMachLoc
     data.isHiddenMode = false
     data.vehicleModeIndex = 4
+    data.vehicleUseTwitchingCollisionTrigger = false
     if (nUI or not veh) then return data end
 
     local config = ManageSettings.openFile()

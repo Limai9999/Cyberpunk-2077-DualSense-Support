@@ -51,18 +51,21 @@ VehiclesList = {}
 VehiclesModesList = {}
 PlayerLEDModeList = {}
 VehiclePlayerLEDModeList = {}
+GearChangeModeList = {}
 
 local weaponFolder = 'weapons'
 local vehicleFolder = 'vehicles'
 local vehicleModesFolder = 'vehicles/modes'
 local playerLEDModesFolder = 'playerLEDModes'
 local vehiclePlayerLEDModesFolder = 'playerLEDVehicleModes'
+local gearChangeModesFolder = 'otherModes/GearChangeModes'
 
 LoadFolder(WeaponsList, weaponFolder)
 LoadFolder(VehiclesList, vehicleFolder)
 LoadFolder(VehiclesModesList, vehicleModesFolder)
 LoadFolder(PlayerLEDModeList, playerLEDModesFolder)
 LoadFolder(VehiclePlayerLEDModeList, vehiclePlayerLEDModesFolder)
+LoadFolder(GearChangeModeList, gearChangeModesFolder)
 
 -- Braindance data
 IsBD = false
@@ -284,6 +287,7 @@ registerForEvent('onUpdate', function(delta)
         canUseNoAmmoWeaponEffect = true,
         overrideDefault = true,
         vehicleModeIndex = 0,
+        vehicleUseTwitchingCollisionTrigger = false,
         type = 'default'
     }
 
@@ -580,6 +584,10 @@ registerForEvent('onUpdate', function(delta)
 
                     if (VehicleCollisionForce and VehicleCollisionForce > 0) then
                         data.rightTriggerType = 'Resistance'
+                        if (vehData.vehicleUseTwitchingCollisionTrigger) then
+                            data.leftTriggerType = 'Machine'
+                            data.rightTriggerType = 'Machine'
+                        end
 
                         if (config.flickerOnCollisionsPlayerLED) then
                             local randomPlayerLED = GetRandomPlayerLED()
@@ -589,29 +597,64 @@ registerForEvent('onUpdate', function(delta)
                         end
 
                         if (VehicleCollisionForce > 0.05) then
-                            data.rightForceTrigger = '(0)(3)'
+                            data.rightForceTrigger = '(0)(4)'
+
+                            if (vehData.vehicleUseTwitchingCollisionTrigger) then
+                                local freq = GetFrequency(30, isTimeDilated, 'vehicleCollision1')
+                                data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
+                                data.rightForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
+                            end
                         end
                         if (VehicleCollisionForce > 0.20) then
-                            data.rightForceTrigger = '(0)(4)'
+                            data.rightForceTrigger = '(0)(5)'
+
+                            if (vehData.vehicleUseTwitchingCollisionTrigger) then
+                                local freq = GetFrequency(30, isTimeDilated, 'vehicleCollision2')
+                                data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
+                                data.rightForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
+                            end
                         end
                         if (VehicleCollisionForce > 1) then
-                            data.rightForceTrigger = '(0)(5)'
+                            data.rightForceTrigger = '(0)(6)'
+
+                            if (vehData.vehicleUseTwitchingCollisionTrigger) then
+                                local freq = GetFrequency(30, isTimeDilated, 'vehicleCollision3')
+                                data.leftForceTrigger = '(1)(9)(3)(3)('.. freq ..')(0)'
+                                data.rightForceTrigger = '(1)(9)(3)(3)('.. freq ..')(0)'
+                            end
                         end
                         if (VehicleCollisionForce > 3) then
-                            data.rightForceTrigger = '(0)(6)'
+                            data.rightForceTrigger = '(0)(7)'
+
+                            if (vehData.vehicleUseTwitchingCollisionTrigger) then
+                                local freq = GetFrequency(30, isTimeDilated, 'vehicleCollision4')
+                                data.leftForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
+                                data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
+                            end
                         end
                         if (VehicleCollisionForce > 6) then
-                            data.rightForceTrigger = '(0)(7)'
-                        end
-                        if (VehicleCollisionForce > 10) then
                             data.rightForceTrigger = '(0)(8)'
+
+                            if (vehData.vehicleUseTwitchingCollisionTrigger) then
+                                local freq = GetFrequency(30, isTimeDilated, 'vehicleCollision5')
+                                data.leftForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+                                data.rightForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+                            end
                         end
                     end
 
                     if (isChangingGear and GearboxValue > 1) then
-                        data.rightTriggerType = 'AutomaticGun'
-                        data.rightForceTrigger = '(1)('..gearChangeForce..')(2)'
-                        data.touchpadLED = '(200)(107)(1)'
+                        local vehicleGearChangeModeList = {}
+
+                        for _, v in pairs(GearChangeModeList) do
+                            local Data = v({}, true)
+                            vehicleGearChangeModeList[Data.value] = Data.name
+                        end
+
+                        local chosenGearMode = config.gearChangeModeValue
+                        data = GearChangeModeList[vehicleGearChangeModeList[chosenGearMode]](data, false, config)
+
+                        if (data.overwriteRGB) then data.touchpadLED = '(200)(107)(1)' end
                     end
 
                     additionalString = data.touchpadLED .. data.playerLEDNewRevision .. data.playerLED .. data.leftTriggerType .. data.rightTriggerType .. data.leftForceTrigger .. data.rightForceTrigger

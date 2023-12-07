@@ -3,7 +3,8 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     local NALoc = GetText('Mod-DualSense-NotAdaptive')
     data.description = 'L2 - ' .. typeLoc .. '; ' .. 'R2 - ' .. typeLoc .. ' (' .. NALoc .. ')'
     data.isHiddenMode = false
-    data.vehicleModeIndex = 0
+    data.vehicleModeIndex = 11
+    data.vehicleUseTwitchingCollisionTrigger = false
     if (nUI or not veh) then return data end
 
     data.leftTriggerType = 'Normal'

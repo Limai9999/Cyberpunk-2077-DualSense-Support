@@ -5,6 +5,7 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     data.isHiddenMode = false
     data.vehicleModeIndex = 6
     data.vehicleModeDefault = true
+    data.vehicleUseTwitchingCollisionTrigger = false
     if (nUI or not veh) then return data end
 
     local config = ManageSettings.openFile()
