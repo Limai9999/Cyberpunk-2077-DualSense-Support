@@ -236,15 +236,27 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    NS.addRangeInt(vehicles, GetText('Mod-DualSense-NS-GearboxForce'), GetText('Mod-DualSense-NS-GearboxForce-Descr'), 1, 8, 1, config.gearChangeForce, 5, function(value)
+    local vehicleGearChangeModeList = {}
+
+    for _, v in pairs(GearChangeModeList) do
+        local data = v({}, true)
+        vehicleGearChangeModeList[data.value] = data.name
+    end
+
+    NS.addSelectorString(vehicles, 'Gear Change Trigger Effect Mode', 'descr', vehicleGearChangeModeList, config.gearChangeModeValue, 1, function(v)
+        config.gearChangeModeValue = v
+        ManageSettings.saveFile(config)
+    end)
+
+    NS.addRangeInt(vehicles, GetText('Mod-DualSense-NS-GearboxForce'), GetText('Mod-DualSense-NS-GearboxForce-Descr'), 1, 7, 1, config.gearChangeForce, 2, function(value)
         config.gearChangeForce = value
         ManageSettings.saveFile(config)
     end)
 
-    -- NS.addRangeInt(vehicles, 'Gear Change Duration', 'It is not recommended to change this value below 15.', 1, 60, 1, config.gearChangeDuration, 15, function(value)
-    --     config.gearChangeDuration = value
-    --     ManageSettings.saveFile(config)
-    -- end)
+    NS.addRangeInt(vehicles, 'Gear Change Duration', 'It is not recommended to change this value below 15.', 1, 60, 1, config.gearChangeDuration, 20, function(value)
+        config.gearChangeDuration = value
+        ManageSettings.saveFile(config)
+    end)
 
     NS.addSubcategory(vehiclesList, GetText('Mod-DualSense-NS-Subcategory-VehiclesList'))
 
