@@ -108,6 +108,13 @@ local function StartObservers()
         IsBlockedBullet = true
     end)
 
+    Observe('gameObject', 'OnHit', function (_, hitEvent)
+        if (hitEvent.attackData.attackType ~= gamedataAttackType.Melee) then return end
+        if (not hitEvent.attackData.source:IsPlayerControlled()) then return end
+        
+        IsPlayerHitNPC = true
+    end)
+
     GameSession.OnLoad(function ()
         IsLoading = true
     end)
