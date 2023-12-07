@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-Items-Item Type-Wea_HeavyMachineGun')
 
     local freq = 0

@@ -2,7 +2,7 @@ local weaponFireTriggerAppliedTimes = 0
 local savedWeaponName = ''
 local savedWeaponState = 0
 
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SniperRifle')
 
     data.leftTriggerType = 'Resistance'

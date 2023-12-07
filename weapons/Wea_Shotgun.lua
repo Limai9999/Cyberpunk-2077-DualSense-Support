@@ -3,7 +3,7 @@ local resistanceEnabled = true
 local resistanceTimes = 0
 local maxResistanceTimes = 10
 
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Shotgun')
 
     if (state == 4 or state == 0 or state == 6) then return data end

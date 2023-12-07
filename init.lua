@@ -42,6 +42,7 @@ GetScannerTrigger = require('otherModes/Scanner')
 HandleMenu = require('otherModes/Menu')
 NCPDChaseTouchpadLEDMode = require('otherModes/TouchpadLEDModes/NCPDChase')
 VehicleDestroyedTouchpadLEDMode = require('otherModes/TouchpadLEDModes/VehicleDestroyed')
+UseBulletBlockTrigger = require('otherModes/BulletBlock')
 
 ModName = '[Enhanced DualSense Support]'
 
@@ -732,7 +733,7 @@ registerForEvent('onUpdate', function(delta)
 
     if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime) end
 
-    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed)
+    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config)
 
     local weaponModeValue = config.weaponsSettings[weaponType].value
 

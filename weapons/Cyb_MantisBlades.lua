@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-Items-Item Type-Cyb_MantisBlades')
 
     local stamina = GetState('Stamina')
@@ -59,8 +59,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     end
 
     if (IsBlockedBullet) then
-        data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(3)(3)'
+        data = UseBulletBlockTrigger(data, config)
     end
 
     return data

@@ -29,6 +29,7 @@ local defaultConfig = {
     micLED = true,
     menuTriggers = true,
     showWeaponStates = false,
+    meleeBulletBlockEffectStrength = 3,
 }
 
 local filePath = 'config/settings.json'
