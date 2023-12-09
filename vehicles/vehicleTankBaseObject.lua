@@ -1,5 +1,5 @@
 local function Vehicle(data, isEnabled, dilated)
-    data.type = GetText('Story-base-gameplay-static_data-database-vehicles-quest-q114-q114_militech_panzer_displayName')
+    data.type = GetText('Story-base-journal-codex-glossary-Militech_basilisk_title')
     data.isButtonedVehicle = true
     data.hasOwnMode = true
 
