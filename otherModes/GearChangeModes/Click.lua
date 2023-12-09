@@ -6,6 +6,8 @@ local function GearChangeMode(data, nUI, config)
 
     local gearChangeForce = config.gearChangeForce
 
+    data.leftTriggerType = 'AutomaticGun'
+    data.leftForceTrigger = '(1)(' .. gearChangeForce .. ')(2)'
     data.rightTriggerType = 'AutomaticGun'
     data.rightForceTrigger = '(1)(' .. gearChangeForce .. ')(2)'
 
