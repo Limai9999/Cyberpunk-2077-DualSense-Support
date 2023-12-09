@@ -68,19 +68,19 @@ function dump(o)
  end
 
 function SetupFolder(f, folder, defValue, putData, isVeh)
-    local defaultVehicleValue = 1
+    -- local defaultVehicleValue = 1
 
-    if (isVeh) then
-        for mode, data in pairs(VehiclesModesList) do
-            local dataObj = data({})
-            local foundValue = dataObj.vehicleModeDefault
-            if (foundValue) then
-                defaultVehicleValue = dataObj.vehicleModeIndex
-            end
-        end
-    end
+    -- if (isVeh) then
+    --     for mode, data in pairs(VehiclesModesList) do
+    --         local dataObj = data({})
+    --         local foundValue = dataObj.vehicleModeDefault
+    --         if (foundValue) then
+    --             defaultVehicleValue = dataObj.vehicleModeIndex
+    --         end
+    --     end
+    -- end
 
-    VehicleModeDefaultIndex = defaultVehicleValue
+    -- VehicleModeDefaultIndex = defaultVehicleValue
 
     for type, dataFunc in pairs(folder) do
         if not (f[type]) then
@@ -100,7 +100,7 @@ function SetupFolder(f, folder, defValue, putData, isVeh)
                     f[type] = {
                         name = data.type,
                         data = data,
-                        value = defaultVehicleValue
+                        value = data.defaultModeIndex
                     }
                 end
             else

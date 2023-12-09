@@ -91,7 +91,7 @@ VehicleCollisionForce = 0
 IsBlockedBullet = false
 IsPlayerHitNPC = false
 
-VehicleModeDefaultIndex = 0
+-- VehicleModeDefaultIndex = 0
 
 -- DSX data
 IsControllerConnected = false

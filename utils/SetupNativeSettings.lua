@@ -282,7 +282,7 @@ local function SetupNativeSettings()
                 ManageSettings.saveFile(config)
             end)
         else
-            NS.addSelectorString(vehiclesList, vehicleName, changesFor .. ' ' .. vehicleName .. '. ' .. GetText('Mod-DualSense-NS-VehicleList-Meanings'), list, config.vehicleSettings[vehicleKey].value, VehicleModeDefaultIndex, function(v)
+            NS.addSelectorString(vehiclesList, vehicleName, changesFor .. ' ' .. vehicleName .. '. ' .. GetText('Mod-DualSense-NS-VehicleList-Meanings'), list, config.vehicleSettings[vehicleKey].value, vehicleValue.data.defaultModeIndex, function(v)
                 config.vehicleSettings[vehicleKey].value = v
                 ManageSettings.saveFile(config)
             end)

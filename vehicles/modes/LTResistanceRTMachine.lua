@@ -4,7 +4,7 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     data.description = 'L2 - ' .. typeResLoc .. '; ' .. 'R2 - ' .. typeMachLoc
     data.isHiddenMode = false
     data.vehicleModeIndex = 6
-    data.vehicleModeDefault = true
+    -- data.vehicleModeDefault = true
     data.vehicleUseTwitchingCollisionTrigger = false
     if (nUI or not veh) then return data end
 

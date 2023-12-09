@@ -2,6 +2,7 @@ local function Vehicle(data)
     data.type = GetText('Story-base-quest-main_quests-part1-q104-scenes-q104_07c_nomads_arrive-q104_07c_ch_drop_haru_displayNameOverride')
     data.isButtonedVehicle = false
     data.hasOwnMode = false
+    data.defaultModeIndex = 6
 
     return data
 end
