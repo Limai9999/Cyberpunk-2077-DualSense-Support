@@ -1,4 +1,5 @@
 local function GearChangeMode(data, nUI, config)
+    -- ! Translate
     data.name = 'Click'
     data.value = 2
 
