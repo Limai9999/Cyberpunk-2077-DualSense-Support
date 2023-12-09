@@ -35,6 +35,8 @@ local function StartObservers()
 
     Observe('scannerBorderGameController', 'OnProgressChange', function (this, progressValue)
         ScanProgress = progressValue
+        ScannerTarget = Dump(Game.FindEntityByID(this.currentTarget), false)
+
         if (progressValue ~= 0) then
             ScanStatus = 'Scanning'
             if (this.isFullyScanned or progressValue == 1) then ScanStatus = 'Scanned' end
@@ -109,8 +111,6 @@ local function StartObservers()
     end)
 
     Observe('gameObject', 'OnHit', function (_, hitEvent)
-        print(hitEvent.attackData.attackType)
-
         if (hitEvent.attackData.attackType ~= gamedataAttackType.Melee and hitEvent.attackData.attackType ~= gamedataAttackType.StrongMelee) then return end
         if (not hitEvent.attackData.source:IsPlayerControlled()) then return end
         

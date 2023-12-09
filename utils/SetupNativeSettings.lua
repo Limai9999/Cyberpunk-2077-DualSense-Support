@@ -16,7 +16,7 @@ local function SetupNativeSettings()
     local weaponsList = modName..'/weaponsList'
     local vehicles = modName..'/vehicles'
     local vehiclesList = modName..'/vehiclesList'
-    local menu = modName..'/menu'
+    local additionalTriggers = modName..'/additionalTriggers'
     local braindance = modName..'/braindance'
     local extraSettings = modName..'/extraSettings'
     local fixProblems = modName..'/fixProblems'
@@ -129,13 +129,21 @@ local function SetupNativeSettings()
     end)
 
     local menuLoc = GetText('Mod-DualSense-NS-Menu')
-    local enableTriggersLoc = GetText('Mod-DualSense-NS-EnableTriggers')
+    -- local enableTriggersLoc = GetText('Mod-DualSense-NS-EnableTriggers')
     local enableTriggersDescriptionLoc = GetText('Mod-DualSense-NS-EnableTriggersFor')
 
-    NS.addSubcategory(menu, menuLoc)
+    -- ! Translate
+    NS.addSubcategory(additionalTriggers, 'Additional Trigger Effects')
 
-    NS.addSwitch(menu, enableTriggersLoc, enableTriggersDescriptionLoc .. ' ' .. menuLoc, config.menuTriggers, true, function(state)
+    NS.addSwitch(additionalTriggers, menuLoc, enableTriggersDescriptionLoc .. ' ' .. menuLoc, config.menuTriggers, true, function(state)
         config.menuTriggers = state
+        ManageSettings.saveFile(config)
+    end)
+
+    local scannerLoc = GetText('Story-base-gameplay-gui-widgets-scanning-scanner_hud-_localizationString')
+
+    NS.addSwitch(additionalTriggers, scannerLoc, enableTriggersDescriptionLoc .. ' ' .. scannerLoc, config.scannerTriggers, true, function(state)
+        config.scannerTriggers = state
         ManageSettings.saveFile(config)
     end)
 
@@ -172,11 +180,13 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
+    -- ! Translate
     NS.addRangeInt(weapons, 'Melee Bullet Block/Deflect Effect Strength', 'descr', 1, 8, 1, config.meleeBulletBlockEffectStrength, 3, function(value)
         config.meleeBulletBlockEffectStrength = value
         ManageSettings.saveFile(config)
     end)
 
+    -- ! Translate
     NS.addSwitch(weapons, 'Melee Entity Hit Effect', 'descr', config.meleeEntityHitTrigger, true, function(state)
         config.meleeEntityHitTrigger = state
         ManageSettings.saveFile(config)
@@ -236,6 +246,7 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
+    -- ! Translate
     NS.addSwitch(vehicles, GetText('Mod-DualSense-NS-EnableGearbox'), GetText('Mod-DualSense-NS-EnableGearbox-Descr') .. ' - Not recommended to use at low FPS.', config.gearboxEmulation, true, function(state)
         config.gearboxEmulation = state
         ManageSettings.saveFile(config)
@@ -248,6 +259,7 @@ local function SetupNativeSettings()
         vehicleGearChangeModeList[data.value] = data.name
     end
 
+    -- ! Translate
     NS.addSelectorString(vehicles, 'Gear Change Trigger Effect Mode', 'descr', vehicleGearChangeModeList, config.gearChangeModeValue, 1, function(v)
         config.gearChangeModeValue = v
         ManageSettings.saveFile(config)
@@ -258,6 +270,7 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
+    -- ! Translate
     NS.addRangeInt(vehicles, 'Gear Change Duration', 'It is not recommended to change this value below 15.', 1, 60, 1, config.gearChangeDuration, 20, function(value)
         config.gearChangeDuration = value
         ManageSettings.saveFile(config)
@@ -346,6 +359,7 @@ local function SetupNativeSettings()
     -- debug
     NS.addSubcategory(debug, GetText('Mod-DualSense-NS-Subcategory-Debug'))
 
+    -- ! Translate
     NS.addSwitch(debug, 'show weapon states', 'xyeta', config.showWeaponStates, false, function(state)
         config.showWeaponStates = state
         ManageSettings.saveFile(config)

@@ -1,10 +1,13 @@
-local function ScannerTrigger(dataObj, ScanStatus, ScanProgress, ScannerActive)
+local function ScannerTrigger(dataObj, ScanStatus, ScanProgress, ScannerActive, ScannerTarget, isAiming, isTimeDilated, config)
     if (ScannerActive) then
         dataObj.overwritePlayerLED = false
         dataObj.overwriteRGB = false
         dataObj.touchpadLED = '(130)(0)(0)'
         dataObj.playerLED = '(False)(False)(False)(False)(False)'
         dataObj.playerLEDNewRevision = '(AllOff)'
+        dataObj.usingScannerTrigger = true
+    else
+        dataObj.usingScannerTrigger = false
     end
 
     if (ScanStatus ~= 'None') then
@@ -31,11 +34,24 @@ local function ScannerTrigger(dataObj, ScanStatus, ScanProgress, ScannerActive)
                 dataObj.playerLED = '(True)(True)(True)'..trueOrFalse..'(False)'
                 dataObj.playerLEDNewRevision = '(Four)'
             end
+
+            if (isAiming and config.scannerTriggers) then
+                local unformattedFreq = math.ceil(40 * ( ScanProgress / 1 ))
+                local freq = GetFrequency(unformattedFreq, isTimeDilated, 'Scanner'..ScanProgress)
+
+                dataObj.leftTriggerType = 'Galloping'
+                dataObj.leftForceTrigger = '(2)(9)(3)(4)('.. freq ..')'
+            end
         end
 
         if (ScanStatus == 'Scanned') then
             dataObj.playerLED = '(True)(True)(True)(True)(True)'
             dataObj.playerLEDNewRevision = '(Five)'
+
+            if (isAiming and config.scannerTriggers) then
+                dataObj.leftTriggerType = 'Resistance'
+                dataObj.leftForceTrigger = '(6)(2)'
+            end
         end
     end
 

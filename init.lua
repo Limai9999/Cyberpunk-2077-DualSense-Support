@@ -80,6 +80,7 @@ BDisFPP = true
 ScanStatus = 'None'
 ScanProgress = 0
 ScannerActive = false
+ScannerTarget = nil
 
 -- Some other game data
 GearboxValue = -1
@@ -293,6 +294,7 @@ registerForEvent('onUpdate', function(delta)
         overrideDefault = true,
         vehicleModeIndex = 0,
         vehicleUseTwitchingCollisionTrigger = false,
+        usingScannerTrigger = false,
         type = 'default'
     }
 
@@ -360,6 +362,7 @@ registerForEvent('onUpdate', function(delta)
     local inCyberspace = GameUI.IsCyberspace()
     local isPhotoMode = GameUI.IsPhoto()
     local isNCPDChasing = GetWantedLevel() > 0
+    local isTimeDilated = Game.GetTimeSystem():IsTimeDilationActive()
 
     if (isPhotoMode) then
         data.touchpadLED = '(243)(230)(0)'
@@ -387,7 +390,7 @@ registerForEvent('onUpdate', function(delta)
     local playerLEDData = PlayerLEDModeList[pLEDlist[config.playerLEDValue]](data, false)
 
     data = playerLEDData
-    data = GetScannerTrigger(data, ScanStatus, ScanProgress, ScannerActive)
+    data = GetScannerTrigger(data, ScanStatus, ScanProgress, ScannerActive, ScannerTarget, isAiming, isTimeDilated, config)
 
     additionalString = additionalString .. data.playerLED .. data.playerLEDNewRevision
 
@@ -445,7 +448,6 @@ registerForEvent('onUpdate', function(delta)
     end
 
     -- ADAPTIVE TRIGGERS FOR VEHICLES
-    local isTimeDilated = Game.GetTimeSystem():IsTimeDilationActive()
 
     -- veh documentation https://nativedb.red4ext.com/vehicleBaseObject
     local veh = Game.GetMountedVehicle(GetPlayer())
@@ -731,6 +733,10 @@ registerForEvent('onUpdate', function(delta)
         return SaveFile('weapon', data, saveString, gameObjName, 'noVehicle')
     end
 
+    if (data.usingScannerTrigger and config.scannerTriggers) then
+        return SaveFile('weapon', data, additionalString .. data.leftForceTrigger, 'scanner', 'noVehicle')
+    end
+
     -- ADAPTIVE TRIGGERS FOR WEAPONS
 
     local usingWeapon = Game.GetActiveWeapon(GetPlayer())
@@ -825,7 +831,6 @@ registerForEvent('onUpdate', function(delta)
     if (isMeleeWeapon and config.meleeEntityHitTrigger) then
         weaponObj = HitEntityMeleeTrigger(weaponObj, config)
         sendingWeaponType = sendingWeaponType .. weaponObj.rightTriggerType .. weaponObj.rightForceTrigger
-        print(weaponObj.rightForceTrigger)
     end
 
     SaveFile('weapon', weaponObj, sendingWeaponType, weaponName, 'noVehicle')

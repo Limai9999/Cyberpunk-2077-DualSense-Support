@@ -29,6 +29,7 @@ local defaultConfig = {
     vehiclePlayerLEDValue = 1,
     micLED = true,
     menuTriggers = true,
+    scannerTriggers = true,
     showWeaponStates = false,
     meleeBulletBlockEffectStrength = 3,
     meleeEntityHitTrigger = true,
