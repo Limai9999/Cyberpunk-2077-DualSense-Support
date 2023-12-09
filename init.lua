@@ -458,6 +458,8 @@ registerForEvent('onUpdate', function(delta)
             -- data.touchpadLED = '(0)(191)(255)'
             return SaveFile('vehicle', data, '', '', 'state4'..additionalString)
         end
+        
+        local isInAir = veh:IsInAir()
         local isOnRoad = Game.GetNavigationSystem():IsOnGround(veh)
         local isOnPavement = veh.onPavement
         local isEngineTurnedOn = veh:IsEngineTurnedOn()
@@ -536,11 +538,9 @@ registerForEvent('onUpdate', function(delta)
                 additionalString = additionalString .. data.touchpadLED
 
                 SaveFile('vehicle', data, '', '', 'vehicleDisabled'..additionalString)
-            elseif (isHaveFlightMod and not veh.isOnGround and not isFlying) then
-                data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(1)(1)'
-                data.rightTriggerType = 'Resistance'
-                data.rightForceTrigger = '(1)(1)'
+            elseif (isInAir and not isFlying) then
+                data.leftTriggerType = 'Normal'
+                data.rightTriggerType = 'Normal'
 
                 SaveFile('vehicle', data, '', '', 'notOnGround'..additionalString)
             else
@@ -551,7 +551,6 @@ registerForEvent('onUpdate', function(delta)
                 end
 
                 local isGearboxEmulationEnabled = config.gearboxEmulation
-                local gearChangeForce = config.gearChangeForce
 
                 vehData = VehiclesModesList[list[vehType.value]](data, veh, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled)
 
