@@ -109,10 +109,13 @@ local function StartObservers()
     end)
 
     Observe('gameObject', 'OnHit', function (_, hitEvent)
-        if (hitEvent.attackData.attackType ~= gamedataAttackType.Melee) then return end
+        print(hitEvent.attackData.attackType)
+
+        if (hitEvent.attackData.attackType ~= gamedataAttackType.Melee and hitEvent.attackData.attackType ~= gamedataAttackType.StrongMelee) then return end
         if (not hitEvent.attackData.source:IsPlayerControlled()) then return end
         
         IsPlayerHitEntity = true
+        IsPlayerHitEntityStrong = hitEvent.attackData.attackType == gamedataAttackType.StrongMelee
     end)
 
     GameSession.OnLoad(function ()

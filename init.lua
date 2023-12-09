@@ -90,6 +90,7 @@ IsScene = false
 VehicleCollisionForce = 0
 IsBlockedBullet = false
 IsPlayerHitEntity = false
+IsPlayerHitEntityStrong = false
 
 -- VehicleModeDefaultIndex = 0
 
@@ -824,6 +825,7 @@ registerForEvent('onUpdate', function(delta)
     if (isMeleeWeapon and config.meleeEntityHitTrigger) then
         weaponObj = HitEntityMeleeTrigger(weaponObj, config)
         sendingWeaponType = sendingWeaponType .. weaponObj.rightTriggerType .. weaponObj.rightForceTrigger
+        print(weaponObj.rightForceTrigger)
     end
 
     SaveFile('weapon', weaponObj, sendingWeaponType, weaponName, 'noVehicle')

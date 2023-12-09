@@ -9,6 +9,7 @@ local function HandleBlockingBullet()
     else
         activeTimes = 0
         IsPlayerHitEntity = false
+        IsPlayerHitEntityStrong = false
     end
 end
 
