@@ -363,10 +363,12 @@ registerForEvent('onUpdate', function(delta)
     if (isPhotoMode) then
         data.touchpadLED = '(243)(230)(0)'
 
-        data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(1)(1)'
-        data.rightTriggerType = 'Resistance'
-        data.rightForceTrigger = '(1)(1)'
+        if (config.menuTriggers) then
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(1)(1)'
+            data.rightTriggerType = 'Resistance'
+            data.rightForceTrigger = '(1)(1)'
+        end
 
         additionalString = additionalString .. data.touchpadLED
 
