@@ -112,7 +112,7 @@ local function StartObservers()
         if (hitEvent.attackData.attackType ~= gamedataAttackType.Melee) then return end
         if (not hitEvent.attackData.source:IsPlayerControlled()) then return end
         
-        IsPlayerHitNPC = true
+        IsPlayerHitEntity = true
     end)
 
     GameSession.OnLoad(function ()

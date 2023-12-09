@@ -162,11 +162,6 @@ local function SetupNativeSettings()
     local weaponsLoc = GetText('Mod-DualSense-NS-Subcategory-Weapons')
     NS.addSubcategory(weapons, weaponsLoc)
 
-    NS.addRangeInt(weapons, 'Melee Bullet Block/Deflect Effect Strength', 'descr', 1, 8, 1, config.meleeBulletBlockEffectStrength, 3, function(value)
-        config.meleeBulletBlockEffectStrength = value
-        ManageSettings.saveFile(config)
-    end)
-
     NS.addSwitch(weapons, leftLoc, leftDescrLoc .. ' ' .. weaponsLoc, config.weaponLT, true, function(state)
         config.weaponLT = state
         ManageSettings.saveFile(config)
@@ -174,6 +169,16 @@ local function SetupNativeSettings()
 
     NS.addSwitch(weapons, rightLoc, rightDescrLoc .. ' ' .. weaponsLoc, config.weaponRT, true, function(state)
         config.weaponRT = state
+        ManageSettings.saveFile(config)
+    end)
+
+    NS.addRangeInt(weapons, 'Melee Bullet Block/Deflect Effect Strength', 'descr', 1, 8, 1, config.meleeBulletBlockEffectStrength, 3, function(value)
+        config.meleeBulletBlockEffectStrength = value
+        ManageSettings.saveFile(config)
+    end)
+
+    NS.addSwitch(weapons, 'Melee Entity Hit Effect', 'descr', config.meleeEntityHitTrigger, true, function(state)
+        config.meleeEntityHitTrigger = state
         ManageSettings.saveFile(config)
     end)
 

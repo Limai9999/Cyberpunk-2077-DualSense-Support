@@ -29,7 +29,7 @@ GetRandomPlayerLED = require('utils/GetRandomPlayerLED')
 GetChargeTrigger = require('utils/GetChargeTrigger')
 IsWeaponGlitched = require('utils/IsWeaponGlitched')
 HandleBlockingBullet = require('utils/HandleBlockingBullet')
-HandlePlayerHitNPC = require('utils/HandlePlayerHitNPC')
+HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
@@ -44,7 +44,7 @@ HandleMenu = require('otherModes/Menu')
 NCPDChaseTouchpadLEDMode = require('otherModes/TouchpadLEDModes/NCPDChase')
 VehicleDestroyedTouchpadLEDMode = require('otherModes/TouchpadLEDModes/VehicleDestroyed')
 UseBulletBlockTrigger = require('otherModes/BulletBlock')
-HitNPCMeleeTrigger = require('otherModes/HitNPCMeleeTrigger')
+HitEntityMeleeTrigger = require('otherModes/HitEntityMeleeTrigger')
 
 ModName = '[Enhanced DualSense Support]'
 
@@ -89,7 +89,7 @@ GameLanguage = 'en-us'
 IsScene = false
 VehicleCollisionForce = 0
 IsBlockedBullet = false
-IsPlayerHitNPC = false
+IsPlayerHitEntity = false
 
 -- VehicleModeDefaultIndex = 0
 
@@ -264,7 +264,7 @@ registerForEvent('onUpdate', function(delta)
     UDPManualStartHandler()
 
     HandleBlockingBullet()
-    HandlePlayerHitNPC()
+    HandlePlayerHitEntity()
     
     local isInScene = GameUI.IsScene()
     IsScene = isInScene
@@ -821,8 +821,9 @@ registerForEvent('onUpdate', function(delta)
         end
     end
 
-    if (isMeleeWeapon) then
-        weaponObj = HitNPCMeleeTrigger(weaponObj)
+    if (isMeleeWeapon and config.meleeEntityHitTrigger) then
+        weaponObj = HitEntityMeleeTrigger(weaponObj, config)
+        sendingWeaponType = sendingWeaponType .. weaponObj.rightTriggerType .. weaponObj.rightForceTrigger
     end
 
     SaveFile('weapon', weaponObj, sendingWeaponType, weaponName, 'noVehicle')

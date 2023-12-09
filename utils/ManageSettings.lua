@@ -31,6 +31,7 @@ local defaultConfig = {
     menuTriggers = true,
     showWeaponStates = false,
     meleeBulletBlockEffectStrength = 3,
+    meleeEntityHitTrigger = true,
 }
 
 local filePath = 'config/settings.json'
