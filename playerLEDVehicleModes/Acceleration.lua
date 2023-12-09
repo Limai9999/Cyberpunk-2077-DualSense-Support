@@ -1,10 +1,10 @@
-local function VehiclePlayerLEDMode(data, nUI, vehicle, gbValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled)
+local function VehiclePlayerLEDMode(data, nUI, vehicle, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled)
     data.LEDName = GetText('Mod-DualSense-VehiclePlayerLEDName-Acceleration')
     data.value = 3
 
     if nUI then return data end
 
-    local rpm = GetVehicleSpeed(gbValue, false, isGearboxEmulationEnabled)
+    local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
 
     data.playerLED = '(False)(False)(False)(False)(False)'
     data.playerLEDNewRevision = '(AllOff)'

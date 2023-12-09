@@ -1,4 +1,4 @@
-local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled)
+local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
     local typeMachLoc = GetText('Mod-DualSense-NS-TriggerType-Machine')
     data.description = 'L2 - ' .. typeMachLoc .. '; ' .. 'R2 - ' .. typeMachLoc
     data.isHiddenMode = false
@@ -8,7 +8,7 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
 
     local config = ManageSettings.openFile()
 
-    local rpm = GetVehicleSpeed(gbValue, false, isGearboxEmulationEnabled)
+    local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
 
     local maxResistance = config.vehicleResistanceValue
     local maxMachine = config.vehicleMachineValue
@@ -23,6 +23,13 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     data.rightForceTrigger = '(1)(9)(2)(2)(' .. frequency .. ')(0)'
     data.leftTriggerType = 'Machine'
     data.leftForceTrigger = '(1)(9)(2)(2)(' .. frequency .. ')(0)'
+
+    if (hasFlatTire) then
+        data.leftTriggerType = 'Machine'
+        data.leftForceTrigger = '(1)(9)(3)(3)(' .. frequency .. ')(0)'
+        data.rightTriggerType = 'Machine'
+        data.rightForceTrigger = '(1)(9)(4)(4)(' .. frequency .. ')(0)'
+    end
 
     if (data.overwriteRGB) then
         local red = math.floor(dividedRpmA * (255 / maxMachine))

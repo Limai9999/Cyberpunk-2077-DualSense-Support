@@ -1,4 +1,4 @@
-local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled)
+local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
     local typeLoc = GetText('Mod-DualSense-NS-TriggerType-Resistance')
     data.description = 'L2 - ' .. typeLoc .. '; ' .. 'R2 - ' .. typeLoc
     data.isHiddenMode = false
@@ -8,10 +8,13 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
 
     local config = ManageSettings.openFile()
 
-    local rpm = GetVehicleSpeed(gbValue, false, isGearboxEmulationEnabled)
+    local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
 
     local maxResistance = config.vehicleResistanceValue
-    local resistance = gbValue
+    local resistance = gearBoxValue
+
+    local flatTirefrequency = 2 * gearBoxValue
+    if (flatTirefrequency < 0) then flatTirefrequency = flatTirefrequency * -1 end
 
     resistance = GetResistanceTrigger(rpm, resistance, maxResistance)
 
@@ -29,6 +32,13 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     data.leftForceTrigger = '(1)(' .. resistance .. ')'
     data.rightTriggerType = 'Resistance'
     data.rightForceTrigger = '(1)(' .. resistance .. ')'
+
+    if (hasFlatTire) then
+        data.leftTriggerType = 'Machine'
+        data.leftForceTrigger = '(1)(9)(2)(3)(' .. flatTirefrequency .. ')(0)'
+        data.rightTriggerType = 'Machine'
+        data.rightForceTrigger = '(1)(9)(2)(3)(' .. flatTirefrequency .. ')(0)'
+    end
 
     data.frequency = resistance
 

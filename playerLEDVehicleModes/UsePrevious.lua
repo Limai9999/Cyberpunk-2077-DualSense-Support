@@ -1,4 +1,4 @@
-local function VehiclePlayerLEDMode(data, nUI, vehicle, gbValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled)
+local function VehiclePlayerLEDMode(data, nUI, vehicle, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled)
     data.LEDName = GetText('Mod-DualSense-VehiclePlayerLEDName-UsePrevious')
     data.value = 1
 

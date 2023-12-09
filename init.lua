@@ -449,13 +449,13 @@ registerForEvent('onUpdate', function(delta)
 
     -- ADAPTIVE TRIGGERS FOR VEHICLES
 
-    -- veh documentation https://nativedb.red4ext.com/vehicleBaseObject
-    local veh = Game.GetMountedVehicle(GetPlayer())
-    -- -- veh component documentation https://nativedb.red4ext.com/VehicleComponent
+    -- vehicle documentation https://nativedb.red4ext.com/vehicleBaseObject
+    local vehicle = Game.GetMountedVehicle(GetPlayer())
+    -- -- vehicle component documentation https://nativedb.red4ext.com/VehicleComponent
 
     local state = GetState('Vehicle')
 
-    if (veh ~= nil and veh:IsPlayerDriver()) then
+    if (vehicle ~= nil and vehicle:IsPlayerDriver()) then
         if (state == 4) then
             data.leftTriggerType = 'Choppy'
             data.rightTriggerType = 'Choppy'
@@ -464,21 +464,20 @@ registerForEvent('onUpdate', function(delta)
             return SaveFile('vehicle', data, '', '', 'state4'..additionalString)
         end
         
-        local isInAir = veh:IsInAir()
-        local isOnRoad = Game.GetNavigationSystem():IsOnGround(veh)
-        local isOnPavement = veh.onPavement
-        local isEngineTurnedOn = veh:IsEngineTurnedOn()
-        local isVehicleTurnedOn = veh:IsVehicleTurnedOn()
-        local isDestroyed = veh:IsDestroyed()
-        local vehicleType = veh:ToString()
+        local isInAir = vehicle:IsInAir()
+        local isOnRoad = Game.GetNavigationSystem():IsOnGround(vehicle)
+        local isOnPavement = vehicle.onPavement
+        local isEngineTurnedOn = vehicle:IsEngineTurnedOn()
+        local isVehicleTurnedOn = vehicle:IsVehicleTurnedOn()
+        local isDestroyed = vehicle:IsDestroyed()
+        local vehicleType = vehicle:ToString()
 
         -- print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType)
 
-        GearboxValue = veh:GetBlackboard():GetInt(GetAllBlackboardDefs().Vehicle.GearValue)
+        GearboxValue = vehicle:GetBlackboard():GetInt(GetAllBlackboardDefs().Vehicle.GearValue)
 
-        -- local component = veh.vehicleComponent
-        -- local vehicleAllowsCombat = component.GetVehicleAllowsCombat(veh)
-        -- print(vehicleAllowsCombat)
+        local vehicleComponent = vehicle.vehicleComponent
+        local hasFlatTire = vehicleComponent.HasFlatTire(vehicle:GetEntityID())
 
         local vehType = config.vehicleSettings[vehicleType] or config.vehicleSettings['default']
         local vehData = nil;
@@ -489,14 +488,14 @@ registerForEvent('onUpdate', function(delta)
         local prevPlayerLEDNewRevision = tostring(data.playerLEDNewRevision)
 
         -- flying vehicles mod support
-        local isHaveFlightMod = veh['GetFlightComponent']
+        local isHaveFlightMod = vehicle['GetFlightComponent']
         -- local isHaveFlightMod = false
         local isFlying = false
         local flyMode = 0
         local hoverHeight = 0
 
         if (isHaveFlightMod) then
-            local f = veh:GetFlightComponent()
+            local f = vehicle:GetFlightComponent()
             isFlying = f.active
             flyMode = f.mode
             hoverHeight = f.hoverHeight
@@ -551,13 +550,13 @@ registerForEvent('onUpdate', function(delta)
             else
                 local list = {}
                 for modeName, modeData in pairs(VehiclesModesList) do
-                    local dataObj = modeData(data, veh, true)
+                    local dataObj = modeData(data, vehicle, true)
                     list[dataObj.vehicleModeIndex] = modeName
                 end
 
                 local isGearboxEmulationEnabled = config.gearboxEmulation
 
-                vehData = VehiclesModesList[list[vehType.value]](data, veh, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled)
+                vehData = VehiclesModesList[list[vehType.value]](data, vehicle, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
 
                 if (vehData) then
                     if (vehData.frequency == -1) then vehData.frequency = 0 end
@@ -586,7 +585,7 @@ registerForEvent('onUpdate', function(delta)
                     end
 
                     local chosenPlayerLED = config.vehiclePlayerLEDValue
-                    local vehiclePlayerLED = VehiclePlayerLEDModeList[vehiclePlayerLEDList[chosenPlayerLED]](data, false, veh, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, VehicleCollisionForce)
+                    local vehiclePlayerLED = VehiclePlayerLEDModeList[vehiclePlayerLEDList[chosenPlayerLED]](data, false, vehicle, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, VehicleCollisionForce)
 
                     data = vehiclePlayerLED
 

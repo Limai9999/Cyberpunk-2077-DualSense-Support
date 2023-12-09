@@ -1,18 +1,20 @@
-local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled)
+
+
+local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
     local typeResLoc = GetText('Mod-DualSense-NS-TriggerType-Resistance')
     local typeGalLoc = GetText('Mod-DualSense-NS-TriggerType-Galloping')
     data.description = 'L2 - ' .. typeResLoc .. '; ' .. 'R2 - ' .. typeGalLoc
     data.isHiddenMode = false
     data.vehicleModeIndex = 5
-    data.vehicleUseTwitchingCollisionTrigger = false
+    data.vehicleUseTwitchingCollisionTrigger = true
     if (nUI or not veh) then return data end
 
     local config = ManageSettings.openFile()
 
-    local rpm = GetVehicleSpeed(gbValue, false, isGearboxEmulationEnabled)
+    local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
 
     local maxResistance = config.vehicleResistanceValue
-    local resistance = gbValue
+    local resistance = gearBoxValue
 
     resistance = GetResistanceTrigger(rpm, resistance, maxResistance)
     resistance = tostring(resistance)
@@ -25,12 +27,21 @@ local function VehicleMode(data, veh, nUI, gbValue, dilated, onRoad, onPavement,
     local dividedRpmA = math.floor(rpm / (9500 / maxGalloping))
     dividedRpmA = GetFrequency(dividedRpmA, dilated, veh:GetDisplayName() .. data.description)
 
-    -- print(dividedRpmA, rpm, maxGalloping)
+    local useMachineTrigger = math.floor(rpm) % 11 == 0
 
     if (dividedRpmA > maxGalloping) then dividedRpmA = maxGalloping end
     frequency = tostring(dividedRpmA)
     data.rightTriggerType = 'Galloping'
     data.rightForceTrigger = '(0)(9)(0)(7)(' .. frequency .. ')'
+
+    if (hasFlatTire) then
+        if (useMachineTrigger) then
+            data.leftTriggerType = 'Machine'
+            data.leftForceTrigger = '(1)(9)(5)(5)(' .. frequency .. ')(0)'
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(1)(9)(8)(8)(' .. frequency .. ')(0)'
+        end
+    end
 
     if (data.overwriteRGB) then
         local red = math.floor(dividedRpmA * (255 / (maxGalloping / 1.3)))

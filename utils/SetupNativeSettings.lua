@@ -271,7 +271,7 @@ local function SetupNativeSettings()
     end)
 
     -- ! Translate
-    NS.addRangeInt(vehicles, 'Gear Change Duration', 'It is not recommended to change this value below 15.', 1, 60, 1, config.gearChangeDuration, 20, function(value)
+    NS.addRangeInt(vehicles, 'Gear Change Duration', 'It is not recommended to change this value below 15.', 1, 60, 1, config.gearChangeDuration, 16, function(value)
         config.gearChangeDuration = value
         ManageSettings.saveFile(config)
     end)
