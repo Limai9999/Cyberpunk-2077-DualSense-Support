@@ -41,8 +41,8 @@ local function GetFrequency(freq, dilation, executorString)
     return newFreq
 end
 
-local function FormatFrequency(freq, dilation)
-    local frequency = GetFrequency(freq, dilation, 'format')
+local function FormatFrequency(freq, dilation, executorString)
+    local frequency = GetFrequency(freq, dilation, executorString)
     frequency = math.floor(frequency)
 
     if (frequency < 1) then frequency = 1 end
