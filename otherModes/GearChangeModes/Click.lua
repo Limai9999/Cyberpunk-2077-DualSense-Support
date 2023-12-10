@@ -1,6 +1,5 @@
 local function GearChangeMode(data, nUI, config)
-    -- ! Translate
-    data.name = 'Click'
+    data.name = GetText('Mod-DualSense-NS-GearChangeMode-Click')
     data.value = 2
 
     if nUI then return data end

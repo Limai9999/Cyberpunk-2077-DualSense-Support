@@ -1,6 +1,5 @@
 local function GearChangeMode(data, nUI, config)
-    -- ! Translate
-    data.name = 'Twitching'
+    data.name = GetText('Mod-DualSense-NS-GearChangeMode-Twitching')
     data.value = 1
 
     if nUI then return data end

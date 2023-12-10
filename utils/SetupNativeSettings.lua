@@ -132,8 +132,7 @@ local function SetupNativeSettings()
     -- local enableTriggersLoc = GetText('Mod-DualSense-NS-EnableTriggers')
     local enableTriggersDescriptionLoc = GetText('Mod-DualSense-NS-EnableTriggersFor')
 
-    -- ! Translate
-    NS.addSubcategory(additionalTriggers, 'Additional Trigger Effects')
+    NS.addSubcategory(additionalTriggers, GetText('Mod-DualSense-NS-Subcategory-AdditionalTriggerEffects'))
 
     NS.addSwitch(additionalTriggers, menuLoc, enableTriggersDescriptionLoc .. ' ' .. menuLoc, config.menuTriggers, true, function(state)
         config.menuTriggers = state
@@ -180,14 +179,18 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    -- ! Translate
-    NS.addRangeInt(weapons, 'Melee Bullet Block/Deflect Effect Strength', 'descr', 1, 8, 1, config.meleeBulletBlockEffectStrength, 3, function(value)
+    local meleeBlockEffectLoc = GetText('Mod-DualSense-NS-MeleeBlockEffectStrength')
+    local meleeBlockEffectDescrLoc = GetText('Mod-DualSense-NS-MeleeBlockEffectStrength-Description')
+
+    NS.addRangeInt(weapons, meleeBlockEffectLoc, meleeBlockEffectDescrLoc, 1, 8, 1, config.meleeBulletBlockEffectStrength, 3, function(value)
         config.meleeBulletBlockEffectStrength = value
         ManageSettings.saveFile(config)
     end)
 
-    -- ! Translate
-    NS.addSwitch(weapons, 'Melee Entity Hit Effect', 'descr', config.meleeEntityHitTrigger, true, function(state)
+    local meleeEntityHitEffectLoc = GetText('Mod-DualSense-NS-MeleeEntityHitEffect')
+    local meleeEntityHitEffectDescrLoc = GetText('Mod-DualSense-NS-MeleeEntityHitEffect-Description')
+
+    NS.addSwitch(weapons, meleeEntityHitEffectLoc, meleeEntityHitEffectDescrLoc, config.meleeEntityHitTrigger, true, function(state)
         config.meleeEntityHitTrigger = state
         ManageSettings.saveFile(config)
     end)
@@ -222,8 +225,8 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    local flatTireTriggersLoc = 'Flat Tire Effects'
-    local flatTireTriggersLocDescr = 'descr'
+    local flatTireTriggersLoc = GetText('Mod-DualSense-NS-VehicleFlatTireEffects')
+    local flatTireTriggersLocDescr = GetText('Mod-DualSense-NS-VehicleFlatTireEffects-Description')
 
     NS.addSwitch(vehicles, flatTireTriggersLoc, flatTireTriggersLocDescr, config.vehicleFlatTireTriggers, true, function (state)
         config.vehicleFlatTireTriggers = state
@@ -254,8 +257,10 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    -- ! Translate
-    NS.addSwitch(vehicles, GetText('Mod-DualSense-NS-EnableGearbox'), GetText('Mod-DualSense-NS-EnableGearbox-Descr') .. ' - Not recommended to use at low FPS.', config.gearboxEmulation, true, function(state)
+    local enableGearboxLoc = GetText('Mod-DualSense-NS-EnableGearbox')
+    local enableGearboxLocDescr = string.format(GetText('Mod-DualSense-NS-EnableGearbox-Descr') .. ' ' .. GetText('Mod-DualSense-NS-GearboxModeNotRecommendedToUseAtLowFPS'), GetText('Mod-DualSense-NS-GearChangeMode-Click'))
+
+    NS.addSwitch(vehicles, enableGearboxLoc, enableGearboxLocDescr, config.gearboxEmulation, true, function(state)
         config.gearboxEmulation = state
         ManageSettings.saveFile(config)
     end)
@@ -267,19 +272,26 @@ local function SetupNativeSettings()
         vehicleGearChangeModeList[data.value] = data.name
     end
 
-    -- ! Translate
-    NS.addSelectorString(vehicles, 'Gear Change Trigger Effect Mode', 'descr', vehicleGearChangeModeList, config.gearChangeModeValue, 1, function(v)
+    local vehicleGearChangeModeLoc = GetText('Mod-DualSense-NS-VehicleGearChangeMode')
+    local vehicleGearChangeModeLocDescr = GetText('Mod-DualSense-NS-VehicleGearChangeMode-Description')
+
+    NS.addSelectorString(vehicles, vehicleGearChangeModeLoc, vehicleGearChangeModeLocDescr, vehicleGearChangeModeList, config.gearChangeModeValue, 1, function(v)
         config.gearChangeModeValue = v
         ManageSettings.saveFile(config)
     end)
 
-    NS.addRangeInt(vehicles, GetText('Mod-DualSense-NS-GearboxForce'), GetText('Mod-DualSense-NS-GearboxForce-Descr'), 1, 7, 1, config.gearChangeForce, 2, function(value)
+    local gearChangeForceLoc = GetText('Mod-DualSense-NS-GearboxForce')
+    local gearChangeForceLocDescr = GetText('Mod-DualSense-NS-GearboxForce-Descr')
+
+    NS.addRangeInt(vehicles, gearChangeForceLoc, gearChangeForceLocDescr, 1, 7, 1, config.gearChangeForce, 2, function(value)
         config.gearChangeForce = value
         ManageSettings.saveFile(config)
     end)
 
-    -- ! Translate
-    NS.addRangeInt(vehicles, 'Gear Change Duration', 'It is not recommended to change this value below 15.', 1, 60, 1, config.gearChangeDuration, 16, function(value)
+    local gearChangeDurationLoc = GetText('Mod-DualSense-NS-GearChangeDuration')
+    local gearChangeDurationLocDescr = string.format(GetText('Mod-DualSense-NS-GearChangeDuration-Description') .. ' ' .. GetText('Mod-DualSense-NS-GearChangeDuration-ModeNotRecommendedToUseAtLowerValue'), GetText('Mod-DualSense-NS-GearChangeMode-Click'))
+
+    NS.addRangeInt(vehicles, gearChangeDurationLoc, gearChangeDurationLocDescr, 1, 60, 1, config.gearChangeDuration, 16, function(value)
         config.gearChangeDuration = value
         ManageSettings.saveFile(config)
     end)
@@ -367,8 +379,10 @@ local function SetupNativeSettings()
     -- debug
     NS.addSubcategory(debug, GetText('Mod-DualSense-NS-Subcategory-Debug'))
 
-    -- ! Translate
-    NS.addSwitch(debug, 'show weapon states', 'xyeta', config.showWeaponStates, false, function(state)
+    local logWeaponStatesLoc = GetText('Mod-DualSense-NS-DebugLogWeaponStates')
+    local logWeaponStatesLocDescr = GetText('Mod-DualSense-NS-DebugLogWeaponStates-Description')
+
+    NS.addSwitch(debug, logWeaponStatesLoc, logWeaponStatesLocDescr, config.showWeaponStates, false, function(state)
         config.showWeaponStates = state
         ManageSettings.saveFile(config)
     end)
