@@ -653,9 +653,9 @@ registerForEvent('onUpdate', function(delta)
                     if (isChangingGear and GearboxValue > 1) then
                         local vehicleGearChangeModeList = {}
 
-                        for _, v in pairs(GearChangeModeList) do
+                        for key, v in pairs(GearChangeModeList) do
                             local Data = v({}, true)
-                            vehicleGearChangeModeList[Data.value] = Data.name
+                            vehicleGearChangeModeList[Data.value] = key
                         end
 
                         local chosenGearMode = config.gearChangeModeValue
