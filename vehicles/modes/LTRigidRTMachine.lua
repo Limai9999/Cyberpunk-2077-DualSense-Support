@@ -11,6 +11,8 @@ local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPave
 
     local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
 
+    local useWeakMachineTrigger = math.floor(rpm) % 5 == 0
+
     data.leftTriggerType = 'Rigid'
 
     local maxMachine = config.vehicleMachineValue
@@ -26,9 +28,14 @@ local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPave
 
     if (hasFlatTire) then
         data.leftTriggerType = 'Machine'
-        data.leftForceTrigger = '(1)(9)(3)(3)(' .. frequency .. ')(0)'
+        data.leftForceTrigger = '(1)(9)(1)(1)(' .. frequency .. ')(0)'
         data.rightTriggerType = 'Machine'
         data.rightForceTrigger = '(1)(9)(4)(4)(' .. frequency .. ')(0)'
+
+        if (useWeakMachineTrigger) then
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(1)(9)(1)(2)(' .. frequency .. ')(0)'
+        end
     end
 
     if (data.overwriteRGB) then

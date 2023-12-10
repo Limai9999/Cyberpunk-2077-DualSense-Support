@@ -222,6 +222,14 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
+    local flatTireTriggersLoc = 'Flat Tire Effects'
+    local flatTireTriggersLocDescr = 'descr'
+
+    NS.addSwitch(vehicles, flatTireTriggersLoc, flatTireTriggersLocDescr, config.vehicleFlatTireTriggers, true, function (state)
+        config.vehicleFlatTireTriggers = state
+        ManageSettings.saveFile(config)
+    end)
+
     local resistanceTitle = string.format(GetText('Mod-DualSense-NS-MaxResistanceValue'), GetText('Mod-DualSense-NS-TriggerType-Resistance'));
     local resistanceDescr = string.format(GetText('Mod-DualSense-NS-MaxResistanceValue-Descr'), GetText('Mod-DualSense-NS-TriggerType-Resistance'));
 

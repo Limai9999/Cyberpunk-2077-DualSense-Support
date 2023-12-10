@@ -14,6 +14,7 @@ local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPave
 
     local maxResistance = config.vehicleResistanceValue
     local resistance = gearBoxValue
+    local useWeakMachineTrigger = math.floor(rpm) % 5 == 0
 
     resistance = GetResistanceTrigger(rpm, resistance, maxResistance)
     resistance = tostring(resistance)
@@ -36,6 +37,11 @@ local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPave
         data.leftForceTrigger = '(1)(9)(1)(1)(' .. frequency .. ')(0)'
         data.rightTriggerType = 'Machine'
         data.rightForceTrigger = '(1)(9)(4)(4)(' .. frequency .. ')(0)'
+
+        if (useWeakMachineTrigger) then
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(1)(9)(1)(2)(' .. frequency .. ')(0)'
+        end
     end
 
     if (data.overwriteRGB) then

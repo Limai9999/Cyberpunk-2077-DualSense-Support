@@ -12,6 +12,8 @@ local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPave
 
     local maxResistance = config.vehicleResistanceValue
     local maxMachine = config.vehicleMachineValue
+    local useWeakMachineTrigger = math.floor(rpm) % 5 == 0
+
     local frequency = '1'
 
     local dividedRpmA = math.floor(rpm / (9500 / maxMachine))
@@ -29,6 +31,11 @@ local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPave
         data.leftForceTrigger = '(1)(9)(3)(3)(' .. frequency .. ')(0)'
         data.rightTriggerType = 'Machine'
         data.rightForceTrigger = '(1)(9)(4)(4)(' .. frequency .. ')(0)'
+
+        if (useWeakMachineTrigger) then
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(1)(9)(1)(2)(' .. frequency .. ')(0)'
+        end
     end
 
     if (data.overwriteRGB) then

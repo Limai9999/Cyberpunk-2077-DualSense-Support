@@ -556,7 +556,7 @@ registerForEvent('onUpdate', function(delta)
 
                 local isGearboxEmulationEnabled = config.gearboxEmulation
 
-                vehData = VehiclesModesList[list[vehType.value]](data, vehicle, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
+                vehData = VehiclesModesList[list[vehType.value]](data, vehicle, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire and config.vehicleFlatTireTriggers)
 
                 if (vehData) then
                     if (vehData.frequency == -1) then vehData.frequency = 0 end
