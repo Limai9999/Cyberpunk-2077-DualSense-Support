@@ -77,6 +77,9 @@ local function StartObservers()
         local player = Game.GetPlayer()
         local vehicle = Game.GetMountedVehicle(player)
 
+        local controlledVehicle = Game.FindEntityByID(Game.GetBlackboardSystem():GetLocalInstanced(GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetEntityID(Game.GetAllBlackboardDefs().PlayerStateMachine.EntityIDVehicleRemoteControlled))
+        if (controlledVehicle) then vehicle = controlledVehicle end
+
         local collisionForce = vehicle:GetCollisionForce()
         local collForceSqr = Vector4.LengthSquared(collisionForce);
 

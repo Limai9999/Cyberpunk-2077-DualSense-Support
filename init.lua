@@ -452,6 +452,9 @@ registerForEvent('onUpdate', function(delta)
     -- vehicle documentation https://nativedb.red4ext.com/vehicleBaseObject
     local vehicle = Game.GetMountedVehicle(GetPlayer())
     -- -- vehicle component documentation https://nativedb.red4ext.com/VehicleComponent
+    local controlledVehicle = Game.FindEntityByID(Game.GetBlackboardSystem():GetLocalInstanced(GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetEntityID(Game.GetAllBlackboardDefs().PlayerStateMachine.EntityIDVehicleRemoteControlled))
+
+    if (controlledVehicle) then vehicle = controlledVehicle end
 
     local state = GetState('Vehicle')
 
@@ -472,12 +475,16 @@ registerForEvent('onUpdate', function(delta)
         local isDestroyed = vehicle:IsDestroyed()
         local vehicleType = vehicle:ToString()
 
-        -- print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType)
-
-        GearboxValue = vehicle:GetBlackboard():GetInt(GetAllBlackboardDefs().Vehicle.GearValue)
+        if (controlledVehicle) then
+            GearboxValue = 2
+        else
+            GearboxValue = vehicle:GetBlackboard():GetInt(Game.GetAllBlackboardDefs().Vehicle.GearValue)
+        end
 
         local vehicleComponent = vehicle.vehicleComponent
         local hasFlatTire = vehicleComponent.HasFlatTire(vehicle:GetEntityID())
+
+        print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType, GearboxValue, hasFlatTire)
 
         local vehType = config.vehicleSettings[vehicleType] or config.vehicleSettings['default']
         local vehData = nil;
@@ -740,9 +747,11 @@ registerForEvent('onUpdate', function(delta)
 
     local usingWeapon = Game.GetActiveWeapon(GetPlayer())
 
-    if (Game.GetMountedVehicle(GetPlayer()) ~= nil) then
-        if (Game.GetMountedVehicle(GetPlayer()):IsPlayerDriver() == true) then return end
+    if (vehicle ~= nil) then
+        if (vehicle:IsPlayerDriver()) then return end
     end
+
+    print(1)
 
     local weaponType = 'default'
     local weaponName = 'no'
