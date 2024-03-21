@@ -751,8 +751,6 @@ registerForEvent('onUpdate', function(delta)
         if (vehicle:IsPlayerDriver()) then return end
     end
 
-    print(1)
-
     local weaponType = 'default'
     local weaponName = 'no'
     local triggerType = 'no'
