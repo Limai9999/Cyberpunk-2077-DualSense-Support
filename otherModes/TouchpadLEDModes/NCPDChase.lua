@@ -2,7 +2,7 @@ local savedTimes = 0
 local LEDState = 0 -- 0 = blue, 1 = purple, 2 = red
 
 local function NCPDChaseTouchpadLEDMode(dataObj, isInCombat)
-    if ((isInCombat and savedTimes > 15) or (not isInCombat and savedTimes > 30)) then
+    if ((isInCombat and savedTimes > 25) or (not isInCombat and savedTimes > 50)) then
         LEDState = LEDState + 1
         savedTimes = 0
     end
