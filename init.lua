@@ -30,6 +30,7 @@ GetChargeTrigger = require('utils/GetChargeTrigger')
 IsWeaponGlitched = require('utils/IsWeaponGlitched')
 HandleBlockingBullet = require('utils/HandleBlockingBullet')
 HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
+CanPerformRelicLeap = require('utils/CanPerformRelicLeap')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
@@ -786,15 +787,55 @@ registerForEvent('onUpdate', function(delta)
     local weaponState = GetState('Weapon')
     local isWeaponGlitched = IsWeaponGlitched()
 
+    local boltPerkBought = PlayerDevelopmentSystem.GetData(GetPlayer()):IsNewPerkBought(gamedataNewPerkType.Tech_Right_Milestone_3) >= 3
+    local isPerfectCharged = usingWeapon.perfectChargeReached and boltPerkBought
+
+    -- local isInFinisher = StatusEffectSystem.ObjectHasStatusEffect(player, 'BaseStatusEffect.PlayerInFinisherWorkspot')
+    -- local locomotionState = Game.GetPlayer():GetCurrentLocomotionState()
+    -- local workspotExtInfo = Game.GetWorkspotSystem():GetExtendedInfo(GetPlayer())
+
+    -- print(isInFinisher, locomotionState, workspotExtInfo.isActive, workspotExtInfo.playingSyncAnim)
+
+    -- function GetFinisherNameBasedOnWeapon()
+    --     local weapon = Game.GetActiveWeapon(GetPlayer())
+    --     if (not weapon) then return nil end
+
+    --     local weaponRecord = TweakDBInterface.GetWeaponItemRecord(ItemID.GetTDBID(weapon:GetItemID()));
+    --     if (not weaponRecord) then return nil end
+
+    --     local finisherName = 'finisher_default'
+
+    --     finisherName = NameToString(weaponRecord:ItemType():Name());
+
+    --     if (finisherName == EnumValueToString('gamedataItemType', EnumInt(gamedataItemType.Wea_Sword))) then
+    --         finisherName = NameToString(EnumValueToName('gamedataItemType', 83));
+    --     end
+
+    --     local weaponTags = weaponRecord:Tags();
+    --     local i = #weaponTags - 1;
+
+    --     while i >= 0 do
+    --         if (Game.GetGameEffectSystem():HasEffect('playFinisher', weaponTags[i])) then
+    --             finisherName = NameToString(weaponTags[i]);
+    --             break;
+    --         end
+    --         i = i - 1;
+    --     end
+
+    --     return finisherName
+    -- end
+
+    -- GetFinisherNameBasedOnWeapon()
+
     if (not weapon) then
         weapon = WeaponsList['default']
         weaponType = 'default'
     end
     if (weaponState == 6) then weaponState = 4 end
 
-    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime) end
+    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged) end
 
-    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config)
+    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon)
 
     local weaponModeValue = config.weaponsSettings[weaponType].value
 

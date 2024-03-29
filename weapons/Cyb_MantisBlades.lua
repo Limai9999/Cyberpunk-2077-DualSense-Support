@@ -1,5 +1,7 @@
-local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config, _, usingWeapon)
     data.type = GetText('Gameplay-Items-Item Type-Cyb_MantisBlades')
+
+    local canPerformRelicLeap = CanPerformRelicLeap(usingWeapon)
 
     local stamina = GetState('Stamina')
     local state = GetState('MeleeWeapon')
@@ -24,6 +26,13 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     if (state == 5 or state == 6 or state == 7 or state == 13) then
         data.rightForceTrigger = '(1)(5)(4)(6)'
         if (stamina == 2) then data.rightForceTrigger = '(1)(6)(7)(8)' end
+
+        if (canPerformRelicLeap and (state == 5 or state == 6 or state == 7)) then
+            local freq = GetChargeTrigger(name, false, false, 0.4, 30)
+
+            data.rightTriggerType = 'Galloping'
+            data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')'
+        end
     end
 
     if (state == 10) then
@@ -33,11 +42,18 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         if (stamina == 2) then data.leftForceTrigger = '(5)(3)' end
     end
 
-    if (state == 11) then
+    if (state == 11 or state == 18) then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(6)(1)(5)'
 
         if (stamina == 2) then data.rightForceTrigger = '(0)(7)(2)(7)' end
+
+        if (canPerformRelicLeap) then
+            local freq = GetChargeTrigger(name, false, false, 0.6, 20)
+
+            data.rightTriggerType = 'Galloping'
+            data.rightForceTrigger = '(4)(9)(3)(4)('.. freq ..')'
+        end
     end
 
     if (isAiming) then
@@ -56,6 +72,11 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             data.leftForceTrigger = '(5)(5)'
             data.rightForceTrigger = '(5)(5)'
         end
+    end
+
+    if (state == 19 or state == 20) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(2)(7)'
     end
 
     if (IsBlockedBullet) then
