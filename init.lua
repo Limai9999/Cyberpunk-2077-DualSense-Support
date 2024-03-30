@@ -30,7 +30,7 @@ GetChargeTrigger = require('utils/GetChargeTrigger')
 IsWeaponGlitched = require('utils/IsWeaponGlitched')
 HandleBlockingBullet = require('utils/HandleBlockingBullet')
 HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
-CanPerformRelicLeap = require('utils/CanPerformRelicLeap')
+CanPerformRelicAttack = require('utils/CanPerformRelicAttack')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')

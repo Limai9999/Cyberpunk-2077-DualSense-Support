@@ -1,5 +1,7 @@
-local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config, _, usingWeapon)
     data.type = GetText('Gameplay-Items-Item Type-Cyb_StrongArms')
+
+    local canPerformRelicAttack = CanPerformRelicAttack(usingWeapon)
 
     local stamina = GetState('Stamina')
     local state = GetState('MeleeWeapon')
@@ -28,9 +30,15 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     end
 
     if (state == 7) then
-        local freq = GetChargeTrigger(name, false, false, 0.12, 2, 30)
-        data.rightTriggerType = 'Galloping'
-        data.rightForceTrigger = '(3)(9)(1)(2)('.. freq ..')'
+        if (canPerformRelicAttack) then
+            local freq = GetChargeTrigger(name, false, false, 0.3, 10, 30)
+            data.rightTriggerType = 'Galloping'
+            data.rightForceTrigger = '(3)(9)(3)(4)('.. freq ..')'
+        else
+            local freq = GetChargeTrigger(name, false, false, 0.12, 2, 30)
+            data.rightTriggerType = 'Galloping'
+            data.rightForceTrigger = '(3)(9)(1)(2)('.. freq ..')'
+        end
     else
         GetChargeTrigger(name, false, true)
     end
@@ -47,9 +55,15 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         data.rightForceTrigger = '(0)(5)(2)(3)'
 
         if (stamina == 2) then data.rightForceTrigger = '(0)(6)(4)(5)' end
+
+        if (canPerformRelicAttack) then
+            local freq = GetChargeTrigger(name, false, false, 0.3, 8, 20)
+            data.rightTriggerType = 'Galloping'
+            data.rightForceTrigger = '(3)(9)(1)(2)('.. freq ..')'
+        end
     end
 
-    if (state == 12 or state == 14) then
+    if (state == 12 or state == 14 or (state == 13 and canPerformRelicAttack)) then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(8)(1)(8)'
         if (stamina == 2) then data.rightForceTrigger = '(0)(8)(3)(8)' end

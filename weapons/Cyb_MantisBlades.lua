@@ -1,7 +1,7 @@
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config, _, usingWeapon)
     data.type = GetText('Gameplay-Items-Item Type-Cyb_MantisBlades')
 
-    local canPerformRelicLeap = CanPerformRelicLeap(usingWeapon)
+    local canPerformRelicAttack = CanPerformRelicAttack(usingWeapon)
 
     local stamina = GetState('Stamina')
     local state = GetState('MeleeWeapon')
@@ -10,6 +10,8 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     data.leftForceTrigger = '(0)(1)(4)(5)'
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(1)(3)(6)(3)'
+
+    if (not canPerformRelicAttack) then GetChargeTrigger(name, false, true) end
 
     if (state == 0) then
         data.leftTriggerType = 'Resistance'
@@ -27,8 +29,8 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         data.rightForceTrigger = '(1)(5)(4)(6)'
         if (stamina == 2) then data.rightForceTrigger = '(1)(6)(7)(8)' end
 
-        if (canPerformRelicLeap and (state == 5 or state == 6 or state == 7)) then
-            local freq = GetChargeTrigger(name, false, false, 0.4, 30)
+        if (canPerformRelicAttack and (state == 5 or state == 6 or state == 7)) then
+            local freq = GetChargeTrigger(name, false, false, 0.4, 5, 30)
 
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')'
@@ -48,11 +50,20 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
 
         if (stamina == 2) then data.rightForceTrigger = '(0)(7)(2)(7)' end
 
-        if (canPerformRelicLeap) then
-            local freq = GetChargeTrigger(name, false, false, 0.6, 20)
+        if (canPerformRelicAttack) then
+            local freq = GetChargeTrigger(name, false, false, 0.3, 7, 20)
 
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(4)(9)(3)(4)('.. freq ..')'
+        end
+    end
+
+    if (state == 13) then
+        if (canPerformRelicAttack) then
+            local freq = GetChargeTrigger(name, false, false, 0.4, 10, 30)
+
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(4)(9)(3)(3)('.. freq ..')(0)'
         end
     end
 
