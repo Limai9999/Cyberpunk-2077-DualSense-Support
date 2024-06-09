@@ -266,7 +266,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     end
 
-    if (isWeaponGlitched and triggerType ~= 'SemiAuto' and triggerType ~= 'Charge') then
+    if (isWeaponGlitched and triggerType ~= 'SemiAuto') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(6)(6)'
 

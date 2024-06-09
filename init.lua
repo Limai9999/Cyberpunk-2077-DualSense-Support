@@ -759,6 +759,7 @@ registerForEvent('onUpdate', function(delta)
     local isCyberwareWeapon = false
     local cycleTime = 0
     local attackSpeed = 0
+    local isPerfectCharged = false
 
     if (usingWeapon) then
         weaponName = usingWeapon:GetItemData():GetNameAsString()
@@ -777,6 +778,8 @@ registerForEvent('onUpdate', function(delta)
             triggerType = usingWeapon:GetCurrentTriggerMode():Name()
             cycleTime = Game.GetStatsSystem():GetStatValue(usingWeapon:GetEntityID(), gamedataStatType.CycleTime)
             attackSpeed = math.floor(1 / cycleTime + 0.5)
+            local boltPerkBought = PlayerDevelopmentSystem.GetData(GetPlayer()):IsNewPerkBought(gamedataNewPerkType.Tech_Right_Milestone_3) >= 3
+            isPerfectCharged = usingWeapon.perfectChargeReached and boltPerkBought
         end
     else
         -- SaveFile('RGBChange', data, 'noWeaponType', 'noWeaponName', 'noVehicle')
@@ -786,9 +789,6 @@ registerForEvent('onUpdate', function(delta)
     local stamina = GetState('Stamina')
     local weaponState = GetState('Weapon')
     local isWeaponGlitched = IsWeaponGlitched()
-
-    local boltPerkBought = PlayerDevelopmentSystem.GetData(GetPlayer()):IsNewPerkBought(gamedataNewPerkType.Tech_Right_Milestone_3) >= 3
-    local isPerfectCharged = usingWeapon.perfectChargeReached and boltPerkBought
 
     -- local isInFinisher = StatusEffectSystem.ObjectHasStatusEffect(player, 'BaseStatusEffect.PlayerInFinisherWorkspot')
     -- local locomotionState = Game.GetPlayer():GetCurrentLocomotionState()

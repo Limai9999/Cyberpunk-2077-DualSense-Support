@@ -10,7 +10,10 @@ local function StartObservers()
     -- end)
 
     Observe('gameTimeSystem', 'SetTimeDilation', function (_, _, dilation)
-        if (dilation <= 1) then TimeDilation = dilation end
+        local threshold = 1e-6
+        if (math.abs(dilation) < threshold) then return end
+
+        TimeDilation = dilation
         Warn('TimeDilation changed to ' .. TimeDilation, true)
     end)
 
@@ -101,12 +104,16 @@ local function StartObservers()
     Observe('gameObject', 'OnHit', function (_, hitEvent)
         if (hitEvent.attackData.attackType ~= gamedataAttackType.Ranged) then return end
 
-        local currentWeapon = Game.GetActiveWeapon(GetPlayer())
+        local player = GetPlayer()
+
+        if (not player.isAiming) then return end
+
+        local currentWeapon = Game.GetActiveWeapon(player)
         if (currentWeapon == nil) then return end
 
         local canBlockBullet = DamageManager.CanBlockBullet(hitEvent)
-        local hasBulletBlockPerk = PlayerDevelopmentSystem.GetData(Game.GetPlayer()):IsNewPerkBought(gamedataNewPerkType.Reflexes_Right_Milestone_2)
-        local currentStamina = Game.GetStatPoolsSystem():GetStatPoolValue(Game.GetPlayer():GetEntityID(), gamedataStatPoolType.Stamina, false)
+        local hasBulletBlockPerk = PlayerDevelopmentSystem.GetData(player):IsNewPerkBought(gamedataNewPerkType.Reflexes_Right_Milestone_2)
+        local currentStamina = Game.GetStatPoolsSystem():GetStatPoolValue(player:GetEntityID(), gamedataStatPoolType.Stamina, false)
 
         if (not canBlockBullet or hasBulletBlockPerk < 2 or currentStamina <= 0) then return end
 
@@ -120,6 +127,41 @@ local function StartObservers()
         IsPlayerHitEntity = true
         IsPlayerHitEntityStrong = hitEvent.attackData.attackType == gamedataAttackType.StrongMelee
     end)
+
+    -- Observe('EffectSystem', 'CreateEffectStatic', function (_, effectName, effectTag)
+    --     print('CreateEffectStatic: ', NameToString(effectName), NameToString(effectTag))
+    -- end)
+
+    -- Observe('AnimationControllerComponent', 'ApplyFeatureToReplicate;GameObjectCNameAnimFeatureFloat', function (obj, inputName)
+    --     print('Animation', inputName)
+    -- end)
+
+    -- Observe('gameObject', 'QueueEvent', function (_, event)
+    --     local isInFinisher = StatusEffectSystem.ObjectHasStatusEffect(GetPlayer(), 'BaseStatusEffect.PlayerInFinisherWorkspot')
+
+    --     local name = NameToString(event.key)
+    --     if (name ~= 'None') then print('QueueEvent', name, isInFinisher) end
+    -- end)
+
+    -- Observe('UseWorkspotCommandHandler', 'Activate', function (this, evt)
+    --     print('Activate')
+    -- end)
+
+    -- Observe('animationPlayer', 'Play', function (this, evt)
+    --     print('PlayPlayPlayPlayPlayPlayPlayPlay', this.animName)
+    -- end)
+
+    -- Observe('animationPlayer', 'PlayOrPause', function (this, evt)
+    --     print('PlayOrPause', this.animName)
+    -- end)
+    
+    -- Observe('animationPlayer', 'PlayOrStop', function (this, evt)
+    --     print('PlayOrStop', this.animName)
+    -- end)
+
+    -- Observe('animationPlayer', 'CreateAndPlayAnimation', function (this, evt)
+    --     print('CreateAndPlayAnimation', this.animName)
+    -- end)
 
     GameSession.OnLoad(function ()
         IsLoading = true
