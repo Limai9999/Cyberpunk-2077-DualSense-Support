@@ -54,7 +54,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 freq = GetFrequency(attackSpeed * 2, dilated, name)
     
                 data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(4)(9)(4)(7)('.. freq ..')(0)'
+                data.rightForceTrigger = '(4)(9)(3)(6)('.. freq ..')(0)'
             end
         elseif (triggerType == 'Charge') then
             if (state == 1) then
@@ -69,8 +69,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             if (state == 8) then
                 freq = GetFrequency(attackSpeed, dilated, name)
     
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
+
                 data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(4)(9)(5)(7)('.. freq ..')(0)'
+                data.rightForceTrigger = '(1)(9)(4)(6)('.. freq ..')(0)'
             end
         end
     elseif (name == 'w_special_kangtao_dian') then

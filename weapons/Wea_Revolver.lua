@@ -1,3 +1,5 @@
+local afterShootTimes = 0
+
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Revolver')
 
@@ -97,9 +99,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.canUseNoAmmoWeaponEffect = false
     elseif (name == 'w_revolver_techtronika_metel') then
         data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(1)(1)'
+        data.leftForceTrigger = '(0)(2)'
 
         if (isAiming) then
+            data.leftTriggerType = 'Normal'
+
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(3)(5)(8)'
         else
@@ -108,7 +112,17 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 8) then
-            data.leftForceTrigger = '(1)(4)'
+            local shootTriggerActiveForTimes = 25
+            if (config.lowFPSMode) then shootTriggerActiveForTimes = 10 end
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(1)(4)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     end
 

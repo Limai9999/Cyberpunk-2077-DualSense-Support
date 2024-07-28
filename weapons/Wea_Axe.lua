@@ -1,6 +1,8 @@
 local flipTriggerActive = false
 local savedFlipTriggerTimes = 0
-local maxFlipTriggerTimes = 20
+local maxFlipTriggerTimes = 30
+
+local timesAfterThrow = 0
 
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-Items-Item Type-Wea_Axe')
@@ -21,24 +23,29 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     if (name == 'w_melee_one_hand_blunt') then
         if (state == 7 or state == 13) then
             data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(3)(8)(1)(3)'
+            data.rightForceTrigger = '(2)(7)(1)(6)'
         end
 
         if (state == 9) then
-            if (not flipTriggerActive) then flipTriggerActive = true end
-
-            if (flipTriggerActive and savedFlipTriggerTimes <= maxFlipTriggerTimes) then
-                if (savedFlipTriggerTimes >= maxFlipTriggerTimes / 2) then
-                    data.leftTriggerType = 'Normal'
-                else
-                    data.leftTriggerType = 'Resistance'
-                    data.leftForceTrigger = '(0)(5)'
-                end
-
-                savedFlipTriggerTimes = savedFlipTriggerTimes + 1
-            else
+            if (config.lowFPSMode) then
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(0)(2)'
+            else
+                if (not flipTriggerActive) then flipTriggerActive = true end
+
+                if (flipTriggerActive and savedFlipTriggerTimes <= maxFlipTriggerTimes) then
+                    if (savedFlipTriggerTimes >= maxFlipTriggerTimes / 2) then
+                        data.leftTriggerType = 'Normal'
+                    else
+                        data.leftTriggerType = 'Resistance'
+                        data.leftForceTrigger = '(0)(5)'
+                    end
+    
+                    savedFlipTriggerTimes = savedFlipTriggerTimes + 1
+                else
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(0)(2)'
+                end
             end
         end
 
@@ -49,14 +56,24 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
 
         if (state == 12) then
             data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(3)(6)(6)'
+            data.rightForceTrigger = '(0)(4)(6)(6)'
         end
 
         if (state == 19) then
-            data.leftTriggerType = 'Bow'
-            data.leftForceTrigger = '(1)(8)(1)(8)'
+            local throwTriggerActiveForTimes = 40
+            if (config.lowFPSMode) then throwTriggerActiveForTimes = 20 end
 
-            data.rightTriggerType = 'Normal'
+            if (timesAfterThrow < throwTriggerActiveForTimes) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(2)(5)'
+            else
+                data.leftTriggerType = 'Normal'
+                data.rightTriggerType = 'Normal'
+            end
+
+            timesAfterThrow = timesAfterThrow + 1
+        else
+            timesAfterThrow = 0
         end
     end
 

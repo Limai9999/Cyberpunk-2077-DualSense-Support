@@ -1,4 +1,8 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local chaoUsedFireTriggerTimes = 0
+
+local afterShootTimes = 0
+
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Skills-GunslingerName')
 
     local freq = 0
@@ -52,7 +56,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(7)(1)'
             data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(2)(4)(3)(4)'
+            data.rightForceTrigger = '(2)(4)(1)(3)'
 
             if (state == 8) then
                 if (triggerType == 'Burst') then
@@ -68,7 +72,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(4)(9)(1)(1)('.. freq ..')(0)'
                 data.rightTriggerType = 'AutomaticGun'
-                data.rightForceTrigger = '(5)(6)('.. freq ..')'
+                data.rightForceTrigger = '(3)(5)('.. freq ..')'
             end
         else
             data.rightTriggerType = 'Bow'
@@ -83,14 +87,50 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     elseif (name == 'w_handgun_kangtao_chao') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(3)(4)'
-        if (state == 8) then
-            if (dilated) then
-                freq = GetFrequency(5, dilated, name)
-            else
-                freq = GetFrequency(7, dilated, name)
+
+        -- bad behavior at low FPS
+        local canUseFireTrigger = true
+        local initialFrequency = 0
+
+        if (itemName == 'Items.Preset_Chao_VooDoo') then
+            initialFrequency = 4
+
+            if (chaoUsedFireTriggerTimes >= 30 and chaoUsedFireTriggerTimes <= 55) then
+                canUseFireTrigger = false
             end
-            data.rightTriggerType = 'AutomaticGun'
-            data.rightForceTrigger = '(3)(5)('.. freq ..')'
+
+            if (chaoUsedFireTriggerTimes > 55) then
+                chaoUsedFireTriggerTimes = 0
+            end
+        else
+            initialFrequency = 7
+
+            if (chaoUsedFireTriggerTimes >= 40 and chaoUsedFireTriggerTimes <= 70) then
+                canUseFireTrigger = false
+            end
+
+            if (chaoUsedFireTriggerTimes > 70) then
+                chaoUsedFireTriggerTimes = 0
+            end
+        end
+
+        if (state == 8) then
+            chaoUsedFireTriggerTimes = chaoUsedFireTriggerTimes + 1
+        else
+            chaoUsedFireTriggerTimes = 0
+        end
+
+        if (config.lowFPSMode) then canUseFireTrigger = true end
+
+        if (state == 8 and canUseFireTrigger) then
+            if (dilated) then
+                freq = GetFrequency(initialFrequency + 2, dilated, name)
+            else
+                freq = GetFrequency(initialFrequency, dilated, name)
+            end
+
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
         end
     elseif (name == 'w_handgun_malorian_silverhand') then
         data.leftTriggerType = 'Bow'
@@ -188,12 +228,12 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     elseif (name == 'w_handgun_constitutional_liberty') then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(1)(4)(6)(6)'
+        data.rightForceTrigger = '(2)(4)(6)(6)'
 
         if (state == 8) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(5)(1)'
-            data.rightForceTrigger = '(1)(5)(6)(6)'
+            data.rightForceTrigger = '(2)(5)(6)(6)'
         end
     elseif (name == 'w_handgun_budget_slaughtomatic') then
         freq = GetFrequency(7, dilated, name)
@@ -201,12 +241,12 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(4)(8)('.. freq ..')'
     elseif (name == 'w_handgun_krauser_grit') then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(1)(4)(6)(5)'
+        data.rightForceTrigger = '(2)(4)(6)(5)'
 
         if (triggerType == 'SemiAuto') then
             if (state == 8) then
                 data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(1)(8)(2)(4)'
+                data.rightForceTrigger = '(4)(8)(2)(4)'
             end
         end
 

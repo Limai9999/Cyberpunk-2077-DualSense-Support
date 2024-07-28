@@ -754,6 +754,7 @@ registerForEvent('onUpdate', function(delta)
 
     local weaponType = 'default'
     local weaponName = 'no'
+    local itemName = 'no'
     local triggerType = 'no'
     local isMeleeWeapon = false
     local isCyberwareWeapon = false
@@ -763,6 +764,7 @@ registerForEvent('onUpdate', function(delta)
 
     if (usingWeapon) then
         weaponName = usingWeapon:GetItemData():GetNameAsString()
+        itemName = usingWeapon.weaponRecord:GetRecordID().value
 
         -- type of item
         local itemType = usingWeapon.GetClassName(usingWeapon).value
@@ -833,9 +835,9 @@ registerForEvent('onUpdate', function(delta)
     end
     if (weaponState == 6) then weaponState = 4 end
 
-    if (config.showWeaponStates) then print(weaponType, weaponName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged) end
+    if (config.showWeaponStates) then print(weaponType, weaponName, itemName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged) end
 
-    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon)
+    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
 
     local weaponModeValue = config.weaponsSettings[weaponType].value
 

@@ -3,6 +3,8 @@ local resistanceEnabled = true
 local resistanceTimes = 0
 local maxResistanceTimes = 10
 
+local afterShootTimes = 0
+
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Shotgun')
 
@@ -63,7 +65,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(1)(2)(6)(6)'
 
         if (state == 8) then
-            freq = GetFrequency(attackSpeed, dilated, name)
+            if (dilated) then
+                freq = GetFrequency(attackSpeed + 1, dilated, name)
+            else
+                freq = GetFrequency(attackSpeed, dilated, name)
+            end
 
             if (resistanceEnabled) then
                 data.leftTriggerType = 'Resistance'
@@ -84,13 +90,29 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     elseif (name == 'w_shotgun_constitutional_tactician') then
         data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(1)(1)'
+        data.leftForceTrigger = '(0)(3)'
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(2)(4)(8)(4)'
+        data.rightForceTrigger = '(1)(4)(5)(4)'
 
-        if (state == 8) then
-            data.leftForceTrigger = '(1)(4)'
-            data.rightForceTrigger = '(0)(5)(8)(6)'
+        if (isAiming) then
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(3)(1)'
+
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(1)(4)(7)(4)'
+        end
+
+        if (state == 8 or state == 4) then
+            local shootTriggerActiveForTimes = 25
+            if (config.lowFPSMode) then shootTriggerActiveForTimes = 10 end
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.leftTriggerType = 'Normal'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     end
 
