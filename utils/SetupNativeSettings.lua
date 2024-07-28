@@ -68,6 +68,11 @@ local function SetupNativeSettings()
     -- fix problems
     NS.addSubcategory(fixProblems, GetText('Mod-DualSense-NS-Subcategory-ProblemsBugs'))
 
+    NS.addSwitch(fixProblems, GetText('Mod-DualSense-NS-LowFPSMode'), GetText('Mod-DualSense-NS-LowFPSMode-Descr'), config.lowFPSMode, false, function(state)
+        config.lowFPSMode = state
+        ManageSettings.saveFile(config)
+    end)
+
     NS.addButton(fixProblems, GetText('Mod-DualSense-NS-RedoSettingsFile'), GetText('Mod-DualSense-NS-RedoSettingsFile-Descr'), GetText('Mod-DualSense-NS-Button-Execute'), 45, function()
         ManageSettings.RedoConfig()
         savedData = 'notSaved'

@@ -34,6 +34,7 @@ local defaultConfig = {
     showWeaponStates = false,
     meleeBulletBlockEffectStrength = 3,
     meleeEntityHitTrigger = true,
+    lowFPSMode = false,
 }
 
 local filePath = 'config/settings.json'
