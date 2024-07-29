@@ -31,6 +31,8 @@ IsWeaponGlitched = require('utils/IsWeaponGlitched')
 HandleBlockingBullet = require('utils/HandleBlockingBullet')
 HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
 CanPerformRelicAttack = require('utils/CanPerformRelicAttack')
+CalcFixedTimeIndex = require('utils/CalcFixedTimeIndex')
+CalcTimeIndex = require('utils/CalcTimeIndex')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
@@ -93,6 +95,7 @@ VehicleCollisionForce = 0
 IsBlockedBullet = false
 IsPlayerHitEntity = false
 IsPlayerHitEntityStrong = false
+Delta = 0.01
 
 -- VehicleModeDefaultIndex = 0
 
@@ -262,13 +265,15 @@ registerForEvent("onDraw", function()
 end)
 
 registerForEvent('onUpdate', function(delta)
+    Delta = delta
+
     if (not handleUpdates) then return end
     Cron.Update(delta)
     UDPManualStartHandler()
 
     HandleBlockingBullet()
     HandlePlayerHitEntity()
-    
+
     local isInScene = GameUI.IsScene()
     IsScene = isInScene
 

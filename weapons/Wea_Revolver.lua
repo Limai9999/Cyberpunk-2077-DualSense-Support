@@ -111,9 +111,12 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(0)(3)(4)(6)'
         end
 
+        if (state ~= 8) then
+            CalcFixedTimeIndex(name, 0, true)
+        end
+
         if (state == 8) then
-            local shootTriggerActiveForTimes = 25
-            if (config.lowFPSMode) then shootTriggerActiveForTimes = 10 end
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
                 data.leftTriggerType = 'Resistance'

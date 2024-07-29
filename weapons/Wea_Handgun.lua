@@ -88,28 +88,33 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(3)(4)'
 
-        -- bad behavior at low FPS
         local canUseFireTrigger = true
         local initialFrequency = 0
 
         if (itemName == 'Items.Preset_Chao_VooDoo') then
             initialFrequency = 4
 
-            if (chaoUsedFireTriggerTimes >= 30 and chaoUsedFireTriggerTimes <= 55) then
+            local chaoUsedFireTriggerTimesStart = CalcTimeIndex(30)
+            local chaoUsedFireTriggerTimesEnd = CalcTimeIndex(55)
+
+            if (chaoUsedFireTriggerTimes >= chaoUsedFireTriggerTimesStart and chaoUsedFireTriggerTimes <= chaoUsedFireTriggerTimesEnd) then
                 canUseFireTrigger = false
             end
 
-            if (chaoUsedFireTriggerTimes > 55) then
+            if (chaoUsedFireTriggerTimes > chaoUsedFireTriggerTimesEnd) then
                 chaoUsedFireTriggerTimes = 0
             end
         else
             initialFrequency = 7
 
-            if (chaoUsedFireTriggerTimes >= 40 and chaoUsedFireTriggerTimes <= 70) then
+            local chaoUsedFireTriggerTimesStart = CalcTimeIndex(40)
+            local chaoUsedFireTriggerTimesEnd = CalcTimeIndex(70)
+
+            if (chaoUsedFireTriggerTimes >= chaoUsedFireTriggerTimesStart and chaoUsedFireTriggerTimes <= chaoUsedFireTriggerTimesEnd) then
                 canUseFireTrigger = false
             end
 
-            if (chaoUsedFireTriggerTimes > 70) then
+            if (chaoUsedFireTriggerTimes > chaoUsedFireTriggerTimesEnd) then
                 chaoUsedFireTriggerTimes = 0
             end
         end
@@ -119,8 +124,6 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         else
             chaoUsedFireTriggerTimes = 0
         end
-
-        if (config.lowFPSMode) then canUseFireTrigger = true end
 
         if (state == 8 and canUseFireTrigger) then
             if (dilated) then

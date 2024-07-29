@@ -33,8 +33,7 @@ local defaultConfig = {
     scannerTriggers = true,
     showWeaponStates = false,
     meleeBulletBlockEffectStrength = 3,
-    meleeEntityHitTrigger = true,
-    lowFPSMode = false,
+    meleeEntityHitTrigger = true
 }
 
 local filePath = 'config/settings.json'
