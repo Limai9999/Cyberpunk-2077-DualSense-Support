@@ -1,7 +1,11 @@
 local savedReason = ''
 local savedIndex = 0
 
-local function CalcFixedTimeIndex(reason, initialIndex, reset)
+local function CalcFixedTimeIndex(reason, initialIndex, isTimeDilated, reset)
+    if (not reason) then return 0 end
+
+    if (isTimeDilated) then reason = reason .. 'dilated' end
+
     if (savedReason ~= reason) then savedIndex = 0 end
     if (reset) then
         savedReason = ''
@@ -12,7 +16,12 @@ local function CalcFixedTimeIndex(reason, initialIndex, reset)
 
     if (savedIndex ~= 0) then return savedIndex end
 
-    savedIndex = CalcTimeIndex(initialIndex)
+    if (isTimeDilated) then
+        savedIndex = CalcTimeIndex(initialIndex * (1 / TimeDilation))
+    else
+        savedIndex = CalcTimeIndex(initialIndex)
+    end
+
     savedReason = reason
 
     return math.floor(savedIndex)
