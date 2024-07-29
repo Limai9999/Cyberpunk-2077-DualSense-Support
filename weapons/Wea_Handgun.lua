@@ -27,12 +27,39 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(1)(7)(2)(6)'
         end
     elseif (name == 'w_handgun_tsunami_nue') then
+        data.leftTriggerType = 'Bow'
+        data.leftForceTrigger = '(0)(1)(4)(1)'
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(2)(4)(6)(4)'
+
+        local isRiskit = FindInString(itemName, 'Bree')
+
         if (state == 8) then
             data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(1)(1)'
+            data.leftForceTrigger = '(1)(2)'
 
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(1)(6)(6)(5)'
+        end
+
+        if (isRiskit) then
+            local playerId = GetPlayer():GetEntityID()
+            local fullHealthValue = Game.GetStatsSystem():GetStatValue(playerId, 'Health')
+            local healthValue = Game.GetStatPoolsSystem():GetStatPoolValue(playerId, Enum.new('gamedataStatPoolType', 'Health'), false);
+            local healthPercentage = healthValue / fullHealthValue
+
+            if (healthPercentage < 0.40) then
+                data.leftTriggerType = 'Bow'
+                data.leftForceTrigger = '(0)(1)(2)(1)'
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(1)(4)(3)(2)'
+
+                if (state == 8) then
+                    data.leftTriggerType = 'Normal'
+                    data.rightTriggerType = 'Bow'
+                    data.rightForceTrigger = '(1)(5)(4)(3)'
+                end
+            end
         end
     elseif (name == 'w_handgun_militech_lexington') then
         if (state == 8) then
@@ -44,12 +71,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
             freq = GetFrequency(attackSpeed, dilated, name)
 
-            local freqHalf = math.floor(freq / 2)
             data.leftTriggerType = 'Machine'
-            data.leftForceTrigger = '(5)(9)(1)(1)('.. freqHalf ..')(0)'
+            data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
 
             data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+            data.rightForceTrigger = '(4)(9)(3)(4)('.. freq ..')(0)'
         end
     elseif (name == 'w_handgun_arasaka_yukimura') then
         if (isAiming) then
@@ -285,7 +311,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8) then
-                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 35, false)
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 35, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
                     freq = GetFrequency(9, dilated, name)
@@ -327,7 +353,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8) then
-                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, false)
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
                     data.leftTriggerType = 'Resistance'

@@ -31,7 +31,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     end
 
     if (state == 19) then
-        local throwTriggerActiveForTimes = CalcFixedTimeIndex(name..'19', 40, false)
+        local throwTriggerActiveForTimes = CalcFixedTimeIndex(name..'19', 40, dilated, false)
 
         if (timesAfterThrow < throwTriggerActiveForTimes) then
             data.leftTriggerType = 'Resistance'

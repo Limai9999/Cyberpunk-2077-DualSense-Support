@@ -2,6 +2,8 @@ local weaponFireTriggerAppliedTimes = 0
 local savedWeaponName = ''
 local savedWeaponState = 0
 
+local afterShootTimes = 0
+
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SniperRifle')
 
@@ -102,18 +104,26 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(1)'
             end
         elseif (triggerType == 'Burst') then
-            if (state == 8) then
-                if (weaponFireTriggerAppliedTimes <= 20 or (weaponFireTriggerAppliedTimes <= 40 and dilated)) then
-                    freq = GetFrequency(12, dilated, name)
-            
+            if (state == 8 or state == 4) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 45, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    if (dilated) then
+                        freq = GetFrequency(10, dilated, name)
+                    else
+                        freq = GetFrequency(11, dilated, name)
+                    end
+
                     data.leftTriggerType = 'Machine'
                     data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
-    
+
                     data.rightTriggerType = 'Machine'
                     data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(1)'
-
-                    weaponFireTriggerAppliedTimes = weaponFireTriggerAppliedTimes + 1
                 end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
             end
         end
     elseif (name == 'w_rifle_sniper_tsunami_rasetsu') then
@@ -123,31 +133,37 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         if (state ~= 1) then GetChargeTrigger(name, dilated, true) end
 
         if (triggerType == 'SemiAuto') then
-            if (state == 8) then
-                if (weaponFireTriggerAppliedTimes <= 20 or (weaponFireTriggerAppliedTimes <= 40 and dilated)) then
-                    freq = GetFrequency(2, dilated, name)
-                    data.rightTriggerType = 'AutomaticGun'
-                    data.rightForceTrigger = '(4)(8)('.. freq ..')'
+            if (state == 8 or state == 4) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 25, dilated, false)
 
-                    weaponFireTriggerAppliedTimes = weaponFireTriggerAppliedTimes + 1
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(0)(8)'
                 end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
             end
         elseif (triggerType == 'Charge') then
             if (state == 1) then
                 freq = GetChargeTrigger(name, dilated, false, 0.3, 0, 50)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
-            elseif (state == 8 or state == 4) then
-                if (weaponFireTriggerAppliedTimes <= 25 or (weaponFireTriggerAppliedTimes <= 50 and dilated)) then
-                    data.leftTriggerType = 'Resistance'
-                    data.leftForceTrigger = '(1)(8)'
-    
-                    freq = GetFrequency(2, dilated, name)
-                    data.rightTriggerType = 'AutomaticGun'
-                    data.rightForceTrigger = '(4)(8)('.. freq ..')'
+            end
 
-                    weaponFireTriggerAppliedTimes = weaponFireTriggerAppliedTimes + 1
+            if (state == 8 or state == 4) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 30, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.leftTriggerType = 'Normal'
+
+                    data.rightTriggerType = 'Rigid'
                 end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
             end
         end
     end

@@ -30,7 +30,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         end
 
         if (state == 9) then
-            local maxFlipTriggerTimes = CalcFixedTimeIndex(name..'9', 30, false)
+            local maxFlipTriggerTimes = CalcFixedTimeIndex(name..'9', 30, dilated, false)
 
             if (not flipTriggerActive) then flipTriggerActive = true end
 
@@ -60,7 +60,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         end
 
         if (state == 19) then
-            local throwTriggerActiveForTimes = CalcFixedTimeIndex(name..'19', 40, false)
+            local throwTriggerActiveForTimes = CalcFixedTimeIndex(name..'19', 40, dilated, false)
 
             if (timesAfterThrow < throwTriggerActiveForTimes) then
                 data.leftTriggerType = 'Resistance'

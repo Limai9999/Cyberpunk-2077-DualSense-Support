@@ -110,7 +110,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 4 or state == 8) then
-                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, false)
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, dilated, false)
 
                 data.leftForceTrigger = '(1)(6)'
 
@@ -148,7 +148,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 8) then
-            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, false)
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
                 data.leftTriggerType = 'Resistance'

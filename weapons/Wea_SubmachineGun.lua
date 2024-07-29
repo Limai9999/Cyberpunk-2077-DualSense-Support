@@ -1,4 +1,6 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local afterShootTimes = 0
+
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SubmachineGun')
 
     local freq = 0
@@ -49,9 +51,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'SemiAutomaticGun'
         data.rightForceTrigger = '(2)(4)(4)'
 
+        local isRaiju = FindInString(itemName, 'prototype')
+
         if (triggerType == 'Burst') then
             if (state == 8) then
-                freq = GetFrequency(attackSpeed * 2, dilated, name)
+                if (isRaiju) then
+                    freq = GetFrequency(attackSpeed * 1.8, dilated, name)
+                else
+                    freq = GetFrequency(attackSpeed * 1.3, dilated, name)
+                end
     
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(3)(6)('.. freq ..')(0)'
@@ -66,8 +74,28 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 GetChargeTrigger(name, dilated, true)
             end
 
+            local initialFrequency = attackSpeed
+            local canUseFireTrigger = true
+
+            local usedFireTriggerTimesStart = CalcTimeIndex(30)
+            local usedFireTriggerTimesEnd = CalcTimeIndex(38)
+
+            if (afterShootTimes >= usedFireTriggerTimesStart and afterShootTimes <= usedFireTriggerTimesEnd) then
+                canUseFireTrigger = false
+            end
+
+            if (afterShootTimes > usedFireTriggerTimesEnd) then
+                afterShootTimes = 0
+            end
+
             if (state == 8) then
-                freq = GetFrequency(attackSpeed, dilated, name)
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
+    
+            if (state == 8 and canUseFireTrigger) then
+                freq = GetFrequency(initialFrequency, dilated, name)
     
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
@@ -75,6 +103,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(1)(9)(4)(6)('.. freq ..')(0)'
             end
+
+            print(canUseFireTrigger, canUseFireTrigger, canUseFireTrigger, canUseFireTrigger)
         end
     elseif (name == 'w_special_kangtao_dian') then
         freq = GetFrequency(attackSpeed - 1, dilated, name)
