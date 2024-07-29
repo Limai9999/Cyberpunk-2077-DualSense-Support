@@ -20,12 +20,21 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     local freq = 0
 
     if (name == 'w_rifle_sniper_tsunami_ashura') then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(1)(3)'
+
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(6)(7)'
 
+        if (isAiming) then
+            data.leftTriggerType = 'Normal'
+        end
+
         if (state == 8) then
             data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(1)(7)'
+            data.leftForceTrigger = '(1)(3)'
+
+            data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(5)(8)(8)(8)'
         end
 

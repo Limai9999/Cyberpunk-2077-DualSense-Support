@@ -42,7 +42,30 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             if (stamina == 2) then data.rightForceTrigger = '(0)(2)(8)(8)' end
         end
     elseif (name == 'w_melee_one_hand_blunt') then
-        local isDildo = string.match(string.lower(itemName), "dildo") == 'dildo' or itemName == 'Items.VHard_50_RefTech_Weapon15'
+        local isDildo = FindInString(itemName, 'dildo') or itemName == 'Items.VHard_50_RefTech_Weapon15'
+        local isTinkerBell = FindInString(itemName, 'Tinker_Bell') or itemName == 'Items.sq021_peter_pan_baton'
+
+        data.leftTriggerType = 'Bow'
+        data.leftForceTrigger = '(1)(4)(2)(2)'
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(1)(6)(5)'
+
+        if (state == 6 or state == 7) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(6)(3)(5)'
+        elseif (state == 8) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(2)(3)(4)'
+        elseif (state == 13) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(6)(3)(5)'
+        elseif (state == 14) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(4)(3)(6)'
+        elseif (state == 18) then
+            data.leftTriggerType = 'Choppy'
+            data.rightTriggerType = 'Normal'
+        end
 
         if (isDildo) then
             if (state == 8 or state == 10 or state == 7 or state == 15 or state == 11) then
@@ -67,24 +90,28 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             end
         end
 
-        if (state == 6) then
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(6)(4)(6)'
-        elseif (state == 13) then
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(6)(4)(4)'
-        elseif (state == 14) then
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(4)(4)(7)'
-        elseif (state == 18) then
-            data.leftTriggerType = 'Choppy'
-            data.rightTriggerType = 'Normal'
+        if (isTinkerBell) then
+            if (state == 7) then
+                if (state == 7) then
+                    freq = GetChargeTrigger(name..'7', dilated, false, 0.6, 5, 20)
+
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
+                end
+            else
+                GetChargeTrigger(name, dilated, true)
+            end
+
+            if (state == 13) then
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(0)(3)(3)(7)'
+            end
         end
     end
 
     if (state == 19) then
-      data.leftTriggerType = 'Resistance'
-      data.leftForceTrigger = '(2)(7)'
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(2)(6)'
     end
 
     return data

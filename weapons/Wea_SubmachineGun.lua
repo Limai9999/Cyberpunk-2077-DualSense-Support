@@ -77,7 +77,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_special_kangtao_dian') then
-        freq = GetFrequency(attackSpeed, dilated, name)
+        freq = GetFrequency(attackSpeed - 1, dilated, name)
         data.rightTriggerType = 'SemiAutomaticGun'
         data.rightForceTrigger = '(2)(4)(4)'
 
@@ -87,7 +87,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.leftForceTrigger = '(5)(9)(1)(1)('.. freqHalf ..')(0)'
 
             data.rightTriggerType = 'AutomaticGun'
-            data.rightForceTrigger = '(4)(8)('.. freq ..')'
+            data.rightForceTrigger = '(4)(6)('.. freq ..')'
         end
     elseif (name == 'w_submachinegun_darra_pulsar') then
         data.rightTriggerType = 'Bow'

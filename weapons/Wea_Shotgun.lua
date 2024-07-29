@@ -107,7 +107,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 8 or state == 4) then
-            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 25, false)
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 30, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
                 data.leftTriggerType = 'Normal'

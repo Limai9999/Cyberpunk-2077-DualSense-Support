@@ -1,4 +1,4 @@
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Story-base-journal-quests-main_quest-prologue-q000_tutorial-01a_pick_weapon_Rifle_mappin')
 
     local freq = 0
@@ -73,22 +73,40 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(5)(9)(6)(6)('.. freq ..')(0)'
         end
     elseif (name == 'w_rifle_assault_nokota_copperhead') then
+        local isPsalm = FindInString(itemName, 'genesis')
+        local isUmbra = FindInString(itemName, 'umbra')
+        local isCarmenUmbra = isUmbra and FindInString(itemName, 'bebe')
+
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(4)(5)'
+        if (isUmbra) then data.rightForceTrigger = '(1)(3)(4)(5)' end
+        if (isCarmenUmbra) then data.rightForceTrigger = '(1)(3)(3)(4)' end
 
         if (isAiming) then
-          data.leftTriggerType = 'Resistance'
-          data.leftForceTrigger = '(6)(2)'
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(3)(2)'
+
+            if (isCarmenUmbra) then data.leftForceTrigger = '(4)(1)' end
         end
 
         if (state == 8) then
             freq = GetFrequency(attackSpeed, dilated, name)
 
-            data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'
-
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(1)(9)(1)(2)('.. freq ..')(0)'
+
+            data.rightTriggerType = 'Machine'
+            data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+
+            if (isPsalm) then
+                data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
+                data.rightForceTrigger = '(4)(9)(6)(7)('.. freq ..')(0)'
+            end
+            if (isUmbra) then data.rightForceTrigger = '(4)(9)(4)(5)('.. freq ..')(0)' end
+            if (isCarmenUmbra) then
+                data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
+                data.rightForceTrigger = '(4)(9)(4)(4)('.. freq ..')(0)'
+            end
         end
     elseif (name == 'w_special__militech_hercules') then
         data.rightTriggerType = 'Bow'

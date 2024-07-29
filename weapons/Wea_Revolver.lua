@@ -43,7 +43,20 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_revolver_darra_quasar') then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(0)(1)'
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(1)(4)(5)(4)'
+
+        if (state == 8) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(1)(7)(3)(4)'
+        end
+
         if (isAiming) then
+            data.leftTriggerType = 'Bow'
+            data.leftForceTrigger = '(0)(3)(2)(2)'
+
             if (state == 1) then
                 freq = GetChargeTrigger(name, dilated, false, 0.35, 2, 24)
                 data.rightTriggerType = 'Galloping'
@@ -67,7 +80,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     elseif (name == 'w_revolver_techtronika_burya') then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(4)(7)(7)'
+        data.rightForceTrigger = '(1)(4)(7)(7)'
 
         if (state == 2 or state == 4 or state == 8) then
             data.leftForceTrigger = '(1)(4)'
@@ -87,11 +100,30 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 GetChargeTrigger(name, dilated, true)
             end
 
-            if (state == 2 or state == 4 or state == 8) then
+            if (state ~= 8 and state ~= 4) then
+                CalcFixedTimeIndex(name, 0, true)
+            end
+
+            if (state == 2) then
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(1)(2)(7)(1)'
+            end
+
+            if (state == 4 or state == 8) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, false)
+
                 data.leftForceTrigger = '(1)(6)'
 
-                data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(0)(8)(8)(8)'
+                data.rightTriggerType = 'Resistance'
+                data.rightForceTrigger = '(0)(8)'
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.rightTriggerType = 'Normal'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
             end
         end
 
