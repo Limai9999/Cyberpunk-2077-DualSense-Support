@@ -33,6 +33,7 @@ HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
 CanPerformRelicAttack = require('utils/CanPerformRelicAttack')
 CalcFixedTimeIndex = require('utils/CalcFixedTimeIndex')
 CalcTimeIndex = require('utils/CalcTimeIndex')
+FindInString = require('utils/FindInString')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
