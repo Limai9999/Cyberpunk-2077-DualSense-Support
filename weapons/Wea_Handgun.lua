@@ -307,7 +307,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     elseif (name == 'w_handgun_militech_ticon') then
         if (triggerType == 'Burst') then
             if (state ~= 8) then
-                CalcFixedTimeIndex(name, 0, true)
+                CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
             if (state == 8) then
@@ -326,7 +326,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         elseif (triggerType == 'Charge') then
             if (state ~= 8) then
-                CalcFixedTimeIndex(name, 0, true)
+                CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
             if (state == 1) then

@@ -104,14 +104,18 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(1)'
             end
         elseif (triggerType == 'Burst') then
+            if (state ~= 8 and state ~= 4) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
             if (state == 8 or state == 4) then
-                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 45, dilated, false)
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 30, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
                     if (dilated) then
-                        freq = GetFrequency(10, dilated, name)
-                    else
                         freq = GetFrequency(11, dilated, name)
+                    else
+                        freq = GetFrequency(10, dilated, name)
                     end
 
                     data.leftTriggerType = 'Machine'
@@ -133,6 +137,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         if (state ~= 1) then GetChargeTrigger(name, dilated, true) end
 
         if (triggerType == 'SemiAuto') then
+            if (state ~= 8 and state ~= 4) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
             if (state == 8 or state == 4) then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 25, dilated, false)
 
@@ -146,6 +154,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 afterShootTimes = 0
             end
         elseif (triggerType == 'Charge') then
+            if (state ~= 8 and state ~= 4) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
             if (state == 1) then
                 freq = GetChargeTrigger(name, dilated, false, 0.3, 0, 50)
                 data.rightTriggerType = 'Galloping'

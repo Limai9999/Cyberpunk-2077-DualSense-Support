@@ -23,7 +23,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     elseif (name == 'w_2020_shotgun_blunderbuss') then
         if (state ~= 8 and state ~= 4) then
-            CalcFixedTimeIndex(name, 0, true)
+            CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
         data.leftTriggerType = 'Resistance'

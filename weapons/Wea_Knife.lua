@@ -10,7 +10,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     local state = GetState('MeleeWeapon')
 
     if (state ~= 19) then
-        CalcFixedTimeIndex(name, 0, true)
+        CalcFixedTimeIndex(name, 0, dilated, true)
     end
 
     if (state == 7 or state == 13 or state == 18) then

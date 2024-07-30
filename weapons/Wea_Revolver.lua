@@ -101,7 +101,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state ~= 8 and state ~= 4) then
-                CalcFixedTimeIndex(name, 0, true)
+                CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
             if (state == 2) then
@@ -143,8 +143,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(0)(3)(4)(6)'
         end
 
-        if (state ~= 8) then
-            CalcFixedTimeIndex(name, 0, true)
+        if (state ~= 8 and state ~= 4) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
         if (state == 8) then

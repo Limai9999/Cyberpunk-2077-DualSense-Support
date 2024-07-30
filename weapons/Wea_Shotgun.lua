@@ -103,7 +103,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state ~= 8 and state ~= 4) then
-            CalcFixedTimeIndex(name, 0, true)
+            CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
         if (state == 8 or state == 4) then

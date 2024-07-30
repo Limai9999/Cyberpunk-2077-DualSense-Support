@@ -21,7 +21,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
 
     if (name == 'w_melee_one_hand_blunt') then
         if (state ~= 9 and state ~= 19) then
-            CalcFixedTimeIndex(name, 0, true)
+            CalcFixedTimeIndex(name, 0, dilated, true)
         end
         
         if (state == 7 or state == 13) then
