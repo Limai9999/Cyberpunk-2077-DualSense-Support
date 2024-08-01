@@ -75,8 +75,43 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_revolver_darra_nova') then
-        if (isAiming and state == 8) then
-            data.leftForceTrigger = '(1)(3)'
+        local isDoomDoom = FindInString(itemName, 'Doom_Doom') or itemName == 'Items.VHard_50_BodyCool_Weapon11'
+
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(2)(1)'
+
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(3)(5)(7)'
+
+        if (isDoomDoom) then
+            data.rightForceTrigger = '(0)(3)(6)(7)'
+        end
+
+        if (state ~= 8) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
+        if (state == 8) then
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
+
+            if (isDoomDoom) then
+                data.leftForceTrigger = '(2)(3)'
+            end
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.leftTriggerType = 'Normal'
+
+                data.rightTriggerType = 'Resistance'
+                data.rightForceTrigger = '(2)(5)'
+
+                if (isDoomDoom) then
+                    data.rightForceTrigger = '(2)(6)'
+                end
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_revolver_techtronika_burya') then
         data.rightTriggerType = 'Bow'

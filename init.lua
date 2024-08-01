@@ -298,6 +298,7 @@ registerForEvent('onUpdate', function(delta)
         overwritePlayerLED = true,
         canUseWeaponReloadEffect = true,
         canUseNoAmmoWeaponEffect = true,
+        skipZeroState = true,
         overrideDefault = true,
         vehicleModeIndex = 0,
         vehicleUseTwitchingCollisionTrigger = false,
@@ -866,9 +867,11 @@ registerForEvent('onUpdate', function(delta)
             data.canUseWeaponReloadEffect = true
         end
 
-        if ((weaponState == 0 and not isMeleeWeapon and not isCyberwareWeapon) or weaponState == 6 or weaponState == 3 or (weaponState == 2 and data.canUseWeaponReloadEffect)) then
-            weaponObj.rightTriggerType = 'Normal'
-            sendingWeaponType = sendingWeaponType .. 'skipState'
+        if (data.skipZeroState) then
+            if ((weaponState == 0 and not isMeleeWeapon and not isCyberwareWeapon) or weaponState == 6 or weaponState == 3 or (weaponState == 2 and data.canUseWeaponReloadEffect)) then
+                weaponObj.rightTriggerType = 'Normal'
+                sendingWeaponType = sendingWeaponType .. 'skipState'
+            end
         end
     end
 

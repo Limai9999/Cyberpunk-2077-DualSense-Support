@@ -42,6 +42,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(2)(4)(6)(4)'
 
         local isRiskit = FindInString(itemName, 'Bree')
+        local isDeathAndTaxes = FindInString(itemName, 'Maiko')
 
         if (state == 8) then
             data.leftTriggerType = 'Resistance'
@@ -69,6 +70,31 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                     data.rightTriggerType = 'Bow'
                     data.rightForceTrigger = '(1)(5)(4)(3)'
                 end
+            end
+        end
+
+        if (isDeathAndTaxes) then
+            if (state ~= 8) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
+            if (state == 8) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84burst', 20, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    if (dilated) then
+                        freq = GetFrequency(9, dilated, name)
+                    else
+                        freq = GetFrequency(7, dilated, name)
+                    end
+
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(1)(9)(6)(6)('.. freq ..')(0)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
             end
         end
     elseif (name == 'w_handgun_militech_lexington') then
@@ -220,7 +246,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             GetChargeTrigger(name, dilated, true)
         end
 
-        if (state ~= 8 or state == 4) then
+        if (state ~= 8 and state ~= 4) then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 

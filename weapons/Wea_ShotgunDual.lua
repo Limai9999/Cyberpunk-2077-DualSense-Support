@@ -55,11 +55,33 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             afterShootTimes = 0
         end
     elseif (name == 'w_shotgun_dual_rostovic_testera') then
+        data.skipZeroState = false
+
+        data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(2)'
+        data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(4)(6)(7)'
 
-        if (state == 8 or state == 4) then
-            data.leftForceTrigger = '(1)(5)'
+        if (state ~= 8 and state ~= 4 and state ~= 0) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
+        if (state == 8 or state == 4 or state == 0) then
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 25, dilated, false)
+
+            data.leftTriggerType = 'Normal' 
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(1)(5)'
+
+                data.rightTriggerType = 'Resistance'
+                data.rightForceTrigger = '(3)(8)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_shotgun_dual_rostovic_palica') then
         data.leftTriggerType = 'Bow'
