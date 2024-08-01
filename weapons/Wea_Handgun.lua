@@ -14,17 +14,26 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
     if (name == 'w_handgun_constitutional_unity') then
         data.leftTriggerType = 'Bow'
-        data.leftForceTrigger = '(0)(2)(3)(3)'
+        data.leftForceTrigger = '(0)(1)(4)(3)'
 
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(0)(4)(3)(6)'
+        data.rightForceTrigger = '(1)(4)(3)(6)'
+
+        if (state ~= 8) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
 
         if (state == 8) then
-            data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(1)(1)'
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 16, dilated, false)
 
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(1)(7)(2)(6)'
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(1)(1)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_handgun_tsunami_nue') then
         data.leftTriggerType = 'Bow'
@@ -48,6 +57,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             local healthValue = Game.GetStatPoolsSystem():GetStatPoolValue(playerId, Enum.new('gamedataStatPoolType', 'Health'), false);
             local healthPercentage = healthValue / fullHealthValue
 
+            -- https://cyberpunk.fandom.com/wiki/Riskit
             if (healthPercentage < 0.40) then
                 data.leftTriggerType = 'Bow'
                 data.leftForceTrigger = '(0)(1)(2)(1)'
@@ -187,6 +197,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     elseif (name == 'w_handgun_arasaka_kenshin') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(4)(8)'
+
+        -- https://cyberpunk.fandom.com/wiki/Apparition
+        local isApparition = FindInString(itemName, 'Frank')
+        local playerId = GetPlayer():GetEntityID()
+        local fullHealthValue = Game.GetStatsSystem():GetStatValue(playerId, 'Health')
+        local healthValue = Game.GetStatPoolsSystem():GetStatPoolValue(playerId, Enum.new('gamedataStatPoolType', 'Health'), false);
+        local healthPercentage = healthValue / fullHealthValue
+        local isLowHealth = healthPercentage < 0.25
+
         if (state == 1) then
             data.rightTriggerType = 'Galloping'
 
@@ -201,6 +220,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             GetChargeTrigger(name, dilated, true)
         end
 
+        if (state ~= 8 or state == 4) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
         if (state == 8 or state == 4) then
             if (isAiming) then
                 data.leftTriggerType = 'Resistance'
@@ -208,30 +231,59 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (triggerType == 'Charge') then
-                freq = GetFrequency(7, dilated, name)
-                data.leftTriggerType = 'AutomaticGun'
-                data.leftForceTrigger = '(4)(1)('.. freq ..')'
+                local initialTimeIndex = 40
+                if (isApparition and isLowHealth) then initialTimeIndex = initialTimeIndex / 1.4 end
 
-                data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84charge', initialTimeIndex, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    if (isApparition and isLowHealth) then
+                        freq = GetFrequency(8 * 1.4, dilated, name)
+                    else
+                        freq = GetFrequency(8, dilated, name)
+                    end
+                    data.leftTriggerType = 'AutomaticGun'
+                    data.leftForceTrigger = '(4)(1)('.. freq ..')'
+    
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
             end
 
             if (triggerType == 'Burst') then
-                if (dilated) then
-                    freq = GetFrequency(7, dilated, name)
-                else
-                    if (state == 8) then
-                        freq = GetFrequency(4, dilated, name)
+                local initialTimeIndex = 20
+                if (isApparition and isLowHealth) then initialTimeIndex = initialTimeIndex / 1.4 end
+
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84burst', initialTimeIndex, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    if (isApparition and isLowHealth) then
+                        if (dilated) then
+                            freq = GetFrequency(9 * 1.4, dilated, name)
+                        else
+                            freq = GetFrequency(7 * 1.4, dilated, name)
+                        end
                     else
-                        freq = GetFrequency(3, dilated, name)
+                        if (dilated) then
+                            freq = GetFrequency(9, dilated, name)
+                        else
+                            freq = GetFrequency(7, dilated, name)
+                        end
                     end
+
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
                 end
-                data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+
+                afterShootTimes = afterShootTimes + 1
 
                 data.canUseWeaponReloadEffect = false
                 data.canUseNoAmmoWeaponEffect = false
             end
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_handgun_militech_omaha') then
         data.rightTriggerType = 'Bow'
@@ -259,13 +311,37 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_handgun_constitutional_liberty') then
+        local isKongou = FindInString(itemName, 'Yorinobu')
+
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(4)(6)'
 
+        if (isKongou) then data.rightForceTrigger = '(2)(4)(4)(4)' end
+
+        if (state ~= 8) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
         if (state == 8) then
-            data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(5)(1)'
-            data.rightForceTrigger = '(2)(5)(6)(6)'
+            if (isKongou) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 12, false, false)
+
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(2)(5)(4)(3)'
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(7)(1)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(5)(1)'
+                data.rightForceTrigger = '(2)(5)(6)(6)'
+            end
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_handgun_budget_slaughtomatic') then
         freq = GetFrequency(7, dilated, name)

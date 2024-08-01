@@ -55,14 +55,26 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             GetChargeTrigger(name, dilated, true)
         end
 
-        if (state == 8) then
-            freq = GetFrequency(2, dilated, name)
-            data.rightTriggerType = 'AutomaticGun'
-            data.rightForceTrigger = '(4)(8)('.. freq ..')'
+        if (state ~= 8 and state ~= 4) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
         if (state == 8 or state == 4) then
-            data.leftForceTrigger = '(1)(7)'
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 40, false, false)
+
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(1)(6)'
+
+            data.rightTriggerType = 'Normal'
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.rightTriggerType = 'Resistance'
+                data.rightForceTrigger = '(4)(8)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_rifle_sniper_techtronika_grad') then
         data.rightTriggerType = 'Bow'

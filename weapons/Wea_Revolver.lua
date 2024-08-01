@@ -1,6 +1,6 @@
 local afterShootTimes = 0
 
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Revolver')
 
     data.leftTriggerType = 'Resistance'
@@ -133,6 +133,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(0)(2)'
 
+        local isBaldEagle = FindInString(itemName, 'Kurt')
+
         if (isAiming) then
             data.leftTriggerType = 'Normal'
 
@@ -152,7 +154,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
                 data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(1)(4)'
+                data.leftForceTrigger = '(1)(3)'
+
+                if (isBaldEagle) then data.leftForceTrigger = '(1)(4)' end
             end
 
             afterShootTimes = afterShootTimes + 1
