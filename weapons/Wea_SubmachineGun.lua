@@ -39,13 +39,28 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     elseif (name == 'w_submachinegun_arasaka_shingen') then
         data.rightTriggerType = 'SemiAutomaticGun'
-        data.rightForceTrigger = '(2)(4)(4)'
+        data.rightForceTrigger = '(2)(4)(6)'
+
+        if (state ~= 8) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
         if (state == 8) then
-            freq = GetFrequency(attackSpeed + 3, dilated, name)
-            data.leftTriggerType = 'Machine'
-            data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
-            data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 18, dilated, false)
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                freq = GetFrequency(attackSpeed * 1.6, dilated, name)
+
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
+
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_submachinegun_arasaka_senkoh') then
         data.rightTriggerType = 'SemiAutomaticGun'
@@ -60,14 +75,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 else
                     freq = GetFrequency(attackSpeed * 1.3, dilated, name)
                 end
-    
+
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(3)(6)('.. freq ..')(0)'
             end
         elseif (triggerType == 'Charge') then
             if (state == 1) then
                 freq = GetChargeTrigger(name, dilated, false, 0.5, 6, 23)
-    
+
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')(0)'
             else
@@ -93,18 +108,16 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             else
                 afterShootTimes = 0
             end
-    
+
             if (state == 8 and canUseFireTrigger) then
                 freq = GetFrequency(initialFrequency, dilated, name)
-    
+
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
 
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(1)(9)(4)(6)('.. freq ..')(0)'
             end
-
-            print(canUseFireTrigger, canUseFireTrigger, canUseFireTrigger, canUseFireTrigger)
         end
     elseif (name == 'w_special_kangtao_dian') then
         freq = GetFrequency(attackSpeed - 1, dilated, name)
@@ -131,19 +144,37 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(4)(4)'
 
+        local isPizdets = FindInString(itemName, 'Boris')
+
         if (triggerType == 'FullAuto') then
             if (state == 8) then
                 freq = GetFrequency(attackSpeed, dilated, name)
-    
+
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'
             end
-        elseif (triggerType == 'Burst') then
-            if (state == 8) then
-                freq = GetFrequency(attackSpeed * 4, dilated, name)
+        end
 
-                data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+        if (isPizdets) then
+            if (triggerType == 'Burst') then
+                if (state ~= 8) then
+                    CalcFixedTimeIndex(name, 0, dilated, true)
+                end
+
+                if (state == 8) then
+                    local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
+
+                    if (afterShootTimes < shootTriggerActiveForTimes) then
+                        freq = GetFrequency(attackSpeed * 4, dilated, name)
+
+                        data.rightTriggerType = 'Machine'
+                        data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+                    end
+
+                    afterShootTimes = afterShootTimes + 1
+                else
+                    afterShootTimes = 0
+                end
             end
         end
     elseif (name == 'w_smg_midnight_borg') then

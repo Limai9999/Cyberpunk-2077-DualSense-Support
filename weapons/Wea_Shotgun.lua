@@ -5,7 +5,7 @@ local maxResistanceTimes = 10
 
 local afterShootTimes = 0
 
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Shotgun')
 
     if (state == 4 or state == 0 or state == 6) then return data end
@@ -28,13 +28,32 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     savedWeaponName = name
 
     if (name == 'w_shotgun_budget_carnage') then
+        data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(3)'
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(4)(8)(8)'
 
+        local isMox = FindInString(itemName, 'Mox')
+
+        if (isMox) then
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(1)(2)'
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(4)(6)(6)'
+        end
+
         if (state == 8) then
+            data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(8)'
+            data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(7)(8)(8)'
+
+            if (isMox) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(1)(4)'
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(0)(7)(6)(6)'
+            end
         end
     elseif (name == 'w_revolver_militech_crusher') then
         data.rightTriggerType = 'Bow'

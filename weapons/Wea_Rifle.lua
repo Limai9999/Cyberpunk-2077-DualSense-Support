@@ -1,3 +1,5 @@
+local afterShootTimes = 0
+
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Story-base-journal-quests-main_quest-prologue-q000_tutorial-01a_pick_weapon_Rifle_mappin')
 
@@ -53,12 +55,25 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.leftForceTrigger = '(5)(3)'
         end
 
+        if (state ~= 8) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
         if (state == 8) then
-            freq = GetFrequency(attackSpeed * 2, dilated, name)
-            data.leftTriggerType = 'Machine'
-            data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
-            data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                freq = GetFrequency(attackSpeed * 2.5, dilated, name)
+
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_rifle_assault_nokota_sidewinder') then
         data.rightTriggerType = 'Bow'

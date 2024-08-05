@@ -81,10 +81,28 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(0)(4)(8)(8)'
 
         if (triggerType == 'SemiAuto') then
+            if (state ~= 8 and state ~= 4) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
             if (state == 8 or state == 4) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 15, dilated, false)
+
                 data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(1)(8)'
-                data.rightForceTrigger = '(0)(8)(8)(8)'
+                data.leftForceTrigger = '(1)(6)'
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    freq = GetFrequency(attackSpeed * 1.6, dilated, name)
+
+                    data.leftTriggerType = 'Normal'
+
+                    data.rightTriggerType = 'Bow'
+                    data.rightForceTrigger = '(0)(8)(8)(8)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
             end
         else
             if (state == 1) then

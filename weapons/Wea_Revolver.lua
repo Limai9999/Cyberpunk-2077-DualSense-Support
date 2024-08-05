@@ -1,4 +1,5 @@
 local afterShootTimes = 0
+local isPerfectChargedTimes = 0
 
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Revolver')
@@ -10,6 +11,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     data.canUseNoAmmoWeaponEffect = false
 
     local freq = 0
+
+    if (not isPerfectCharged) then
+        isPerfectChargedTimes = 0
+    end
 
     if (name == 'w_revolver_malorian_overture') then
         if (isAiming) then
@@ -127,10 +132,26 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.rightForceTrigger = '(0)(8)(7)(7)'
             end
         elseif (triggerType == 'Charge') then
+            if (not isPerfectCharged) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
             if (state == 1) then
                 freq = GetChargeTrigger(name, dilated, false, 2, 3, 50)
+
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(3)(9)(5)(7)('.. freq ..')'
+    
+                if (isPerfectCharged) then
+                    local perfectChargeTriggerActiveForTimes = CalcFixedTimeIndex(name..'perfect_charge', GetPerfectChargeDuration(), dilated, false)
+    
+                    if (isPerfectChargedTimes < perfectChargeTriggerActiveForTimes) then
+                        data.rightTriggerType = 'Machine'
+                        data.rightForceTrigger = '(3)(9)(4)(4)('.. freq ..')(0)'
+    
+                        isPerfectChargedTimes = isPerfectChargedTimes + 1
+                    end
+                end
             else
                 GetChargeTrigger(name, dilated, true)
             end

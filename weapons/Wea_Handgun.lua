@@ -1,6 +1,7 @@
 local chaoUsedFireTriggerTimes = 0
 
 local afterShootTimes = 0
+local isPerfectChargedTimes = 0
 
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Skills-GunslingerName')
@@ -11,6 +12,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     data.leftForceTrigger = '(0)(1)(4)(1)'
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(2)(4)(6)(4)'
+
+    if (not isPerfectCharged) then
+        isPerfectChargedTimes = 0
+    end
 
     if (name == 'w_handgun_constitutional_unity') then
         data.leftTriggerType = 'Bow'
@@ -232,6 +237,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         local healthPercentage = healthValue / fullHealthValue
         local isLowHealth = healthPercentage < 0.25
 
+        if (not isPerfectCharged) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
         if (state == 1) then
             data.rightTriggerType = 'Galloping'
 
@@ -241,6 +250,16 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             else
                 freq = GetChargeTrigger(name, dilated, false, 0.3, 1, 12)
                 data.rightForceTrigger = '(3)(9)(3)(4)('.. freq ..')'
+            end
+
+            if (isPerfectCharged) then
+                local perfectChargeTriggerActiveForTimes = CalcFixedTimeIndex(name..'perfect_charge', GetPerfectChargeDuration(), dilated, false)
+
+                if (isPerfectChargedTimes < perfectChargeTriggerActiveForTimes) then
+                    data.rightTriggerType = 'Normal'
+
+                    isPerfectChargedTimes = isPerfectChargedTimes + 1
+                end
             end
         else
             GetChargeTrigger(name, dilated, true)

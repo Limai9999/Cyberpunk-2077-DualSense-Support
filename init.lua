@@ -34,6 +34,7 @@ CanPerformRelicAttack = require('utils/CanPerformRelicAttack')
 CalcFixedTimeIndex = require('utils/CalcFixedTimeIndex')
 CalcTimeIndex = require('utils/CalcTimeIndex')
 FindInString = require('utils/FindInString')
+GetPerfectChargeDuration = require('utils/GetPerfectChargeDuration')
 
 -- =============== OBSERVERS & HANDLERS ===============
 StartObservers = require('observers/observers')
@@ -869,8 +870,11 @@ registerForEvent('onUpdate', function(delta)
 
         if (data.skipZeroState) then
             if ((weaponState == 0 and not isMeleeWeapon and not isCyberwareWeapon) or weaponState == 6 or weaponState == 3 or (weaponState == 2 and data.canUseWeaponReloadEffect)) then
-                weaponObj.rightTriggerType = 'Normal'
-                sendingWeaponType = sendingWeaponType .. 'skipState'
+                if (not isMeleeWeapon and not isCyberwareWeapon and magazineAmmo == 0 and weaponState == 0) then -- bored to write reversed condition lol
+                else
+                    weaponObj.rightTriggerType = 'Normal'
+                    sendingWeaponType = sendingWeaponType .. 'skipState'
+                end
             end
         end
     end
