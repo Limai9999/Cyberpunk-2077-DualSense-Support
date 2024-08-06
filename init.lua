@@ -224,11 +224,13 @@ registerForEvent('onInit', function()
                 -- Warn('DualSenseX ' .. statusString .. oldCheckString)
 
                 Cron.After(5, function()
-                    if (dsxData.BatteryLevel ~= BatteryLevel) then
+                    if (dsxData.BatteryLevel ~= BatteryLevel and dsxData.isDSXLaunched and dsxData.isControllerConnected) then
+                        BatteryLevel = dsxData.BatteryLevel
                         ShowBatteryLevel()
                     end
                 end, {})
-            elseif (dsxData.BatteryLevel ~= BatteryLevel) then
+            elseif (dsxData.BatteryLevel ~= BatteryLevel and dsxData.isDSXLaunched and dsxData.isControllerConnected) then
+                BatteryLevel = dsxData.BatteryLevel
                 ShowBatteryLevel()
             end
 

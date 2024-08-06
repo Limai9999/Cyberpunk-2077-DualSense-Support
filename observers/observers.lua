@@ -169,7 +169,6 @@ local function StartObservers()
 
     GameSession.OnStart(function ()
         IsLoading = false
-        -- if (IsControllerConnected) then Cron.After(10, ShowBatteryLevel) end
     end)
 end
 

@@ -1,11 +1,15 @@
-local function Warn(message, isDebug)
+local function Warn(message, isDebug, isNegative)
     if (IsScene) then return end
 
     local settings = ManageSettings.openFile()
     if (not settings.debugLogs and isDebug) then return end
     if (not settings.showNotifications) then return end
 
-    Game.GetPlayer():SetWarningMessage(message)
+    if (isNegative) then
+        Game.GetPlayer():SetWarningMessage(message)
+    else
+        Game.GetPlayer():SetWarningMessage(message, 2)
+    end
     print(ModName .. ' ' .. message)
 end
 
