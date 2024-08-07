@@ -1,6 +1,7 @@
 local chaoUsedFireTriggerTimes = 0
 
 local afterShootTimes = 0
+local afterShootTimes2 = 0
 local isPerfectChargedTimes = 0
 
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
@@ -119,6 +120,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(4)(9)(3)(4)('.. freq ..')(0)'
         end
     elseif (name == 'w_handgun_arasaka_yukimura') then
+        local isCrimestopper = FindInString(itemName, 'George')
+
         if (isAiming) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(7)(1)'
@@ -138,8 +141,29 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(4)(9)(1)(1)('.. freq ..')(0)'
+
                 data.rightTriggerType = 'AutomaticGun'
                 data.rightForceTrigger = '(3)(5)('.. freq ..')'
+
+                if (not isCrimestopper and not HasSentQuickHackUsingWeapon) then
+                    CalcFixedTimeIndex(name, 0, dilated, true)
+                end
+    
+                if (isCrimestopper and HasSentQuickHackUsingWeapon) then
+                    local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'HasSentQuickHackUsingWeapon', 8, dilated, false)
+    
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(2)(9)(6)(6)('.. freq * 2 ..')(0)'
+    
+                    if (afterShootTimes < shootTriggerActiveForTimes) then
+                        data.rightTriggerType = 'Resistance'
+                        data.rightForceTrigger = '(2)(6)'
+                    end
+    
+                    afterShootTimes = afterShootTimes + 1
+                else
+                    afterShootTimes = 0
+                end
             end
         else
             data.rightTriggerType = 'Bow'
@@ -231,13 +255,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         -- https://cyberpunk.fandom.com/wiki/Apparition
         local isApparition = FindInString(itemName, 'Frank')
+        local isAmbition = FindInString(itemName, 'Spy')
+
         local playerId = GetPlayer():GetEntityID()
         local fullHealthValue = Game.GetStatsSystem():GetStatValue(playerId, 'Health')
         local healthValue = Game.GetStatPoolsSystem():GetStatPoolValue(playerId, Enum.new('gamedataStatPoolType', 'Health'), false);
         local healthPercentage = healthValue / fullHealthValue
         local isLowHealth = healthPercentage < 0.25
 
-        if (not isPerfectCharged) then
+        if (not isPerfectCharged and state ~= 8 and state ~= 4 and not isAmbition and not HasSentQuickHackUsingWeapon) then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
@@ -263,10 +289,6 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         else
             GetChargeTrigger(name, dilated, true)
-        end
-
-        if (state ~= 8 and state ~= 4) then
-            CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
         if (state == 8 or state == 4) then
@@ -329,6 +351,21 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         else
             afterShootTimes = 0
+        end
+
+        if (isAmbition and HasSentQuickHackUsingWeapon) then
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'HasSentQuickHackUsingWeapon', 4, dilated, false)
+
+            data.leftTriggerType = 'Machine'
+            data.leftForceTrigger = '(2)(9)(5)(5)('.. freq * 3 ..')(0)'
+
+            if (afterShootTimes2 < shootTriggerActiveForTimes) then
+                data.leftTriggerType = 'Normal'
+            end
+
+            afterShootTimes2 = afterShootTimes2 + 1
+        else
+            afterShootTimes2 = 0
         end
     elseif (name == 'w_handgun_militech_omaha') then
         data.rightTriggerType = 'Bow'

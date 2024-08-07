@@ -24,17 +24,39 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(4)(4)'
 
+        local isFenrir = FindInString(itemName, 'Maelstrom')
+
         if (state == 8) then
             freq = GetFrequency(attackSpeed, dilated, name)
             data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(4)(9)(5)(6)('.. freq ..')(0)'
+            data.rightForceTrigger = '(2)(9)(4)(5)('.. freq ..')(0)'
+
+            if (not isFenrir and not HasSentQuickHackUsingWeapon) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
+            if (isFenrir and HasSentQuickHackUsingWeapon) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'HasSentQuickHackUsingWeapon', 8, dilated, false)
+
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(2)(9)(7)(7)('.. freq * 2 ..')(0)'
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(2)(8)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
         end
 
         if (isAiming) then
             if (state == 8) then
                 local freqHalf = math.floor(freq / 2)
                 data.leftTriggerType = 'Machine'
-                data.leftForceTrigger = '(5)(9)(1)(2)('.. freqHalf ..')(0)'
+                data.leftForceTrigger = '(4)(9)(1)(2)('.. freqHalf ..')(0)'
             end
         end
     elseif (name == 'w_submachinegun_arasaka_shingen') then

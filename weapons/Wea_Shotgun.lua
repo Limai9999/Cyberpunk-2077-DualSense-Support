@@ -34,26 +34,52 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(0)(4)(8)(8)'
 
         local isMox = FindInString(itemName, 'Mox')
+        local isGuts = FindInString(itemName, 'Edgerunners')
+
+        if (state ~= 8 and state ~= 4) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
 
         if (isMox) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(2)'
+
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(4)(6)(6)'
         end
 
-        if (state == 8) then
+        if (isGuts) then
             data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(1)(8)'
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(7)(8)(8)'
+            data.leftForceTrigger = '(1)(2)'
+        end
 
-            if (isMox) then
+        if (state == 8 or state == 4) then
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 35, dilated, false)
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
                 data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(1)(4)'
+                data.leftForceTrigger = '(1)(6)'
+    
                 data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(0)(7)(6)(6)'
+                data.rightForceTrigger = '(0)(7)(8)(8)'
+    
+                if (isMox) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(1)(4)'
+    
+                    data.rightTriggerType = 'Bow'
+                    data.rightForceTrigger = '(0)(7)(6)(6)'
+                end
+    
+                if (isGuts) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(1)(8)'
+                end
             end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_revolver_militech_crusher') then
         data.rightTriggerType = 'Bow'
@@ -70,11 +96,36 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(3)'
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(1)(3)(8)(8)'
+        data.rightForceTrigger = '(1)(3)(6)(8)'
 
-        if (state == 8) then
+        local isBaXingChong = FindInString(itemName, 'Eight_Star')
+
+        if (state ~= 8 and state ~= 4) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
+        if (state == 8 or state == 4) then
             data.leftForceTrigger = '(1)(6)'
             data.rightForceTrigger = '(1)(6)(8)(8)'
+
+            if (isBaXingChong) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 25, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    if (dilated) then
+                        freq = GetFrequency(7, dilated, name)
+                    else
+                        freq = GetFrequency(6, dilated, name)
+                    end
+
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+                end
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
 
         -- data.canUseWeaponReloadEffect = true

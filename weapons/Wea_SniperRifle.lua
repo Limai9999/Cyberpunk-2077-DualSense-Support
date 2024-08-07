@@ -4,7 +4,7 @@ local savedWeaponState = 0
 
 local afterShootTimes = 0
 
-local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
+local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SniperRifle')
 
     data.leftTriggerType = 'Resistance'
@@ -60,7 +60,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 8 or state == 4) then
-            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 40, false, false)
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 30, false, false)
 
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(6)'
@@ -77,8 +77,20 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             afterShootTimes = 0
         end
     elseif (name == 'w_rifle_sniper_techtronika_grad') then
+        data.skipZeroState = false
+
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(1)(3)'
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(4)(8)(8)'
+
+        local isOFive = FindInString(itemName, 'Buck')
+
+        if (isOFive) then
+            data.leftForceTrigger = '(1)(6)'
+
+            if (isAiming) then data.leftForceTrigger = '(1)(4)' end
+        end
 
         if (triggerType == 'SemiAuto') then
             if (state ~= 8 and state ~= 4) then
@@ -90,6 +102,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(1)(6)'
+
+                if (isOFive) then data.leftForceTrigger = '(1)(7)' end
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
                     freq = GetFrequency(attackSpeed * 1.6, dilated, name)
