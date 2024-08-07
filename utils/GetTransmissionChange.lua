@@ -10,7 +10,7 @@ local function EmulateTransmissionChange(rpm, gear)
 
     local config = ManageSettings.openFile()
     if (config.gearboxEmulation == false) then return false end
-    trueSendMax = config.gearChangeDuration
+    trueSendMax = CalcTimeIndex(config.gearChangeDuration)
 
     if (trueSent < trueSendMax or sVehGear ~= gear) then
         if (trueSent < trueSendMax or sVehRpm < rpm or sVehRpm > rpm) then

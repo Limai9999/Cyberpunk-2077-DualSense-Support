@@ -3,7 +3,9 @@ local activeTimes = 0
 local function HandleBlockingBullet()
     if (not IsBlockedBullet) then return end
 
-    if (activeTimes < 10) then
+    local activeTimesMax = CalcTimeIndex(10)
+
+    if (activeTimes < activeTimesMax) then
         activeTimes = activeTimes + 1
         IsBlockedBullet = true
     else
