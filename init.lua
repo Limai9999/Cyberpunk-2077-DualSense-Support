@@ -30,6 +30,7 @@ GetChargeTrigger = require('utils/GetChargeTrigger')
 IsWeaponGlitched = require('utils/IsWeaponGlitched')
 HandleBlockingBullet = require('utils/HandleBlockingBullet')
 HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
+HandleWeaponQuickHack = require('utils/HandleWeaponQuickHack')
 CanPerformRelicAttack = require('utils/CanPerformRelicAttack')
 CalcFixedTimeIndex = require('utils/CalcFixedTimeIndex')
 CalcTimeIndex = require('utils/CalcTimeIndex')
@@ -97,6 +98,7 @@ VehicleCollisionForce = 0
 IsBlockedBullet = false
 IsPlayerHitEntity = false
 IsPlayerHitEntityStrong = false
+HasSentQuickHackUsingWeapon = false
 Delta = 0.01
 
 -- VehicleModeDefaultIndex = 0
@@ -269,14 +271,17 @@ registerForEvent("onDraw", function()
 end)
 
 registerForEvent('onUpdate', function(delta)
+    if (not handleUpdates) then return end
+
     Delta = delta
 
-    if (not handleUpdates) then return end
     Cron.Update(delta)
+
     UDPManualStartHandler()
 
     HandleBlockingBullet()
     HandlePlayerHitEntity()
+    HandleWeaponQuickHack()
 
     local isInScene = GameUI.IsScene()
     IsScene = isInScene
@@ -316,7 +321,7 @@ registerForEvent('onUpdate', function(delta)
     local subMenu = GameUI.GetSubmenu()
 
     -- print(isMainMenu, inMenu, menu, subMenu)
-    
+
     local additionalString = ''
 
     if (IsLoading) then
@@ -477,7 +482,7 @@ registerForEvent('onUpdate', function(delta)
             -- data.touchpadLED = '(0)(191)(255)'
             return SaveFile('vehicle', data, '', '', 'state4'..additionalString)
         end
-        
+
         local isInAir = vehicle:IsInAir()
         local isOnRoad = Game.GetNavigationSystem():IsOnGround(vehicle)
         local isOnPavement = vehicle.onPavement
@@ -534,7 +539,7 @@ registerForEvent('onUpdate', function(delta)
 
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
-    
+
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
 
@@ -550,7 +555,7 @@ registerForEvent('onUpdate', function(delta)
 
                     data.leftTriggerType = 'Machine'
                     data.leftForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
-        
+
                     data.rightTriggerType = 'Machine'
                     data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
 
@@ -870,13 +875,11 @@ registerForEvent('onUpdate', function(delta)
             data.canUseWeaponReloadEffect = true
         end
 
-        if (data.skipZeroState) then
-            if ((weaponState == 0 and not isMeleeWeapon and not isCyberwareWeapon) or weaponState == 6 or weaponState == 3 or (weaponState == 2 and data.canUseWeaponReloadEffect)) then
-                if (not isMeleeWeapon and not isCyberwareWeapon and magazineAmmo == 0 and weaponState == 0) then -- bored to write reversed condition lol
-                else
-                    weaponObj.rightTriggerType = 'Normal'
-                    sendingWeaponType = sendingWeaponType .. 'skipState'
-                end
+        if ((weaponState == 0 and not isMeleeWeapon and not isCyberwareWeapon) or weaponState == 6 or weaponState == 3 or (weaponState == 2 and data.canUseWeaponReloadEffect)) then
+            if ((not isMeleeWeapon and not isCyberwareWeapon and magazineAmmo == 0 and weaponState == 0) or not data.skipZeroState and weaponState == 0) then -- bored to write reversed condition lol
+            else
+                weaponObj.rightTriggerType = 'Normal'
+                sendingWeaponType = sendingWeaponType .. 'skipState'
             end
         end
     end

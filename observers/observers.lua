@@ -163,6 +163,21 @@ local function StartObservers()
     --     print('CreateAndPlayAnimation', this.animName)
     -- end)
 
+    Observe("QuickHackableQueueHelper", "PutActionInQuickhackQueue;ScriptableDeviceActionGameplayRoleComponentGameInstanceCNameGameObject", function(action, gameplayRoleComponent, gameInstance, qhIndicatorSlotName, requesterObject)
+        -- method has just been called with:
+        -- action: ref<ScriptableDeviceAction>
+        -- gameplayRoleComponent: ref<GameplayRoleComponent>
+        -- gameInstance: GameInstance
+        -- qhIndicatorSlotName: CName
+        -- requesterObject: ref<GameObject>
+
+        local actionName = NameToString(action:GetActionName())
+
+        if (not action.isQuickHack and (actionName == 'CyberwareMalfunction' or actionName == 'LocomotionMalfunction' or actionName == 'Blind')) then
+            HasSentQuickHackUsingWeapon = true
+        end
+    end)
+
     GameSession.OnLoad(function ()
         IsLoading = true
     end)
