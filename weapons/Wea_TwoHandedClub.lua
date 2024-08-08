@@ -1,23 +1,43 @@
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
-    -- ! SOS: TODO: HELP: If anybody is playing with these weapons, please make a good trigger for them yourself. I think I haven't changed this trigger since the first version of the mod, because I really don't know which trigger will be the best!
-
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_TwoHandedClub')
 
-    data.leftTriggerType = 'Choppy'
-    data.rightTriggerType = 'Resistance'
-    data.rightForceTrigger = '(1)(4)'
-
     local stamina = GetState('Stamina')
+    local state = GetState('MeleeWeapon')
 
-    if (stamina == 2) then data.rightForceTrigger = '(1)(8)' end
+    data.leftTriggerType = 'Bow'
+    data.leftForceTrigger = '(1)(4)(3)(3)'
+    data.rightTriggerType = 'Bow'
+    data.rightForceTrigger = '(0)(1)(7)(5)'
 
-    if (isAiming) then
-        data.rightTriggerType = 'Medium'
-        if (stamina == 2) then
-            data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(1)(6)'
-            data.rightTriggerType = 'Hardest'
-        end
+    if (state == 6 or state == 7) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(6)(4)(5)'
+    elseif (state == 8) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(2)(4)(4)'
+    elseif (state == 12) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(3)(8)(5)'
+    elseif (state == 13) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(6)(4)(7)'
+    elseif (state == 14) then
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(4)(4)(6)'
+    elseif (state == 15) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(1)(2)'
+
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(0)(2)(4)(4)'
+    elseif (state == 18) then
+        data.leftTriggerType = 'Choppy'
+        data.rightTriggerType = 'Normal'
+    end
+
+    if (state == 19) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(2)(6)'
     end
 
     return data
