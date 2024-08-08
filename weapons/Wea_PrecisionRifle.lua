@@ -19,9 +19,20 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(7)(8)'
 
+        if (state ~= 8) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+        
         if (state == 8) then
-            data.leftForceTrigger = '(1)(6)'
-            data.rightForceTrigger = '(1)(7)(7)(8)'
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 20, dilated, false)
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.leftForceTrigger = '(1)(6)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_rifle_precision_militech_achilles') then
         data.canUseNoAmmoWeaponEffect = false

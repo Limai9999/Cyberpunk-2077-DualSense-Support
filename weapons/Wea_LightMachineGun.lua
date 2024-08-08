@@ -28,7 +28,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, dilated, false)
 
             if (afterShootTimes > shootTriggerActiveForTimes) then
-                freq = GetFrequency(attackSpeed, dilated, name)
+                freq = GetFrequency(attackSpeed, dilated, name, true)
                 local leftFreq = math.floor(freq / 2)
 
                 data.rightTriggerType = 'AutomaticGun'

@@ -71,7 +71,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8) then
-                freq = GetFrequency(attackSpeed, dilated, name)
+                freq = GetFrequency(attackSpeed, dilated, name, true)
 
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'

@@ -5,7 +5,7 @@ local currentFreq = 0
 
 local getIndex = 0
 
-local function GetFrequency(freq, dilation, executorString)
+local function GetFrequency(freq, dilation, executorString, useGradualTimeDilation)
     if (savedExecutorString ~= executorString or dilation ~= savedDilation) then
         savedExecutorString = executorString
         currentFreq = freq
@@ -18,31 +18,35 @@ local function GetFrequency(freq, dilation, executorString)
     if (dilation) then
         newFreq = math.floor(freq * TimeDilation)
 
-        local dilationX10 = math.floor(TimeDilation * 10)
+        local dilationX20 = CalcTimeIndex(TimeDilation * 20)
 
-        if (getIndex < dilationX10) then
-            getIndex = getIndex + 1
-            return currentFreq
+        if (useGradualTimeDilation) then
+            if (getIndex < dilationX20) then
+                getIndex = getIndex + 1
+                return currentFreq
+            else
+                getIndex = 0
+                currentFreq = currentFreq - 1
+
+                if (currentFreq < newFreq) then
+                    currentFreq = newFreq
+                    return currentFreq
+                end
+
+                if (currentFreq ~= newFreq) then
+                    return currentFreq
+                end
+            end
         else
-            getIndex = 0
-            currentFreq = currentFreq - 1
-
-            if (currentFreq < newFreq) then
-                currentFreq = newFreq
-                return currentFreq
-            end
-
-            if (currentFreq ~= newFreq) then
-                return currentFreq
-            end
+            return newFreq
         end
     end
 
     return newFreq
 end
 
-local function FormatFrequency(freq, dilation, executorString)
-    local frequency = GetFrequency(freq, dilation, executorString)
+local function FormatFrequency(freq, dilation, executorString, useGradualTimeDilation)
+    local frequency = GetFrequency(freq, dilation, executorString, useGradualTimeDilation)
     frequency = math.floor(frequency)
 
     if (frequency < 1) then frequency = 1 end

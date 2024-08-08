@@ -109,7 +109,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(1)(6)(8)(8)'
 
             if (isBaXingChong) then
-                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 25, dilated, false)
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 27, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
                     if (dilated) then
@@ -136,9 +136,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         if (state == 8) then
             if (dilated) then
-                freq = GetFrequency(attackSpeed + 1, dilated, name)
+                freq = GetFrequency(attackSpeed + 1, dilated, name, true)
             else
-                freq = GetFrequency(attackSpeed, dilated, name)
+                freq = GetFrequency(attackSpeed, dilated, name, true)
             end
 
             if (resistanceEnabled) then

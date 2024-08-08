@@ -104,20 +104,33 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_handgun_militech_lexington') then
-        if (state == 8) then
-            -- if (dilated) then
-            --     freq = GetFrequency(11, dilated, name)
-            -- else
-            --     freq = GetFrequency(10, dilated, name)
-            -- end
+        local isARRaygun = FindInString(itemName, 'Toygun')
 
-            freq = GetFrequency(attackSpeed, dilated, name)
+        data.leftTriggerType = 'Bow'
+        data.leftForceTrigger = '(0)(1)(4)(1)'
+        data.rightTriggerType = 'Bow'
+        data.rightForceTrigger = '(2)(4)(6)(4)'
+
+        if (isARRaygun) then
+            data.leftTriggerType = 'Bow'
+            data.leftForceTrigger = '(0)(1)(2)(1)'
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(1)(4)(3)(2)'
+        end
+
+        if (state == 8) then
+            freq = GetFrequency(attackSpeed, dilated, name, true)
 
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
 
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(3)(4)('.. freq ..')(0)'
+
+            if (isARRaygun) then
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')(0)'
+            end
         end
     elseif (name == 'w_handgun_arasaka_yukimura') then
         local isCrimestopper = FindInString(itemName, 'George')
@@ -130,13 +143,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
             if (state == 8) then
                 if (triggerType == 'Burst') then
-                    if (dilated) then
-                        freq = GetFrequency(attackSpeed - 1, dilated, name)
-                    else
-                        freq = GetFrequency(attackSpeed, dilated, name)
-                    end
+                    freq = GetFrequency(attackSpeed - 1, dilated, name)
                 else
-                    freq = GetFrequency(attackSpeed, dilated, name)
+                    freq = GetFrequency(attackSpeed, dilated, name, true)
                 end
 
                 data.leftTriggerType = 'Machine'
@@ -426,9 +435,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             afterShootTimes = 0
         end
     elseif (name == 'w_handgun_budget_slaughtomatic') then
-        freq = GetFrequency(7, dilated, name)
+        freq = GetFrequency(7, dilated, name, true)
+
         data.rightTriggerType = 'AutomaticGun'
-        data.rightForceTrigger = '(4)(8)('.. freq ..')'
+        data.rightForceTrigger = '(4)(5)('.. freq ..')'
     elseif (name == 'w_handgun_krauser_grit') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(6)(5)'
@@ -456,7 +466,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8) then
-                freq = GetFrequency(6, dilated, name)
+                freq = GetFrequency(attackSpeed, dilated, name, true)
 
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(3)(9)(5)(5)('.. freq ..')(1)'

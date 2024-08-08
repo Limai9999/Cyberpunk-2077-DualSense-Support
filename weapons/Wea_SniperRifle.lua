@@ -3,6 +3,7 @@ local savedWeaponName = ''
 local savedWeaponState = 0
 
 local afterShootTimes = 0
+local isPerfectChargedTimes = 0
 
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_SniperRifle')
@@ -20,6 +21,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     savedWeaponState = state
 
     local freq = 0
+
+    if (not isPerfectCharged) then
+        isPerfectChargedTimes = 0
+    end
 
     if (name == 'w_rifle_sniper_tsunami_ashura') then
         data.leftTriggerType = 'Resistance'
@@ -47,16 +52,28 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(8)(8)'
 
-        if (state == 1) then
-            freq = GetChargeTrigger(name, dilated, false, 0.37, 2, 35)
-            data.rightTriggerType = 'Galloping'
-            data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
-        else
-            GetChargeTrigger(name, dilated, true)
+        if (state ~= 8 and state ~= 4 and not isPerfectCharged) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state ~= 8 and state ~= 4) then
-            CalcFixedTimeIndex(name, 0, dilated, true)
+        if (state == 1) then
+            freq = GetChargeTrigger(name, dilated, false, 0.37, 2, 35)
+
+            data.rightTriggerType = 'Galloping'
+            data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
+
+            if (isPerfectCharged) then
+                local perfectChargeTriggerActiveForTimes = CalcFixedTimeIndex(name..'perfect_charge', GetPerfectChargeDuration(), dilated, false)
+
+                if (isPerfectChargedTimes < perfectChargeTriggerActiveForTimes) then
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(3)(9)(4)(4)('.. freq * 2 ..')(0)'
+
+                    isPerfectChargedTimes = isPerfectChargedTimes + 1
+                end
+            end
+        else
+            GetChargeTrigger(name, dilated, true)
         end
 
         if (state == 8 or state == 4) then
@@ -198,7 +215,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 afterShootTimes = 0
             end
         elseif (triggerType == 'Charge') then
-            if (state ~= 8 and state ~= 4) then
+            if (state ~= 8 and state ~= 4 and not isPerfectCharged) then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
@@ -206,6 +223,17 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 freq = GetChargeTrigger(name, dilated, false, 0.3, 0, 50)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(4)(9)(3)(7)('.. freq ..')'
+
+                if (isPerfectCharged) then
+                    local perfectChargeTriggerActiveForTimes = CalcFixedTimeIndex(name..'perfect_charge', GetPerfectChargeDuration(), dilated, false)
+    
+                    if (isPerfectChargedTimes < perfectChargeTriggerActiveForTimes) then
+                        data.rightTriggerType = 'Machine'
+                        data.rightForceTrigger = '(3)(9)(4)(4)('.. freq * 2 ..')(0)'
+    
+                        isPerfectChargedTimes = isPerfectChargedTimes + 1
+                    end
+                end
             end
 
             if (state == 8 or state == 4) then

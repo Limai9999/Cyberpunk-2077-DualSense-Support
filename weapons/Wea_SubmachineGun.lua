@@ -27,7 +27,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         local isFenrir = FindInString(itemName, 'Maelstrom')
 
         if (state == 8) then
-            freq = GetFrequency(attackSpeed, dilated, name)
+            freq = GetFrequency(attackSpeed, dilated, name, true)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(2)(9)(4)(5)('.. freq ..')(0)'
 
@@ -132,7 +132,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8 and canUseFireTrigger) then
-                freq = GetFrequency(initialFrequency, dilated, name)
+                freq = GetFrequency(initialFrequency, dilated, name, true)
 
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(1)(9)(1)(1)('.. freq ..')(0)'
@@ -142,7 +142,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_special_kangtao_dian') then
-        freq = GetFrequency(attackSpeed - 1, dilated, name)
+        freq = GetFrequency(attackSpeed - 1, dilated, name, true)
         data.rightTriggerType = 'SemiAutomaticGun'
         data.rightForceTrigger = '(2)(4)(4)'
 
@@ -156,9 +156,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     elseif (name == 'w_submachinegun_darra_pulsar') then
         data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(3)(4)(5)(4)'
+        data.rightForceTrigger = '(2)(4)(4)(4)'
+
         if (state == 8) then
-            freq = GetFrequency(attackSpeed, dilated, name)
+            freq = GetFrequency(attackSpeed, dilated, name, true)
+
+            data.leftTriggerType = 'Machine'
+            data.leftForceTrigger = '(3)(9)(1)(1)('.. freq ..')(0)'
+
             data.rightTriggerType = 'AutomaticGun'
             data.rightForceTrigger = '(4)(6)('.. freq ..')'
         end
@@ -170,7 +175,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         if (triggerType == 'FullAuto') then
             if (state == 8) then
-                freq = GetFrequency(attackSpeed, dilated, name)
+                freq = GetFrequency(attackSpeed, dilated, name, true)
 
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(6)(6)('.. freq ..')(0)'

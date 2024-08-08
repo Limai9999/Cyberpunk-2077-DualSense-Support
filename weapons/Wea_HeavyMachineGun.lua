@@ -10,7 +10,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     if (state == 7) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(8)'
-        freq = GetFrequency(25, dilated, name)
+
+        freq = GetFrequency(25, dilated, name, true)
         data.rightTriggerType = 'Galloping'
         data.rightForceTrigger = '(4)(9)(3)(4)('.. freq ..')'
     end
@@ -21,7 +22,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.leftForceTrigger = '(4)(9)(2)(3)(2)'
         end
 
-        freq = GetFrequency(attackSpeed, dilated, name)
+        freq = GetFrequency(attackSpeed, dilated, name, true)
         data.rightTriggerType = 'Machine'
         data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
     end

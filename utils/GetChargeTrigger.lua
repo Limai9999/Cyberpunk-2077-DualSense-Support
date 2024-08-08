@@ -9,6 +9,8 @@ local function resetSaved()
 end
 
 local function GetChargeTrigger(weaponName, isTimeDilated, reset, stepValue, initValue, maxValue)
+    stepValue = CalcTimeIndex(stepValue, true)
+
     if (savedWeaponName ~= weaponName) then resetSaved() end
     if (reset) then resetSaved() return 0 end
 
@@ -28,7 +30,7 @@ local function GetChargeTrigger(weaponName, isTimeDilated, reset, stepValue, ini
 
     if (savedFrequency < 0) then savedFrequency = 0 end
 
-    local freq = GetFrequency(math.floor(savedFrequency), isTimeDilated, weaponName)
+    local freq = GetFrequency(math.floor(savedFrequency or 1), isTimeDilated, weaponName)
 
     return freq
 end

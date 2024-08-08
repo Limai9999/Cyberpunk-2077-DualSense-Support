@@ -779,7 +779,6 @@ registerForEvent('onUpdate', function(delta)
 
     if (usingWeapon) then
         weaponName = usingWeapon:GetItemData():GetNameAsString()
-        itemName = usingWeapon.weaponRecord:GetRecordID().value
 
         -- type of item
         local itemType = usingWeapon.GetClassName(usingWeapon).value
@@ -790,6 +789,7 @@ registerForEvent('onUpdate', function(delta)
             -- (thanks to keanuWheeze) getting type of equipped weapon, full list of game item types: https://nativedb.red4ext.com/gamedataItemType
             local itemId = usingWeapon:GetItemID()
             weaponType = usingWeapon.GetWeaponType(itemId).value
+            itemName = usingWeapon.weaponRecord:GetRecordID().value
             isMeleeWeapon = usingWeapon.isMeleeWeapon
             isCyberwareWeapon = usingWeapon.IsCyberwareWeapon(itemId)
             triggerType = usingWeapon:GetCurrentTriggerMode():Name()
