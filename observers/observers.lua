@@ -3,12 +3,6 @@ local skippedSavingCollisionTimes = 0
 
 ---@diagnostic disable: missing-parameter
 local function StartObservers()
-    -- breaks when the map opened
-    -- Observe('gearboxLogicController', 'OnGearBoxChanged', function (_, gearValue)
-    --     GearboxValue = gearValue
-    --     Warn('Gearbox value changed to ' .. gearValue, true)
-    -- end)
-
     Observe('gameTimeSystem', 'SetTimeDilation', function (_, _, dilation)
         local threshold = 1e-6
         if (math.abs(dilation) < threshold) then return end
@@ -51,24 +45,6 @@ local function StartObservers()
     Observe('gameuiScannerGameController', 'ShowScanner', function (_, show)
         ScannerActive = show
     end)
-
-    -- Stole this code from the creator of the mod Metro System, keanuWheeze. https://www.nexusmods.com/cyberpunk2077/mods/3560 
-    ObserveAfter('DlcMenuGameController', 'OnInitialize', function(this)
-        local data = DlcDescriptionData.new()
-        CName.add('DualSenseSupport')
-        data.guide = 'DualSenseSupport'
-        this:AsyncSpawnFromLocal(inkWidgetRef.Get(this.containersRef), 'dlcDescription', this, 'OnDescriptionSpawned', data)
-    end)
-    -- Override('DlcDescriptionController', 'SetData', function (this, data, wrapped)
-    --     if data.guide.value == "DualSenseSupport" then
-    --         inkTextRef.SetText(this.titleRef, GetText('Mod-DualSense-DLC-Title'))
-    --         inkTextRef.SetText(this.descriptionRef, GetText('Mod-DualSense-DLC-Description'))
-    --         inkTextRef.SetText(this.guideRef, GetText('Mod-DualSense-DLC-Guide'))
-    --         inkImageRef.SetTexturePart(this.imageRef, 'none')
-    --     else
-    --         wrapped(data)
-    --     end
-    -- end)
 
     Observe('CollisionExitingDecisions', 'EnterCondition', function (_, scriptContext, scriptInterface)
         local config = ManageSettings.openFile()
@@ -175,6 +151,16 @@ local function StartObservers()
 
         if (not action.isQuickHack and (actionName == 'CyberwareMalfunction' or actionName == 'LocomotionMalfunction' or actionName == 'Blind')) then
             HasSentQuickHackUsingWeapon = true
+        end
+    end)
+
+    Observe("GameObject", "OnSmartGunLockEvent", function(this, evt)
+        -- method has been called and fully executed with:
+        -- this: GameObject
+        -- evt: ref<SmartGunLockEvent>
+
+        if (evt.locked) then
+            HasLockedOnEnemyUsingSmartWeapon = true
         end
     end)
 

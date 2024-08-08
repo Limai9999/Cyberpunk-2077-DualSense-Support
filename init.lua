@@ -31,6 +31,7 @@ IsWeaponGlitched = require('utils/IsWeaponGlitched')
 HandleBlockingBullet = require('utils/HandleBlockingBullet')
 HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
 HandleWeaponQuickHack = require('utils/HandleWeaponQuickHack')
+HandleSmartWeaponLock = require('utils/HandleSmartWeaponLock')
 CanPerformRelicAttack = require('utils/CanPerformRelicAttack')
 CalcFixedTimeIndex = require('utils/CalcFixedTimeIndex')
 CalcTimeIndex = require('utils/CalcTimeIndex')
@@ -99,6 +100,7 @@ IsBlockedBullet = false
 IsPlayerHitEntity = false
 IsPlayerHitEntityStrong = false
 HasSentQuickHackUsingWeapon = false
+HasLockedOnEnemyUsingSmartWeapon = false
 Delta = 0.01
 
 -- VehicleModeDefaultIndex = 0
@@ -117,6 +119,8 @@ CETOpened = false
 
 EnableUDPBtn = false
 DisableUDPBtn = false
+
+local appliedTriggerTimes = 0
 
 -- Trigger settings for weapons in Native Settings
 SettingsCheckData = {
@@ -282,6 +286,7 @@ registerForEvent('onUpdate', function(delta)
     HandleBlockingBullet()
     HandlePlayerHitEntity()
     HandleWeaponQuickHack()
+    HandleSmartWeaponLock()
 
     local isInScene = GameUI.IsScene()
     IsScene = isInScene
@@ -771,6 +776,7 @@ registerForEvent('onUpdate', function(delta)
     local weaponName = 'no'
     local itemName = 'no'
     local triggerType = 'no'
+    local weaponEvolution = 'no'
     local isMeleeWeapon = false
     local isCyberwareWeapon = false
     local cycleTime = 0
@@ -797,6 +803,7 @@ registerForEvent('onUpdate', function(delta)
             attackSpeed = math.floor(1 / cycleTime + 0.5)
             local boltPerkBought = PlayerDevelopmentSystem.GetData(GetPlayer()):IsNewPerkBought(gamedataNewPerkType.Tech_Right_Milestone_3) >= 3
             isPerfectCharged = usingWeapon.perfectChargeReached and boltPerkBought
+            weaponEvolution = EnumValueToString('gamedataWeaponEvolution', EnumInt(RPGManager.GetWeaponEvolution(itemId)))
         end
     else
         -- SaveFile('RGBChange', data, 'noWeaponType', 'noWeaponName', 'noVehicle')
@@ -853,6 +860,24 @@ registerForEvent('onUpdate', function(delta)
     if (config.showWeaponStates) then print(weaponType, weaponName, itemName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged) end
 
     local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
+
+    -- Smart weapons lock trigger effect
+    if (weaponEvolution == 'Smart' and isAiming and weaponState == 5 and HasLockedOnEnemyUsingSmartWeapon) then
+        local shootTriggerActiveForTimes = CalcFixedTimeIndex(weaponName..'HasLockedOnEnemyUsingSmartWeapon', 10, isTimeDilated, false)
+
+        if (appliedTriggerTimes < shootTriggerActiveForTimes) then
+            if (data.leftTriggerType == 'Resistance') then
+                data.leftTriggerType = 'Normal'
+            else
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(1)(5)'
+            end
+        end
+
+        appliedTriggerTimes = appliedTriggerTimes + 1
+    else
+        appliedTriggerTimes = 0
+    end
 
     local weaponModeValue = config.weaponsSettings[weaponType].value
 
