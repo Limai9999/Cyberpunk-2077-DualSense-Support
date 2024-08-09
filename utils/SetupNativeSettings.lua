@@ -12,7 +12,8 @@ local function SetupNativeSettings()
     end
 
     local general = modName..'/general'
-    local weapons = modName..'/weapons'
+    local guns = modName..'/guns'
+    local meleeWeapons = modName..'/meleeWeapons'
     local weaponsList = modName..'/weaponsList'
     local vehicles = modName..'/vehicles'
     local vehiclesList = modName..'/vehiclesList'
@@ -165,24 +166,54 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    -- weapons
-    local weaponsLoc = GetText('Mod-DualSense-NS-Subcategory-Weapons')
-    NS.addSubcategory(weapons, weaponsLoc)
+    -- Guns
+    local gunsLoc = GetText('Mod-DualSense-NS-Subcategory-Guns')
+    NS.addSubcategory(guns, gunsLoc)
 
-    NS.addSwitch(weapons, leftLoc, leftDescrLoc .. ' ' .. weaponsLoc, config.weaponLT, true, function(state)
-        config.weaponLT = state
+    NS.addSwitch(guns, leftLoc, leftDescrLoc .. ' ' .. gunsLoc, config.gunsLT, true, function(state)
+        config.gunsLT = state
         ManageSettings.saveFile(config)
     end)
 
-    NS.addSwitch(weapons, rightLoc, rightDescrLoc .. ' ' .. weaponsLoc, config.weaponRT, true, function(state)
-        config.weaponRT = state
+    NS.addSwitch(guns, rightLoc, rightDescrLoc .. ' ' .. gunsLoc, config.gunsRT, true, function(state)
+        config.gunsRT = state
         ManageSettings.saveFile(config)
     end)
 
-    local meleeBlockEffectLoc = GetText('Mod-DualSense-NS-MeleeBlockEffectStrength')
-    local meleeBlockEffectDescrLoc = GetText('Mod-DualSense-NS-MeleeBlockEffectStrength-Description')
+    local gunsSmartLockOnEnemyEffectLoc = GetText('Mod-DualSense-NS-GunsSmartLockOnEnemyEffect')
+    local gunsSmartLockOnEnemyEffectDescrLoc = GetText('Mod-DualSense-NS-GunsSmartLockOnEnemyEffect-Description')
 
-    NS.addRangeInt(weapons, meleeBlockEffectLoc, meleeBlockEffectDescrLoc, 1, 8, 1, config.meleeBulletBlockEffectStrength, 3, function(value)
+    NS.addSwitch(guns, gunsSmartLockOnEnemyEffectLoc, gunsSmartLockOnEnemyEffectDescrLoc, config.gunsSmartLockOnTrigger, true, function(state)
+        config.gunsSmartLockOnTrigger = state
+        ManageSettings.saveFile(config)
+    end)
+
+    -- Melee Weapons
+    local meleeWeaponsLoc = GetText('Mod-DualSense-NS-Subcategory-Melee-Weapons')
+    NS.addSubcategory(meleeWeapons, meleeWeaponsLoc)
+
+    NS.addSwitch(meleeWeapons, leftLoc, leftDescrLoc .. ' ' .. meleeWeaponsLoc, config.meleeLT, true, function(state)
+        config.meleeLT = state
+        ManageSettings.saveFile(config)
+    end)
+
+    NS.addSwitch(meleeWeapons, rightLoc, rightDescrLoc .. ' ' .. meleeWeaponsLoc, config.meleeRT, true, function(state)
+        config.meleeRT = state
+        ManageSettings.saveFile(config)
+    end)
+
+    local meleeBulletBlockEffectLoc = GetText('Mod-DualSense-NS-MeleeBlockEffect')
+    local meleeBulletBlockEffectDescrLoc = GetText('Mod-DualSense-NS-MeleeBlockEffect-Description')
+
+    NS.addSwitch(meleeWeapons, meleeBulletBlockEffectLoc, meleeBulletBlockEffectDescrLoc, config.meleeBulletBlockTrigger, true, function(state)
+        config.meleeBulletBlockTrigger = state
+        ManageSettings.saveFile(config)
+    end)
+
+    local meleeBulletBlockStrengthLoc = GetText('Mod-DualSense-NS-MeleeBlockEffectStrength')
+    local meleeBulletBlockStrengthDescrLoc = GetText('Mod-DualSense-NS-MeleeBlockEffectStrength-Description')
+
+    NS.addRangeInt(meleeWeapons, meleeBulletBlockStrengthLoc, meleeBulletBlockStrengthDescrLoc, 1, 8, 1, config.meleeBulletBlockEffectStrength, 3, function(value)
         config.meleeBulletBlockEffectStrength = value
         ManageSettings.saveFile(config)
     end)
@@ -190,7 +221,7 @@ local function SetupNativeSettings()
     local meleeEntityHitEffectLoc = GetText('Mod-DualSense-NS-MeleeEntityHitEffect')
     local meleeEntityHitEffectDescrLoc = GetText('Mod-DualSense-NS-MeleeEntityHitEffect-Description')
 
-    NS.addSwitch(weapons, meleeEntityHitEffectLoc, meleeEntityHitEffectDescrLoc, config.meleeEntityHitTrigger, true, function(state)
+    NS.addSwitch(meleeWeapons, meleeEntityHitEffectLoc, meleeEntityHitEffectDescrLoc, config.meleeEntityHitTrigger, true, function(state)
         config.meleeEntityHitTrigger = state
         ManageSettings.saveFile(config)
     end)
@@ -258,7 +289,7 @@ local function SetupNativeSettings()
     end)
 
     local enableGearboxLoc = GetText('Mod-DualSense-NS-EnableGearbox')
-    local enableGearboxLocDescr = string.format(GetText('Mod-DualSense-NS-EnableGearbox-Descr') .. ' ' .. GetText('Mod-DualSense-NS-GearboxModeNotRecommendedToUseAtLowFPS'), GetText('Mod-DualSense-NS-GearChangeMode-Click'))
+    local enableGearboxLocDescr = string.format(GetText('Mod-DualSense-NS-EnableGearbox-Descr'), GetText('Mod-DualSense-NS-GearChangeMode-Click'))
 
     NS.addSwitch(vehicles, enableGearboxLoc, enableGearboxLocDescr, config.gearboxEmulation, true, function(state)
         config.gearboxEmulation = state

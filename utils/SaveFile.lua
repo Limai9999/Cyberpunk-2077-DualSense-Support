@@ -83,9 +83,6 @@ local function SaveFile(type, data, weaponType, weaponName, vehicleVal)
         savedWeaponType = weaponType
 
         savedDefault = false
-
-        if (settings.weaponLT == false) then objData.leftTriggerType = 'Normal' end
-        if (settings.weaponRT == false) then objData.rightTriggerType = 'Normal' end
     end
 
     if (type == 'vehicle') then

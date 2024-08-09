@@ -316,6 +316,7 @@ registerForEvent('onUpdate', function(delta)
         vehicleModeIndex = 0,
         vehicleUseTwitchingCollisionTrigger = false,
         usingScannerTrigger = false,
+        usingBulletBlockTrigger = false,
         type = 'default'
     }
 
@@ -861,22 +862,36 @@ registerForEvent('onUpdate', function(delta)
 
     local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
 
-    -- Smart weapons lock trigger effect
-    if (weaponEvolution == 'Smart' and isAiming and weaponState == 5 and HasLockedOnEnemyUsingSmartWeapon) then
-        local shootTriggerActiveForTimes = CalcFixedTimeIndex(weaponName..'HasLockedOnEnemyUsingSmartWeapon', 10, isTimeDilated, false)
-
-        if (appliedTriggerTimes < shootTriggerActiveForTimes) then
-            if (data.leftTriggerType == 'Resistance') then
-                data.leftTriggerType = 'Normal'
-            else
-                data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(1)(5)'
-            end
+    if (isMeleeWeapon or isCyberwareWeapon) then
+        if (data.usingBulletBlockTrigger) then
+            if (not config.meleeBulletBlockTrigger) then data.leftTriggerType = 'Normal' end
+        else
+            if (not config.meleeLT) then data.leftTriggerType = 'Normal' end
+            if (not config.meleeRT) then data.rightTriggerType = 'Normal' end
         end
-
-        appliedTriggerTimes = appliedTriggerTimes + 1
     else
-        appliedTriggerTimes = 0
+        if (not config.gunsLT) then data.leftTriggerType = 'Normal' end
+        if (not config.gunsRT) then data.rightTriggerType = 'Normal' end
+    end
+
+    -- Smart weapons lock trigger effect
+    if (config.gunsSmartLockOnTrigger) then
+        if (weaponEvolution == 'Smart' and isAiming and weaponState == 5 and HasLockedOnEnemyUsingSmartWeapon) then
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(weaponName..'HasLockedOnEnemyUsingSmartWeapon', 10, isTimeDilated, false)
+
+            if (appliedTriggerTimes < shootTriggerActiveForTimes) then
+                if (data.leftTriggerType == 'Resistance') then
+                    data.leftTriggerType = 'Normal'
+                else
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(1)(5)'
+                end
+            end
+
+            appliedTriggerTimes = appliedTriggerTimes + 1
+        else
+            appliedTriggerTimes = 0
+        end
     end
 
     local weaponModeValue = config.weaponsSettings[weaponType].value

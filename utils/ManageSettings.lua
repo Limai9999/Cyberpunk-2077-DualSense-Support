@@ -7,8 +7,10 @@ local defaultConfig = {
     UDPdebugLogs = true,
     showNotifications = true,
     weaponsSettings = {},
-    weaponLT = true,
-    weaponRT = true,
+    gunsLT = true,
+    gunsRT = true,
+    meleeLT = true,
+    meleeRT = true,
     vehicleSettings = {},
     vehicleLT = true,
     vehicleRT = true,
@@ -32,8 +34,10 @@ local defaultConfig = {
     menuTriggers = true,
     scannerTriggers = true,
     showWeaponStates = false,
+    meleeBulletBlockTrigger = true,
     meleeBulletBlockEffectStrength = 3,
-    meleeEntityHitTrigger = true
+    meleeEntityHitTrigger = true,
+    gunsSmartLockOnTrigger = true,
 }
 
 local filePath = 'config/settings.json'
