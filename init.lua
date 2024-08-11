@@ -601,12 +601,17 @@ registerForEvent('onUpdate', function(delta)
 
                 local isGearboxEmulationEnabled = config.gearboxEmulation
 
-                vehData = VehiclesModesList[list[vehType.value]](data, vehicle, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire and config.vehicleFlatTireTriggers)
+                local vehicleModeIndex = vehType.value
+                if (controlledVehicle) then
+                    vehicleModeIndex = 4
+                end
+
+                vehData = VehiclesModesList[list[vehicleModeIndex]](data, vehicle, false, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire and config.vehicleFlatTireTriggers)
 
                 if (vehData) then
                     if (vehData.frequency == -1) then vehData.frequency = 0 end
 
-                    local isChangingGear = GetTransmissionChange(GetVehicleSpeed(GearboxValue, true, isGearboxEmulationEnabled), GearboxValue)
+                    local isChangingGear = GetTransmissionChange(GetVehicleSpeed(vehicle, GearboxValue, true, isGearboxEmulationEnabled), GearboxValue)
 
                     data = vehData
                     if (isFlying and hoverHeight ~= 0) then

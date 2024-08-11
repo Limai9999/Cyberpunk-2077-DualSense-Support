@@ -1,15 +1,15 @@
-local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
+local function VehicleMode(data, vehicle, nUI, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
     local typeRigidLoc = GetText('Mod-DualSense-NS-TriggerType-Rigid')
     local typeGallopingLoc = GetText('Mod-DualSense-NS-TriggerType-Galloping')
     data.description = 'L2 - ' .. typeRigidLoc .. '; ' .. 'R2 - ' .. typeGallopingLoc
     data.isHiddenMode = false
     data.vehicleModeIndex = 10
     data.vehicleUseTwitchingCollisionTrigger = false
-    if (nUI or not veh) then return data end
+    if (nUI or not vehicle) then return data end
 
     local config = ManageSettings.openFile()
 
-    local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
+    local rpm = GetVehicleSpeed(vehicle, gearBoxValue, false, isGearboxEmulationEnabled)
 
     data.leftTriggerType = 'Rigid'
 
@@ -17,7 +17,7 @@ local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPave
     local frequency = '1'
 
     local dividedRpmA = math.floor(rpm / (9500 / maxGalloping))
-    dividedRpmA = GetFrequency(dividedRpmA, dilated, veh:GetDisplayName() .. data.description)
+    dividedRpmA = GetFrequency(dividedRpmA, dilated, vehicle:GetDisplayName() .. data.description)
 
     local useMachineTrigger = math.floor(rpm) % 11 == 0
 

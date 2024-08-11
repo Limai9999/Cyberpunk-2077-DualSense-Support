@@ -4,7 +4,7 @@ local function VehiclePlayerLEDMode(data, nUI, vehicle, gearBoxValue, dilated, o
 
     if nUI then return data end
 
-    local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
+    local rpm = GetVehicleSpeed(vehicle, gearBoxValue, false, isGearboxEmulationEnabled)
 
     data.playerLED = '(False)(False)(False)(False)(False)'
     data.playerLEDNewRevision = '(AllOff)'

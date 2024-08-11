@@ -4,11 +4,10 @@ local shouldBeSpeed = 0
 local savedGear = -1
 local requiredEmulateLowSpeed = false
 
-local function GetVehicleSpeed(gear, skipEmulatingLowSpeed, isGearboxEmulationEnabled)
-    local veh = Game.GetMountedVehicle(GetPlayer())
-    if (veh ~= nil) then
-        if (veh:IsPlayerDriver() == true) then
-            local speed = math.abs(veh:GetCurrentSpeed())
+local function GetVehicleSpeed(vehicle, gear, skipEmulatingLowSpeed, isGearboxEmulationEnabled)
+    if (vehicle ~= nil) then
+        if (vehicle:IsPlayerDriver() == true) then
+            local speed = math.abs(vehicle:GetCurrentSpeed())
             local rpm = 30 + speed * 200
             -- print(rpm)
 

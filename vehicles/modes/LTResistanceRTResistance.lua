@@ -1,14 +1,14 @@
-local function VehicleMode(data, veh, nUI, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
+local function VehicleMode(data, vehicle, nUI, gearBoxValue, dilated, onRoad, onPavement, isFlying, isGearboxEmulationEnabled, hasFlatTire)
     local typeLoc = GetText('Mod-DualSense-NS-TriggerType-Resistance')
     data.description = 'L2 - ' .. typeLoc .. '; ' .. 'R2 - ' .. typeLoc
     data.isHiddenMode = false
     data.vehicleModeIndex = 7
     data.vehicleUseTwitchingCollisionTrigger = true
-    if (nUI or not veh) then return data end
+    if (nUI or not vehicle) then return data end
 
     local config = ManageSettings.openFile()
 
-    local rpm = GetVehicleSpeed(gearBoxValue, false, isGearboxEmulationEnabled)
+    local rpm = GetVehicleSpeed(vehicle, gearBoxValue, false, isGearboxEmulationEnabled)
 
     local maxResistance = config.vehicleResistanceValue
     local resistance = gearBoxValue
