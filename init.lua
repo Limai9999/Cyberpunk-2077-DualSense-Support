@@ -50,6 +50,7 @@ GetScannerTrigger = require('otherModes/Scanner')
 HandleMenu = require('otherModes/Menu')
 NCPDChaseTouchpadLEDMode = require('otherModes/TouchpadLEDModes/NCPDChase')
 VehicleDestroyedTouchpadLEDMode = require('otherModes/TouchpadLEDModes/VehicleDestroyed')
+ControlledVehicleTouchpadLEDMode = require('otherModes/TouchpadLEDModes/ControlledVehicle')
 UseBulletBlockTrigger = require('otherModes/BulletBlock')
 HitEntityMeleeTrigger = require('otherModes/HitEntityMeleeTrigger')
 
@@ -331,7 +332,7 @@ registerForEvent('onUpdate', function(delta)
     local additionalString = ''
 
     if (IsLoading) then
-        local r, g, b = PulseLED('loading', 1.2, 170, 170, 0, 10)
+        local r, g, b = PulseLED('loading', 1.2, 170, 170, 0, 5, 10)
 
         data.touchpadLED = '('..r..')('..g..')('..b..')'
         additionalString = additionalString .. data.touchpadLED
@@ -450,7 +451,7 @@ registerForEvent('onUpdate', function(delta)
         -- cyberspace
         if (inCyberspace) then
             data.overwriteRGB = false
-            local r, g, b = PulseLED('cyberspace', 0.5, 0, 70, 255, 70)
+            local r, g, b = PulseLED('cyberspace', 1, 0, 70, 255, 60, 25)
             data.touchpadLED = '('..r..')('..g..')('..b..')'
             -- cyberspace in crouch
             if (inCrouch) then
@@ -498,6 +499,8 @@ registerForEvent('onUpdate', function(delta)
         local vehicleType = vehicle:ToString()
 
         if (controlledVehicle) then
+            data = ControlledVehicleTouchpadLEDMode(data, controlledVehicle)
+
             GearboxValue = 2
         else
             GearboxValue = vehicle:GetBlackboard():GetInt(Game.GetAllBlackboardDefs().Vehicle.GearValue)
@@ -506,7 +509,7 @@ registerForEvent('onUpdate', function(delta)
         local vehicleComponent = vehicle.vehicleComponent
         local hasFlatTire = vehicleComponent.HasFlatTire(vehicle:GetEntityID())
 
-        -- print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType, GearboxValue, hasFlatTire)
+        print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType, GearboxValue, hasFlatTire)
 
         local vehType = config.vehicleSettings[vehicleType] or config.vehicleSettings['default']
         local vehData = nil;
@@ -530,6 +533,24 @@ registerForEvent('onUpdate', function(delta)
             hoverHeight = f.hoverHeight
         end
 
+        if not (data.overwriteRGB) then data.touchpadLED = prevRGB end
+        if not (data.overwritePlayerLED) then
+            data.playerLED = prevPlayerLED
+            data.playerLEDNewRevision = prevPlayerLEDNewRevision
+        end
+
+        local vehiclePlayerLEDList = {}
+
+        for name, v in pairs(VehiclePlayerLEDModeList) do
+            local Data = v({}, true)
+            vehiclePlayerLEDList[Data.value] = name
+        end
+
+        local chosenPlayerLED = config.vehiclePlayerLEDValue
+        local vehiclePlayerLED = VehiclePlayerLEDModeList[vehiclePlayerLEDList[chosenPlayerLED]](data, false, vehicle, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, VehicleCollisionForce)
+
+        data = vehiclePlayerLED
+
         if (vehType.data.hasOwnMode) then
             vehData = VehiclesList[vehicleType](data, vehType.value, isTimeDilated)
             data = vehData
@@ -549,6 +570,8 @@ registerForEvent('onUpdate', function(delta)
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
 
+                data = VehicleDestroyedTouchpadLEDMode(data)
+
                 SaveFile('vehicle', data, '', '', 'vehicleDestroyed'..additionalString)
             elseif (not isVehicleTurnedOn or (not isEngineTurnedOn and not isFlying)) then
                 data.leftTriggerType = 'Resistance'
@@ -557,15 +580,8 @@ registerForEvent('onUpdate', function(delta)
                 data.rightForceTrigger = '(1)(1)'
 
                 if (not isEngineTurnedOn and isVehicleTurnedOn) then
-                    local freq = GetFrequency(30, isTimeDilated, 'vehicleDestroyed')
-
-                    data.leftTriggerType = 'Machine'
-                    data.leftForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
-
-                    data.rightTriggerType = 'Machine'
-                    data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
-
-                    data = VehicleDestroyedTouchpadLEDMode(data)
+                    data.leftTriggerType = 'GameCube'
+                    data.rightTriggerType = 'GameCube'
                 end
 
                 additionalString = additionalString .. data.touchpadLED
@@ -599,24 +615,6 @@ registerForEvent('onUpdate', function(delta)
                         if (resHeight > 255) then resHeight = 255 end
                         data.touchpadLED = '(0)('..resHeight..')(255)'
                     end
-
-                    if not (data.overwriteRGB) then data.touchpadLED = prevRGB end
-                    if not (data.overwritePlayerLED) then
-                        data.playerLED = prevPlayerLED
-                        data.playerLEDNewRevision = prevPlayerLEDNewRevision
-                    end
-
-                    local vehiclePlayerLEDList = {}
-
-                    for name, v in pairs(VehiclePlayerLEDModeList) do
-                        local Data = v({}, true)
-                        vehiclePlayerLEDList[Data.value] = name
-                    end
-
-                    local chosenPlayerLED = config.vehiclePlayerLEDValue
-                    local vehiclePlayerLED = VehiclePlayerLEDModeList[vehiclePlayerLEDList[chosenPlayerLED]](data, false, vehicle, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, VehicleCollisionForce)
-
-                    data = vehiclePlayerLED
 
                     if (VehicleCollisionForce and VehicleCollisionForce > 0) then
                         data.rightTriggerType = 'Resistance'
