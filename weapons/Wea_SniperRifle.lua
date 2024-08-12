@@ -1,7 +1,3 @@
-local weaponFireTriggerAppliedTimes = 0
-local savedWeaponName = ''
-local savedWeaponState = 0
-
 local afterShootTimes = 0
 local isPerfectChargedTimes = 0
 
@@ -13,13 +9,6 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     data.rightTriggerType = 'SemiAutomaticGun'
     data.rightForceTrigger = '(2)(5)(8)'
 
-    if (savedWeaponName ~= name or savedWeaponState ~= state) then
-        weaponFireTriggerAppliedTimes = 0
-    end
-
-    savedWeaponName = name
-    savedWeaponState = state
-
     local freq = 0
 
     if (not isPerfectCharged) then
@@ -27,26 +16,68 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     end
 
     if (name == 'w_rifle_sniper_tsunami_ashura') then
-        data.leftTriggerType = 'Resistance'
-        data.leftForceTrigger = '(1)(3)'
+        -- * Modded Weapon: Game.AddToInventory("Items.Preset_Antitank_Default", 1)	https://www.nexusmods.com/cyberpunk2077/mods/11675?tab=description
+        local isAntitank = FindInString(itemName, 'Antitank')
 
-        data.rightTriggerType = 'Bow'
-        data.rightForceTrigger = '(1)(4)(6)(7)'
+        if (isAntitank) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(3)(6)(7)'
 
-        if (isAiming) then
-            data.leftTriggerType = 'Normal'
-        end
+            if (isAiming) then
+                data.leftTriggerType = 'Normal'
+            end
 
-        if (state == 8) then
+            if (state ~= 8 and state ~= 4) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
+            if (state == 8 or state == 4) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 20, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(0)(5)'
+
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(4)(3)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
+        else
+            -- Original
+
             data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(1)(3)'
+            data.leftForceTrigger = '(0)(4)'
 
             data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(5)(8)(8)(8)'
-        end
+            data.rightForceTrigger = '(1)(4)(6)(7)'
 
-        if (state == 2 or state == 4) then
-            data.rightForceTrigger = '(4)(8)(8)(8)'
+            if (isAiming) then
+                data.leftTriggerType = 'Normal'
+            end
+
+            if (state ~= 8 and state ~= 4) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
+            if (state == 8 or state == 4) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 20, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(0)(3)'
+
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(0)(7)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
         end
     elseif (name == 'w_rifle_sniper_tsunami_nekomata') then
         data.rightTriggerType = 'Bow'

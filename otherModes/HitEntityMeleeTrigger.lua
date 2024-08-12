@@ -1,18 +1,19 @@
 local savedTimes = 0
-local maxSavedTimes = 8
-local halfMaxSavedTimes = maxSavedTimes / 2
 
 local function HitEntityMeleeTrigger(data, config)
     if (not config.meleeEntityHitTrigger) then return data end
 
-    if (savedTimes >= maxSavedTimes) then
+    local activeTimesMax = CalcTimeIndex(28)
+    local halfMaxSavedTimes = activeTimesMax / 2
+
+    if (savedTimes >= activeTimesMax) then
         savedTimes = 0
         IsPlayerHitEntity = false
         IsPlayerHitEntityStrong = false
     end
 
     if (not IsPlayerHitEntity and savedTimes == 0) then return data end
-    
+
     if (savedTimes < halfMaxSavedTimes - 1) then
         data.leftTriggerType = 'Bow'
         data.leftForceTrigger = '(6)(8)(8)(4)'

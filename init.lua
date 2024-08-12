@@ -28,6 +28,7 @@ HandleZoneChange = require('utils/HandleZoneChange')
 GetRandomPlayerLED = require('utils/GetRandomPlayerLED')
 GetChargeTrigger = require('utils/GetChargeTrigger')
 IsWeaponGlitched = require('utils/IsWeaponGlitched')
+IsWeaponSecondaryModeApplied = require('utils/IsWeaponSecondaryModeApplied')
 HandleBlockingBullet = require('utils/HandleBlockingBullet')
 HandlePlayerHitEntity = require('utils/HandlePlayerHitEntity')
 HandleWeaponQuickHack = require('utils/HandleWeaponQuickHack')
@@ -318,6 +319,7 @@ registerForEvent('onUpdate', function(delta)
         vehicleUseTwitchingCollisionTrigger = false,
         usingScannerTrigger = false,
         usingBulletBlockTrigger = false,
+        canUseDefaultEntityHitTrigger = true,
         type = 'default'
     }
 
@@ -546,6 +548,8 @@ registerForEvent('onUpdate', function(delta)
             vehiclePlayerLEDList[Data.value] = name
         end
 
+        local isGearboxEmulationEnabled = config.gearboxEmulation
+
         local chosenPlayerLED = config.vehiclePlayerLEDValue
         local vehiclePlayerLED = VehiclePlayerLEDModeList[vehiclePlayerLEDList[chosenPlayerLED]](data, false, vehicle, GearboxValue, isTimeDilated, isOnRoad, isOnPavement, isFlying, isGearboxEmulationEnabled, VehicleCollisionForce)
 
@@ -598,8 +602,6 @@ registerForEvent('onUpdate', function(delta)
                     local dataObj = modeData(data, vehicle, true)
                     list[dataObj.vehicleModeIndex] = modeName
                 end
-
-                local isGearboxEmulationEnabled = config.gearboxEmulation
 
                 local vehicleModeIndex = vehType.value
                 if (controlledVehicle) then
@@ -817,6 +819,7 @@ registerForEvent('onUpdate', function(delta)
     local stamina = GetState('Stamina')
     local weaponState = GetState('Weapon')
     local isWeaponGlitched = IsWeaponGlitched()
+    local isSecondaryMode = IsWeaponSecondaryModeApplied()
 
     -- local isInFinisher = StatusEffectSystem.ObjectHasStatusEffect(player, 'BaseStatusEffect.PlayerInFinisherWorkspot')
     -- local locomotionState = Game.GetPlayer():GetCurrentLocomotionState()
@@ -861,9 +864,9 @@ registerForEvent('onUpdate', function(delta)
     end
     if (weaponState == 6) then weaponState = 4 end
 
-    if (config.showWeaponStates) then print(weaponType, weaponName, itemName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged) end
+    if (config.showWeaponStates) then print(weaponType, weaponName, itemName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged, isSecondaryMode) end
 
-    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
+    local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName, isSecondaryMode)
 
     if (isMeleeWeapon or isCyberwareWeapon) then
         if (data.usingBulletBlockTrigger) then
@@ -938,7 +941,7 @@ registerForEvent('onUpdate', function(delta)
         end
     end
 
-    if (isMeleeWeapon and config.meleeEntityHitTrigger) then
+    if (isMeleeWeapon and config.meleeEntityHitTrigger and data.canUseDefaultEntityHitTrigger) then
         weaponObj = HitEntityMeleeTrigger(weaponObj, config)
         sendingWeaponType = sendingWeaponType .. weaponObj.rightTriggerType .. weaponObj.rightForceTrigger
     end

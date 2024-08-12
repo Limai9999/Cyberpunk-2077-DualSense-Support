@@ -3,7 +3,7 @@ local activeTimes = 0
 local function HandlePlayerHitEntity()
     if (not IsPlayerHitEntity) then return end
 
-    local activeTimesMax = CalcTimeIndex(15)
+    local activeTimesMax = CalcTimeIndex(28)
 
     if (activeTimes < activeTimesMax) then
         activeTimes = activeTimes + 1

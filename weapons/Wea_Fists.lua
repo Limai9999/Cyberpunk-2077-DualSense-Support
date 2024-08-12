@@ -52,9 +52,9 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         data.leftForceTrigger = '(1)(4)'
     end
 
-    if (state == 19 or state == 20) then
-      data.leftTriggerType = 'Resistance'
-      data.leftForceTrigger = '(2)(7)'
+    if (state == 20) then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(2)(7)'
     end
 
     return data

@@ -21,15 +21,28 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     data.leftTriggerType = 'Choppy'
 
     if (name == 'w_submachinegun_militech_saratoga') then
+        -- * Modded Weapon: Game.AddToInventory("Items.SJ_DangerRoom")	https://www.nexusmods.com/cyberpunk2077/mods/15889
+        local isDangerRoom = FindInString(itemName, 'DangerRoom')
+
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(4)(4)'
 
         local isFenrir = FindInString(itemName, 'Maelstrom')
 
         if (state == 8) then
+            if (isDangerRoom and dilated) then attackSpeed = attackSpeed + 1 end
+
             freq = GetFrequency(attackSpeed, dilated, name, true)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(2)(9)(4)(5)('.. freq ..')(0)'
+
+            if (isDangerRoom) then
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
+
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(2)(9)(5)(6)('.. freq ..')(0)'
+            end
 
             if (not isFenrir and not HasSentQuickHackUsingWeapon) then
                 CalcFixedTimeIndex(name, 0, dilated, true)
@@ -60,29 +73,68 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_submachinegun_arasaka_shingen') then
-        data.rightTriggerType = 'SemiAutomaticGun'
-        data.rightForceTrigger = '(2)(4)(6)'
+        -- * Modded Weapon: Game.AddToInventory("Items.SJ_Tzijimura")	https://www.nexusmods.com/cyberpunk2077/mods/15889
+        local isTzijimura = FindInString(itemName, 'Tzijimura')
 
-        if (state ~= 8) then
-            CalcFixedTimeIndex(name, 0, dilated, true)
-        end
+        if (isTzijimura) then
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(0)(3)(5)(4)'
 
-        if (state == 8) then
-            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 18, dilated, false)
+            local canUseFireTrigger = true
+            local initialFrequency = 10
 
-            if (afterShootTimes < shootTriggerActiveForTimes) then
-                freq = GetFrequency(attackSpeed * 1.6, dilated, name)
+            local usedFireTriggerTimesStart = CalcTimeIndex(21, false, dilated)
+            local usedFireTriggerTimesEnd = CalcTimeIndex(33, false, dilated)
 
-                data.leftTriggerType = 'Machine'
-                data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
-
-                data.rightTriggerType = 'Machine'
-                data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+            if (afterShootTimes >= usedFireTriggerTimesStart and afterShootTimes <= usedFireTriggerTimesEnd) then
+                canUseFireTrigger = false
             end
 
-            afterShootTimes = afterShootTimes + 1
+            if (afterShootTimes > usedFireTriggerTimesEnd) then
+                afterShootTimes = 0
+            end
+
+            if (state == 8) then
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
+
+            if (state == 8 and canUseFireTrigger) then
+                if (dilated) then
+                    freq = GetFrequency(initialFrequency + 6, dilated, name)
+                else
+                    freq = GetFrequency(initialFrequency, dilated, name)
+                end
+
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+            end
         else
-            afterShootTimes = 0
+            data.rightTriggerType = 'SemiAutomaticGun'
+            data.rightForceTrigger = '(2)(4)(6)'
+
+            if (state ~= 8) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
+            if (state == 8) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 18, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    freq = GetFrequency(attackSpeed * 1.6, dilated, name)
+
+                    data.leftTriggerType = 'Machine'
+                    data.leftForceTrigger = '(5)(9)(1)(1)('.. freq ..')(0)'
+
+                    data.rightTriggerType = 'Machine'
+                    data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
         end
     elseif (name == 'w_submachinegun_arasaka_senkoh') then
         data.rightTriggerType = 'SemiAutomaticGun'
@@ -115,7 +167,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             local canUseFireTrigger = true
 
             local usedFireTriggerTimesStart = CalcTimeIndex(30)
-            local usedFireTriggerTimesEnd = CalcTimeIndex(38)
+            local usedFireTriggerTimesEnd = CalcTimeIndex(34)
 
             if (afterShootTimes >= usedFireTriggerTimesStart and afterShootTimes <= usedFireTriggerTimesEnd) then
                 canUseFireTrigger = false

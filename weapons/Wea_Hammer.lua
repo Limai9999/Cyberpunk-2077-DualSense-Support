@@ -49,7 +49,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             if (isSasquatchHammer) then data.leftForceTrigger = '(2)(7)' end
         end
 
-        if (state == 19 or state == 20) then
+        if (state == 20) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(7)'
 

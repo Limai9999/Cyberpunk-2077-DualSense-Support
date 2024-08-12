@@ -13,7 +13,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         if (state ~= 19) then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
-    
+
         if (state == 7 or state == 13 or state == 18) then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(5)(4)(4)'
@@ -30,10 +30,10 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(2)(6)'
         end
-    
+
         if (state == 19) then
             local throwTriggerActiveForTimes = CalcFixedTimeIndex(name..'19', 40, dilated, false)
-    
+
             if (timesAfterThrow < throwTriggerActiveForTimes) then
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(2)(2)'
@@ -41,7 +41,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
                 data.leftTriggerType = 'Normal'
                 data.rightTriggerType = 'Normal'
             end
-    
+
             timesAfterThrow = timesAfterThrow + 1
         else
             timesAfterThrow = 0

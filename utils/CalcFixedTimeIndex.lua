@@ -16,11 +16,7 @@ local function CalcFixedTimeIndex(reason, initialIndex, isTimeDilated, reset)
 
     if (savedIndex ~= 0) then return savedIndex end
 
-    if (isTimeDilated) then
-        savedIndex = CalcTimeIndex(initialIndex * (1 / TimeDilation))
-    else
-        savedIndex = CalcTimeIndex(initialIndex)
-    end
+    savedIndex = CalcTimeIndex(initialIndex, false, isTimeDilated)
 
     savedReason = reason
 

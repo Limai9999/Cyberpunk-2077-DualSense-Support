@@ -17,9 +17,32 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     end
 
     if (name == 'w_revolver_malorian_overture') then
+        data.leftTriggerType = 'Resistance'
+        data.leftForceTrigger = '(0)(1)'
+
         if (isAiming) then
+            data.leftTriggerType = 'Normal'
+
             if (state == 8) then
+                data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(1)(4)'
+            end
+        else
+            if (state ~= 8) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
+            end
+
+            if (state == 8) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 10, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(2)(5)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
             end
         end
 
@@ -39,7 +62,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (state == 8) then
-                freq = GetFrequency(attackSpeed, dilated, name)
+                freq = GetFrequency(attackSpeed, dilated, name, true)
 
                 data.leftTriggerType = 'Machine'
                 data.leftForceTrigger = '(4)(9)(1)(1)('.. freq ..')(1)'
@@ -80,6 +103,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_revolver_darra_nova') then
+        -- * Modded Weapon: Game.AddToInventory("Items.Preset_Wormhole_legendaryplusplus", 1)	https://www.nexusmods.com/cyberpunk2077/mods/10541
+        local isWormhole = FindInString(itemName, 'Wormhole')
+
         local isDoomDoom = FindInString(itemName, 'Doom_Doom') or itemName == 'Items.VHard_50_BodyCool_Weapon11'
 
         data.leftTriggerType = 'Resistance'
@@ -88,35 +114,47 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(5)(7)'
 
-        if (isDoomDoom) then
+        if (isDoomDoom or isWormhole) then
             data.rightForceTrigger = '(0)(3)(6)(7)'
         end
 
-        if (state ~= 8) then
-            CalcFixedTimeIndex(name, 0, dilated, true)
-        end
+        if (triggerType == 'FullAuto') then
+            if (state == 8) then
+                freq = GetFrequency(attackSpeed, dilated, name, true)
 
-        if (state == 8) then
-            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
+                data.leftTriggerType = 'Machine'
+                data.leftForceTrigger = '(4)(9)(1)(2)('.. freq ..')(0)'
 
-            if (isDoomDoom) then
-                data.leftForceTrigger = '(2)(3)'
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(4)(5)('.. freq ..')(0)'
+            end
+        else
+            if (state ~= 8) then
+                CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (afterShootTimes < shootTriggerActiveForTimes) then
-                data.leftTriggerType = 'Normal'
-
-                data.rightTriggerType = 'Resistance'
-                data.rightForceTrigger = '(2)(5)'
+            if (state == 8) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
 
                 if (isDoomDoom) then
-                    data.rightForceTrigger = '(2)(6)'
+                    data.leftForceTrigger = '(2)(3)'
                 end
-            end
 
-            afterShootTimes = afterShootTimes + 1
-        else
-            afterShootTimes = 0
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.leftTriggerType = 'Normal'
+
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(2)(5)'
+
+                    if (isDoomDoom or isWormhole) then
+                        data.rightForceTrigger = '(2)(6)'
+                    end
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
         end
     elseif (name == 'w_revolver_techtronika_burya') then
         data.rightTriggerType = 'Bow'
@@ -141,14 +179,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(3)(9)(5)(7)('.. freq ..')'
-    
+
                 if (isPerfectCharged) then
                     local perfectChargeTriggerActiveForTimes = CalcFixedTimeIndex(name..'perfect_charge', GetPerfectChargeDuration(), dilated, false)
-    
+
                     if (isPerfectChargedTimes < perfectChargeTriggerActiveForTimes) then
                         data.rightTriggerType = 'Machine'
                         data.rightForceTrigger = '(3)(9)(4)(4)('.. freq ..')(0)'
-    
+
                         isPerfectChargedTimes = isPerfectChargedTimes + 1
                     end
                 end

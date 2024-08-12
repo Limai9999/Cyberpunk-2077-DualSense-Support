@@ -8,7 +8,7 @@ local afterShootTimes = 0
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Shotgun')
 
-    if (state == 4 or state == 0 or state == 6) then return data end
+    if (state == 6) then return data end
 
     data.leftTriggerType = 'Resistance'
     data.leftForceTrigger = '(1)(1)'
@@ -28,6 +28,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     savedWeaponName = name
 
     if (name == 'w_shotgun_budget_carnage') then
+        -- * Modded Weapon: Game.AddToInventory("Items.SJ_PlasmaShotgun")	https://www.nexusmods.com/cyberpunk2077/mods/15889
+        local isPlasmaShotgun = FindInString(itemName, 'PlasmaShotgun')
+
+        data.skipZeroState = false
+
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(3)'
         data.rightTriggerType = 'Bow'
@@ -36,7 +41,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         local isMox = FindInString(itemName, 'Mox')
         local isGuts = FindInString(itemName, 'Edgerunners')
 
-        if (state ~= 8 and state ~= 4) then
+        if (state ~= 8 and state ~= 4 and state ~= 0) then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
@@ -53,27 +58,46 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.leftForceTrigger = '(1)(2)'
         end
 
-        if (state == 8 or state == 4) then
-            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 35, dilated, false)
+        if (state == 8 or state == 4 or state == 0) then
+            if (isPlasmaShotgun) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'840', 10, dilated, false)
 
-            if (afterShootTimes < shootTriggerActiveForTimes) then
-                data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(1)(6)'
-    
-                data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(0)(7)(8)(8)'
-    
-                if (isMox) then
-                    data.leftTriggerType = 'Resistance'
-                    data.leftForceTrigger = '(1)(4)'
-    
-                    data.rightTriggerType = 'Bow'
-                    data.rightForceTrigger = '(0)(7)(6)(6)'
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    freq = GetFrequency(30, dilated, name, true)
+
+                    if (isAiming) then
+                        data.leftTriggerType = 'Machine'
+                        data.leftForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+
+                        data.rightTriggerType = 'Bow'
+                        data.rightForceTrigger = '(0)(7)(8)(8)'
+                    else
+                        data.rightTriggerType = 'Machine'
+                        data.rightForceTrigger = '(1)(9)(5)(5)('.. freq ..')(0)'
+                    end
                 end
-    
-                if (isGuts) then
+            else
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 35, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
                     data.leftTriggerType = 'Resistance'
-                    data.leftForceTrigger = '(1)(8)'
+                    data.leftForceTrigger = '(1)(6)'
+
+                    data.rightTriggerType = 'Bow'
+                    data.rightForceTrigger = '(0)(7)(8)(8)'
+
+                    if (isMox) then
+                        data.leftTriggerType = 'Resistance'
+                        data.leftForceTrigger = '(1)(4)'
+
+                        data.rightTriggerType = 'Bow'
+                        data.rightForceTrigger = '(0)(7)(6)(6)'
+                    end
+
+                    if (isGuts) then
+                        data.leftTriggerType = 'Resistance'
+                        data.leftForceTrigger = '(1)(8)'
+                    end
                 end
             end
 
@@ -177,10 +201,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 8 or state == 4) then
-            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 30, dilated, false)
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 20, dilated, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
-                data.leftTriggerType = 'Normal'
+                if (isAiming) then
+                    data.leftTriggerType = 'Normal'
+                else
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(1)(4)'
+                end
             end
 
             afterShootTimes = afterShootTimes + 1

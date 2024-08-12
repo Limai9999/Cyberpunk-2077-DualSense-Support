@@ -32,7 +32,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     elseif (state == 18) then
         data.leftTriggerType = 'Choppy'
         data.rightTriggerType = 'Normal'
-    elseif (state == 19 or state == 20) then
+    elseif (state == 20) then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(7)'
     end

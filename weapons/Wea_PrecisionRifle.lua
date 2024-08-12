@@ -22,12 +22,18 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         if (state ~= 8) then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
-        
-        if (state == 8) then
+
+        if (state == 8 or state == 4) then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 20, dilated, false)
 
+            data.leftTriggerType = 'Resistance'
+            data.leftForceTrigger = '(1)(6)'
+
             if (afterShootTimes < shootTriggerActiveForTimes) then
-                data.leftForceTrigger = '(1)(6)'
+                data.leftTriggerType = 'Normal'
+
+                data.rightTriggerType = 'Resistance'
+                data.rightForceTrigger = '(1)(8)'
             end
 
             afterShootTimes = afterShootTimes + 1
@@ -41,6 +47,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.leftForceTrigger = '(0)(2)(5)(1)'
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(6)(3)(1)'
+
+        -- * Modded Weapon: Game.AddToInventory("Items.Achilles_Noxious")	https://www.nexusmods.com/cyberpunk2077/mods/13628?tab=description
+        local isAchillesNoxious = FindInString(itemName, 'Achilles_Noxious')
 
         local isWidowMaker = FindInString(itemName, 'Nash')
 
@@ -86,11 +95,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
                 if (isPerfectCharged) then
                     local perfectChargeTriggerActiveForTimes = CalcFixedTimeIndex(name..'perfect_charge', GetPerfectChargeDuration(-10), dilated, false)
-    
+
                     if (isPerfectChargedTimes < perfectChargeTriggerActiveForTimes) then
                         data.rightTriggerType = 'Machine'
                         data.rightForceTrigger = '(3)(9)(5)(5)('.. freq ..')(0)'
-    
+
                         isPerfectChargedTimes = isPerfectChargedTimes + 1
                     end
                 end
@@ -98,23 +107,23 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 GetChargeTrigger(name, dilated, true)
             end
 
-            if (isWidowMaker) then
+            if (isWidowMaker or isAchillesNoxious) then
                 if (state == 8) then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8widow_maker', 25, dilated, false)
-    
+
                     data.rightTriggerType = 'Resistance'
                     data.rightForceTrigger = '(2)(8)'
-    
+
                     if (afterShootTimes < shootTriggerActiveForTimes) then
                         freq = GetFrequency(8, dilated, name)
-                        
+
                         data.leftTriggerType = 'Machine'
                         data.leftForceTrigger = '(1)(9)(2)(3)('.. freq ..')(0)'
-        
+
                         data.rightTriggerType = 'Machine'
                         data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
                     end
-    
+
                     afterShootTimes = afterShootTimes + 1
                 else
                     afterShootTimes = 0
@@ -122,14 +131,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             else
                 if (state == 8) then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, dilated, false)
-    
+
                     data.rightTriggerType = 'Resistance'
                     data.rightForceTrigger = '(2)(8)'
-    
+
                     if (afterShootTimes < shootTriggerActiveForTimes) then
                         data.rightTriggerType = 'Normal'
                     end
-    
+
                     afterShootTimes = afterShootTimes + 1
                 else
                     afterShootTimes = 0
@@ -147,10 +156,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
                     freq = GetFrequency(8, dilated, name)
-                    
+
                     data.leftTriggerType = 'AutomaticGun'
                     data.leftForceTrigger = '(4)(1)('.. freq ..')'
-    
+
                     data.rightTriggerType = 'Machine'
                     data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
                 end
@@ -169,9 +178,62 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(3)(8)(6)'
 
-        if (state == 8) then
+        if (state ~= 8 or state ~= 4) then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
+
+        if (state == 8 or state == 4) then
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
+
+            data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(6)'
-            data.rightForceTrigger = '(3)(7)(8)(6)'
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                if (isAiming) then
+                    data.leftTriggerType = 'Normal'
+                else
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(1)(7)'
+                end
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
+        end
+    elseif (name == 'w_rifle_assault_arasaka_masamune') then
+        -- * Modded Weapon: Game.AddToInventory("Items.aa_masamune_02",1)	https://www.nexusmods.com/cyberpunk2077/mods/2335?tab=description
+        local isOpportunity = FindInString(itemName, 'aa_masamune_02')
+
+        if (isOpportunity) then
+            data.leftTriggerType = 'Bow'
+            data.leftForceTrigger = '(0)(1)(4)(4)'
+
+            data.rightTriggerType = 'Bow'
+            data.rightForceTrigger = '(1)(4)(7)(8)'
+
+            if (isAiming) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(5)(3)'
+            end
+
+            if (state == 8) then
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    freq = GetFrequency(attackSpeed * 2.5, dilated, name)
+
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(3)(7)'
+
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(4)(4)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
+            else
+                afterShootTimes = 0
+            end
         end
     end
 
