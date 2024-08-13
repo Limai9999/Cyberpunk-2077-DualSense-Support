@@ -89,12 +89,12 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-MicLED'), GetText('Mod-DualSense-NS-MicLED-Descr') .. ' ' .. GetText('Mod-DualSense-NS-OnlySteamDSX'), config.micLED, true, function(state)
+    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-MicLED'), GetText('Mod-DualSense-NS-MicLED-Descr'), config.micLED, true, function(state)
         config.micLED = state
         ManageSettings.saveFile(config)
     end)
 
-    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-PlayerLED'), GetText('Mod-DualSense-NS-PlayerLED-Descr') .. ' ' .. GetText('Mod-DualSense-NS-OnlySteamDSX'), config.playerLED, true, function(state)
+    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-PlayerLED'), GetText('Mod-DualSense-NS-PlayerLED-Descr'), config.playerLED, true, function(state)
         config.playerLED = state
         ManageSettings.saveFile(config)
     end)
@@ -107,7 +107,7 @@ local function SetupNativeSettings()
         playerLEDList[data.value] = data.LEDName
     end
 
-    NS.addSelectorString(extraSettings, GetText('Mod-DualSense-NS-PlayerLED-Mode'), GetText('Mod-DualSense-NS-PlayerLED-Mode-Descr') .. ' ' .. GetText('Mod-DualSense-NS-OnlySteamDSX'), playerLEDList, config.playerLEDValue, 1, function(v)
+    NS.addSelectorString(extraSettings, GetText('Mod-DualSense-NS-PlayerLED-Mode'), GetText('Mod-DualSense-NS-PlayerLED-Mode-Descr'), playerLEDList, config.playerLEDValue, 1, function(v)
         config.playerLEDValue = v
         ManageSettings.saveFile(config)
     end)
@@ -119,12 +119,12 @@ local function SetupNativeSettings()
         vehiclePlayerLEDList[data.value] = data.LEDName
     end
 
-    NS.addSelectorString(extraSettings, GetText('Mod-DualSense-NS-VehiclePlayerLED-Mode'), GetText('Mod-DualSense-NS-VehiclePlayerLED-Mode-Descr') .. ' ' .. GetText('Mod-DualSense-NS-OnlySteamDSX'), vehiclePlayerLEDList, config.vehiclePlayerLEDValue, 1, function(v)
+    NS.addSelectorString(extraSettings, GetText('Mod-DualSense-NS-VehiclePlayerLED-Mode'), GetText('Mod-DualSense-NS-VehiclePlayerLED-Mode-Descr'), vehiclePlayerLEDList, config.vehiclePlayerLEDValue, 1, function(v)
         config.vehiclePlayerLEDValue = v
         ManageSettings.saveFile(config)
     end)
 
-    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-Notifications'), GetText('Mod-DualSense-NS-Notifications-Description') .. ' ' .. GetText('Mod-DualSense-NS-OnlySteamDSX'), config.showNotifications, true, function(state)
+    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-Notifications'), GetText('Mod-DualSense-NS-Notifications-Description'), config.showNotifications, true, function(state)
         config.showNotifications = state
         ManageSettings.saveFile(config)
     end)
@@ -167,7 +167,7 @@ local function SetupNativeSettings()
     end)
 
     -- Guns
-    local gunsLoc = GetText('Mod-DualSense-NS-Subcategory-Guns')
+    local gunsLoc = GetText('UI-Filters-RangedWeapons')
     NS.addSubcategory(guns, gunsLoc)
 
     NS.addSwitch(guns, leftLoc, leftDescrLoc .. ' ' .. gunsLoc, config.gunsLT, true, function(state)
@@ -189,7 +189,7 @@ local function SetupNativeSettings()
     end)
 
     -- Melee Weapons
-    local meleeWeaponsLoc = GetText('Mod-DualSense-NS-Subcategory-Melee-Weapons')
+    local meleeWeaponsLoc = GetText('UI-Filters-MeleeWeapons')
     NS.addSubcategory(meleeWeapons, meleeWeaponsLoc)
 
     NS.addSwitch(meleeWeapons, leftLoc, leftDescrLoc .. ' ' .. meleeWeaponsLoc, config.meleeLT, true, function(state)
