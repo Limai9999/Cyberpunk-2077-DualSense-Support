@@ -3,7 +3,7 @@
 
 --gamePSM
 
-local function GetState(stateType)
+local function GetState(stateType, enumString)
     local state = 0
 
     local bbSystem = Game.GetBlackboardSystem()
@@ -14,8 +14,15 @@ local function GetState(stateType)
 
     local psmBB = bbSystem:GetLocalInstanced(GetPlayer():GetEntityID(), bbDefs.PlayerStateMachine)
     state = psmBB:GetInt(bbDefs.PlayerStateMachine[stateType])
-    -- print("GetState: " .. stateType .. " = " .. state)
-    return state
+
+    if (enumString) then
+        local stateString = EnumValueToString(enumString, state)
+        if (not stateString) then return state end
+
+        return stateString
+    else
+        return state
+    end
 end
 
 return GetState

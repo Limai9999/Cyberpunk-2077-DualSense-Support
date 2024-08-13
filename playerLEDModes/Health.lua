@@ -4,7 +4,7 @@ local function PlayerLEDMode(data, nUI)
 
     if nUI then return data end
     if not (data.overwritePlayerLED) then return data end
-    
+
     local playerId = GetPlayer():GetEntityID()
     local fullHealthValue = Game.GetStatsSystem():GetStatValue(playerId, 'Health')
     local healthValue = Game.GetStatPoolsSystem():GetStatPoolValue(playerId, Enum.new('gamedataStatPoolType', 'Health'), false);

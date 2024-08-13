@@ -9,33 +9,33 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(0)(1)(7)(5)'
 
-    if (state == 6 or state == 7) then
+    if (state == 'Hold' or state == 'ChargedHold') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(6)(4)(5)'
-    elseif (state == 8) then
+    elseif (state == 'Block') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(2)(4)(4)'
-    elseif (state == 12) then
+    elseif (state == 'FinalAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(8)(5)'
-    elseif (state == 13) then
+    elseif (state == 'StrongAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(6)(4)(7)'
-    elseif (state == 14) then
+    elseif (state == 'SafeAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(4)(4)(6)'
-    elseif (state == 15) then
+    elseif (state == 'BlockAttack') then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(2)'
 
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(2)(4)(4)'
-    elseif (state == 18) then
+    elseif (state == 'JumpAttack') then
         data.leftTriggerType = 'Choppy'
         data.rightTriggerType = 'Normal'
     end
 
-    if (state == 20) then
+    if (state == 'DeflectAttack') then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(6)'
     end

@@ -14,22 +14,22 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(0)(3)(4)(4)'
 
-    if (state ~= 9) then
+    if (state ~= 'Targeting') then
         flipTriggerActive = false
         savedFlipTriggerTimes = 0
     end
 
     if (name == 'w_melee_one_hand_blunt') then
-        if (state ~= 9 and state ~= 19) then
+        if (state ~= 'Targeting' and state ~= 'ThrowAttack') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
         
-        if (state == 7 or state == 13) then
+        if (state == 'ChargedHold' or state == 'StrongAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(2)(7)(1)(6)'
         end
 
-        if (state == 9) then
+        if (state == 'Targeting') then
             local maxFlipTriggerTimes = CalcFixedTimeIndex(name..'9', 30, dilated, false)
 
             if (not flipTriggerActive) then flipTriggerActive = true end
@@ -49,17 +49,17 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             end
         end
 
-        if (state == 11) then
+        if (state == 'ComboAttack') then
             data.rightTriggerType = 'Resistance'
             data.rightForceTrigger = '(0)(2)'
         end
 
-        if (state == 12) then
+        if (state == 'FinalAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(4)(6)(6)'
         end
 
-        if (state == 19) then
+        if (state == 'ThrowAttack') then
             local throwTriggerActiveForTimes = CalcFixedTimeIndex(name..'19', 40, dilated, false)
 
             if (timesAfterThrow < throwTriggerActiveForTimes) then

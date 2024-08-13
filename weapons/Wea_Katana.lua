@@ -27,7 +27,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             data.rightForceTrigger = '(0)(2)(1)(1)'
         end
 
-        if (state ~= 15 and state ~= 12 and state ~= 18 and state ~= 16) then
+        if (state ~= 'BlockAttack' and state ~= 'FinalAttack' and state ~= 'JumpAttack' and state ~= 'SprintAttack') then
             CalcFixedTimeIndex(name, 0, dilated, true)
             afterShootTimes = 0
         else
@@ -41,14 +41,14 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             if (isGhostBlade) then data.rightForceTrigger = '(0)(4)(1)(1)' end
         end
 
-        if (state == 7 or state == 13) then
+        if (state == 'ChargedHold' or state == 'StrongAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(6)(2)(6)'
 
             if (isGhostBlade) then data.rightForceTrigger = '(0)(6)(1)(4)' end
         end
 
-        if (state == 18) then
+        if (state == 'JumpAttack') then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'12', 30, dilated, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -61,21 +61,21 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             afterShootTimes = afterShootTimes + 1
         end
 
-        if (state == 10) then
+        if (state == 'Deflect') then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(0)(2)'
 
             if (isGhostBlade) then data.leftForceTrigger = '(0)(1)' end
         end
 
-        if (state == 11) then
+        if (state == 'ComboAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(4)(2)(1)'
 
             if (isGhostBlade) then data.rightForceTrigger = '(0)(2)(3)(1)' end
         end
 
-        if (state == 12) then
+        if (state == 'FinalAttack') then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'12', 20, dilated, false)
 
             data.rightTriggerType = 'Bow'
@@ -91,7 +91,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             end
         end
 
-        if (state == 15) then
+        if (state == 'BlockAttack') then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'15', 20, dilated, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -104,7 +104,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             afterShootTimes = afterShootTimes + 1
         end
 
-        if (state == 16) then
+        if (state == 'SprintAttack') then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'15', 20, dilated, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -117,7 +117,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             afterShootTimes = afterShootTimes + 1
         end
 
-        if (state == 20) then
+        if (state == 'DeflectAttack') then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(2)(6)'
 

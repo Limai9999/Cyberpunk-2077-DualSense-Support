@@ -13,23 +13,23 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
 
     if (isAiming) then
         data.rightForceTrigger = '(0)(2)(4)(6)'
-        if (stamina == 2) then data.rightForceTrigger = '(0)(2)(6)(8)' end
+        if (stamina == 'Exhausted') then data.rightForceTrigger = '(0)(2)(6)(8)' end
     end
 
-    if (stamina == 2) then
+    if (stamina == 'Exhausted') then
         data.leftTriggerType = 'Bow'
         data.leftForceTrigger = '(0)(2)(5)(4)'
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(2)(8)(8)'
     end
 
-    if (state == 6) then
+    if (state == 'Hold') then
         data.rightTriggerType = 'Resistance'
         data.rightForceTrigger = '(2)(4)'
-        if (stamina == 2) then data.rightForceTrigger = '(2)(6)' end
+        if (stamina == 'Exhausted') then data.rightForceTrigger = '(2)(6)' end
     end
 
-    if (state == 7) then
+    if (state == 'ChargedHold') then
         if (canPerformRelicAttack) then
             local freq = GetChargeTrigger(name, false, false, 0.3, 10, 30)
             data.rightTriggerType = 'Galloping'
@@ -43,18 +43,18 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         GetChargeTrigger(name, false, true)
     end
 
-    if (state == 13) then
+    if (state == 'StrongAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(2)(1)(7)'
 
-        if (stamina == 2) then data.rightForceTrigger = '(0)(2)(3)(8)' end
+        if (stamina == 'Exhausted') then data.rightForceTrigger = '(0)(2)(3)(8)' end
     end
 
-    if (state == 11) then
+    if (state == 'ComboAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(5)(2)(3)'
 
-        if (stamina == 2) then data.rightForceTrigger = '(0)(6)(4)(5)' end
+        if (stamina == 'Exhausted') then data.rightForceTrigger = '(0)(6)(4)(5)' end
 
         if (canPerformRelicAttack) then
             local freq = GetChargeTrigger(name, false, false, 0.3, 8, 20)
@@ -63,18 +63,18 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         end
     end
 
-    if (state == 12 or state == 14 or (state == 13 and canPerformRelicAttack)) then
+    if (state == 'FinalAttack' or state == 'SafeAttack' or (state == 'StrongAttack' and canPerformRelicAttack)) then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(8)(1)(8)'
-        if (stamina == 2) then data.rightForceTrigger = '(0)(8)(3)(8)' end
+        if (stamina == 'Exhausted') then data.rightForceTrigger = '(0)(8)(3)(8)' end
     end
 
-    if (state == 15) then
+    if (state == 'BlockAttack') then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(4)'
     end
 
-    if (state == 20) then
+    if (state == 'DeflectAttack') then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(7)'
     end

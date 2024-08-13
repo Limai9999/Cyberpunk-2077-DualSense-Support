@@ -99,7 +99,7 @@ local function StartObservers()
     Observe('gameObject', 'OnHit', function (_, hitEvent)
         if (hitEvent.attackData.attackType ~= gamedataAttackType.Melee and hitEvent.attackData.attackType ~= gamedataAttackType.StrongMelee) then return end
         if (not hitEvent.attackData.source:IsPlayerControlled()) then return end
-        
+
         IsPlayerHitEntity = true
         IsPlayerHitEntityStrong = hitEvent.attackData.attackType == gamedataAttackType.StrongMelee
     end)
@@ -130,7 +130,7 @@ local function StartObservers()
     -- Observe('animationPlayer', 'PlayOrPause', function (this, evt)
     --     print('PlayOrPause', this.animName)
     -- end)
-    
+
     -- Observe('animationPlayer', 'PlayOrStop', function (this, evt)
     --     print('PlayOrStop', this.animName)
     -- end)

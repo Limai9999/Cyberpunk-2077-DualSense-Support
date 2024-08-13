@@ -7,7 +7,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(0)(4)(5)(4)'
 
-    if (state == 7) then
+    if (state == 'Overheat') then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(8)'
 
@@ -16,8 +16,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(4)(9)(3)(4)('.. freq ..')'
     end
 
-    if (state == 8 or state == 'turretShooting') then
-        if (state == 8) then
+    if (state == 'Shoot' or state == 'turretShooting') then
+        if (state == 'Shoot') then
             data.leftTriggerType = 'Galloping'
             data.leftForceTrigger = '(4)(9)(2)(3)(2)'
         end
@@ -31,7 +31,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(6)(6)'
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             freq = GetFrequency(2, dilated, name)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'

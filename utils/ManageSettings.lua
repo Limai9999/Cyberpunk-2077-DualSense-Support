@@ -121,7 +121,7 @@ function SetupFolder(f, folder, defValue, putData, isVeh)
     end
 end
 
-function Settings.backwardCompatibility()
+function Settings.backwardsCompatibility()
     local f = Settings.openFile()
 
     for k, e in pairs(defaultConfig) do
@@ -181,7 +181,7 @@ function Settings.RedoConfig()
     DATA = {}
     Settings.RemoveConfig()
     Settings.CreateDefault()
-    Settings.backwardCompatibility()
+    Settings.backwardsCompatibility()
 end
 
 return Settings

@@ -10,28 +10,28 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     local state = GetState('MeleeWeapon')
 
     if (name == 'w_melee_knife') then
-        if (state ~= 19) then
+        if (state ~= 'ThrowAttack') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state == 7 or state == 13 or state == 18) then
+        if (state == 'ChargedHold' or state == 'StrongAttack' or state == 'JumpAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(5)(4)(4)'
-        elseif (state == 6) then
+        elseif (state == 'Hold') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(3)(5)(3)'
-        elseif (state == 14) then
+        elseif (state == 'SafeAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(4)(6)(6)'
-        elseif (state == 17) then
+        elseif (state == 'CrouchAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(5)(4)(6)'
-        elseif (state == 20) then
+        elseif (state == 'DeflectAttack') then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(2)(6)'
         end
 
-        if (state == 19) then
+        if (state == 'ThrowAttack') then
             local throwTriggerActiveForTimes = CalcFixedTimeIndex(name..'19', 40, dilated, false)
 
             if (timesAfterThrow < throwTriggerActiveForTimes) then

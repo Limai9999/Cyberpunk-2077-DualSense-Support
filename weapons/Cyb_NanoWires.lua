@@ -12,15 +12,15 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     local stamina = GetState('Stamina')
     local state = GetState('MeleeWeapon');
 
-    if (state ~= 6 and state ~= 10 and state ~= 15 and state ~= 7 and state ~= 13) then GetChargeTrigger(name, false, true) end
+    if (state ~= 'Hold' and state ~= 'Deflect' and state ~= 'BlockAttack' and state ~= 'ChargedHold' and state ~= 'StrongAttack') then GetChargeTrigger(name, false, true) end
 
-    if (stamina == 2) then
+    if (stamina == 'Exhausted') then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(3)'
         data.rightForceTrigger = '(0)(3)(7)(8)'
     end
 
-    if (state == 6) then
+    if (state == 'Hold') then
         if (hasRelicPerk and hasMonoWireQuickHack) then
             local freq = GetChargeTrigger(name, false, false, 0.3, 8, 30)
 
@@ -34,18 +34,18 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         end
     end
 
-    if (state == 7 or state == 13) then
+    if (state == 'ChargedHold' or state == 'StrongAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(7)(2)(7)'
 
-        if (canPerformRelicAttack and state == 7) then
+        if (canPerformRelicAttack and state == 'ChargedHold') then
             local freq = GetChargeTrigger(name, false, false, 0.3, 5, 35)
 
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(2)(9)(3)(4)('.. freq ..')'
         end
 
-        if (canPerformRelicAttack and state == 13) then
+        if (canPerformRelicAttack and state == 'StrongAttack') then
             local freq = GetChargeTrigger(name, false, false, -0.5, 35, 35)
 
             data.rightTriggerType = 'Galloping'
@@ -53,30 +53,30 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         end
     end
 
-    if (state == 10) then
+    if (state == 'Deflect') then
         local freq = GetChargeTrigger(name, false, false, 0.3, 4)
 
         data.leftTriggerType = 'Galloping'
         data.leftForceTrigger = '(2)(9)(1)(2)('.. freq ..')'
     end
 
-    if (state == 8) then
+    if (state == 'Block') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(3)(6)(7)'
-        if (stamina == 2) then data.rightForceTrigger = '(0)(3)(7)(8)' end
+        if (stamina == 'Exhausted') then data.rightForceTrigger = '(0)(3)(7)(8)' end
     end
 
-    if (state == 11) then
+    if (state == 'ComboAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(6)(1)(4)'
     end
 
-    if (state == 12) then
+    if (state == 'FinalAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(7)(2)(8)'
     end
 
-    if (state == 15) then
+    if (state == 'BlockAttack') then
         local freq = GetChargeTrigger(name, false, false, 0.5, 20)
 
         data.leftTriggerType = 'Resistance'
@@ -86,12 +86,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         data.rightForceTrigger = '(4)(9)(2)(3)('.. freq ..')'
     end
 
-    -- if (state == 6) then
-    --   data.rightTriggerType = 'Bow'
-    --   data.rightForceTrigger = '(1)(5)(7)(7)'
-    -- end
-
-    if (state == 20) then
+    if (state == 'DeflectAttack') then
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(2)(7)'
     end

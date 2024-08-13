@@ -4,7 +4,7 @@ local startedHandlingChangeDate = 0
 local function HandleZoneChange()
     -- ! TODO: HELP: SOS: I'm unable to find a way to check if player is in SAFE zone. Now: Safe = Public
 
-    local currentZone = EnumValueToString('gamePSMZones', GetState('Zones'))
+    local currentZone = GetState('Zones', 'gamePSMZones')
 
     if (currentZone == 'Any' or currentZone == 'Default') then return false end
 

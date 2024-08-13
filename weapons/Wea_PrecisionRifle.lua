@@ -19,11 +19,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(7)(8)'
 
-        if (state ~= 8) then
+        if (state ~= 'Shoot') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state == 8 or state == 4) then
+        if (state == 'Shoot' or state == 'NoAmmo') then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 20, dilated, false)
 
             data.leftTriggerType = 'Resistance'
@@ -59,14 +59,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (triggerType == 'SemiAuto') then
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(1)(6)(3)(4)'
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8semi_auto', 20, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -81,11 +81,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (triggerType == 'Charge') then
-            if (state ~= 8 and not isPerfectCharged) then
+            if (state ~= 'Shoot' and not isPerfectCharged) then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 1) then
+            if (state == 'Charging') then
                 data.leftTriggerType = 'Galloping'
                 data.leftForceTrigger = '(3)(9)(1)(2)(3)'
 
@@ -108,7 +108,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
 
             if (isWidowMaker or isAchillesNoxious) then
-                if (state == 8) then
+                if (state == 'Shoot') then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8widow_maker', 25, dilated, false)
 
                     data.rightTriggerType = 'Resistance'
@@ -129,7 +129,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                     afterShootTimes = 0
                 end
             else
-                if (state == 8) then
+                if (state == 'Shoot') then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, dilated, false)
 
                     data.rightTriggerType = 'Resistance'
@@ -147,11 +147,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (triggerType == 'Burst') then
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -178,11 +178,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(3)(8)(6)'
 
-        if (state ~= 8 or state ~= 4) then
+        if (state ~= 'Shoot' or state ~= 'NoAmmo') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state == 8 or state == 4) then
+        if (state == 'Shoot' or state == 'NoAmmo') then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
 
             data.leftTriggerType = 'Resistance'
@@ -217,7 +217,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.leftForceTrigger = '(5)(3)'
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then

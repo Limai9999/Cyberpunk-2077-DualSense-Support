@@ -20,7 +20,6 @@ PulseLED = require('utils/PulseLED')
 CheckDataFromDSX = require('utils/CheckDataFromDSX')
 ShowBatteryLevel = require('utils/ShowBatteryLevel')
 SaveFile = require('utils/SaveFile')
-IsMagazineEmpty = require('utils/IsMagazineEmpty')
 LoadFolder = require('utils/LoadFolder')
 SetupNativeSettings = require('utils/SetupNativeSettings')
 CheckRGB = require('utils/CheckRGB')
@@ -158,7 +157,7 @@ end
 
 registerForEvent('onInit', function()
     ManageSettings.CreateDefault()
-    ManageSettings.backwardCompatibility()
+    ManageSettings.backwardsCompatibility()
 
     GameLanguage = NameToString(GameSettings.Get('/language/OnScreen'))
 
@@ -313,7 +312,7 @@ registerForEvent('onUpdate', function(delta)
         overwritePlayerLED = true,
         canUseWeaponReloadEffect = true,
         canUseNoAmmoWeaponEffect = true,
-        skipZeroState = true,
+        skipDefaultState = true,
         overrideDefault = true,
         vehicleModeIndex = 0,
         vehicleUseTwitchingCollisionTrigger = false,
@@ -481,10 +480,10 @@ registerForEvent('onUpdate', function(delta)
 
     if (controlledVehicle) then vehicle = controlledVehicle end
 
-    local state = GetState('Vehicle')
+    local vehicleState = GetState('Vehicle', 'gamePSMVehicle')
 
     if (vehicle ~= nil and vehicle:IsPlayerDriver()) then
-        if (state == 4) then
+        if (vehicleState == 'Transition') then
             data.leftTriggerType = 'Choppy'
             data.rightTriggerType = 'Choppy'
 
@@ -563,7 +562,7 @@ registerForEvent('onUpdate', function(delta)
                 data.playerLED = prevPlayerLED
                 data.playerLEDNewRevision = prevPlayerLEDNewRevision
             end
-            SaveFile('vehicle', data, '', '', vehType.name..state)
+            SaveFile('vehicle', data, '', '', vehType.name..vehicleState)
         else
             if (isDestroyed and not isFlying) then
                 local freq = GetFrequency(30, isTimeDilated, 'vehicleDestroyed')
@@ -742,15 +741,13 @@ registerForEvent('onUpdate', function(delta)
 
             local weapon = WeaponsList[weaponType]
 
-            local weaponState = 0
+            local weaponState = 'Default'
 
             if (isShooting) then weaponState = 'turretShooting' end
 
             local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, false, attackSpeed)
             data = weaponObj
         elseif (gameObjName == 'SniperNest') then
-            local isShooting = entity.isShootingOngoing
-
             if (isShooting) then
                 local freq = GetFrequency(1, false, gameObjName)
                 data.rightTriggerType = 'AutomaticGun'
@@ -801,7 +798,7 @@ registerForEvent('onUpdate', function(delta)
             -- (thanks to keanuWheeze) getting type of equipped weapon, full list of game item types: https://nativedb.red4ext.com/gamedataItemType
             local itemId = usingWeapon:GetItemID()
             weaponType = usingWeapon.GetWeaponType(itemId).value
-            itemName = usingWeapon.weaponRecord:GetRecordID().value
+            if (usingWeapon.weaponRecord) then itemName = usingWeapon.weaponRecord:GetRecordID().value end
             isMeleeWeapon = usingWeapon.isMeleeWeapon
             isCyberwareWeapon = usingWeapon.IsCyberwareWeapon(itemId)
             triggerType = usingWeapon:GetCurrentTriggerMode():Name()
@@ -816,8 +813,8 @@ registerForEvent('onUpdate', function(delta)
     end
 
     local weapon = WeaponsList[weaponType]
-    local stamina = GetState('Stamina')
-    local weaponState = GetState('Weapon')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
+    local weaponState = GetState('Weapon', 'gamePSMRangedWeaponStates')
     local isWeaponGlitched = IsWeaponGlitched()
     local isSecondaryMode = IsWeaponSecondaryModeApplied()
 
@@ -862,9 +859,9 @@ registerForEvent('onUpdate', function(delta)
         weapon = WeaponsList['default']
         weaponType = 'default'
     end
-    if (weaponState == 6) then weaponState = 4 end
+    if (weaponState == 'Safe') then weaponState = 'NoAmmo' end
 
-    if (config.showWeaponStates) then print(weaponType, weaponName, itemName, isMeleeWeapon and GetState('MeleeWeapon') or GetState('Weapon'), triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged, isSecondaryMode) end
+    if (config.showWeaponStates) then print(weaponType, weaponName, itemName, isMeleeWeapon and GetState('MeleeWeapon', 'gamePSMMeleeWeapon') or weaponState, triggerType, stamina, data.canUseNoAmmoWeaponEffect, data.canUseWeaponReloadEffect, isWeaponGlitched, 1 / cycleTime, isPerfectCharged, isSecondaryMode) end
 
     local weaponObj = weapon(data, weaponName, isAiming, weaponState, isTimeDilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName, isSecondaryMode)
 
@@ -882,7 +879,7 @@ registerForEvent('onUpdate', function(delta)
 
     -- Smart weapons lock trigger effect
     if (config.gunsSmartLockOnTrigger) then
-        if (weaponEvolution == 'Smart' and isAiming and weaponState == 5 and HasLockedOnEnemyUsingSmartWeapon) then
+        if (weaponEvolution == 'Smart' and isAiming and weaponState == 'Ready' and HasLockedOnEnemyUsingSmartWeapon) then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(weaponName..'HasLockedOnEnemyUsingSmartWeapon', 10, isTimeDilated, false)
 
             if (appliedTriggerTimes < shootTriggerActiveForTimes) then
@@ -913,7 +910,7 @@ registerForEvent('onUpdate', function(delta)
         sendingWeaponType = sendingWeaponType .. 'IsAiming'
     end
 
-    if (weaponState == 4 and data.canUseNoAmmoWeaponEffect) then weaponState = 0 end
+    if (weaponState == 'NoAmmo' and data.canUseNoAmmoWeaponEffect) then weaponState = 'Default' end
 
     if (weaponType ~= 'default') then
         local magazineAmmo = usingWeapon:GetMagazineAmmoCount()
@@ -921,8 +918,8 @@ registerForEvent('onUpdate', function(delta)
             data.canUseWeaponReloadEffect = true
         end
 
-        if ((weaponState == 0 and not isMeleeWeapon and not isCyberwareWeapon) or weaponState == 6 or weaponState == 3 or (weaponState == 2 and data.canUseWeaponReloadEffect)) then
-            if ((not isMeleeWeapon and not isCyberwareWeapon and magazineAmmo == 0 and weaponState == 0) or not data.skipZeroState and weaponState == 0) then -- bored to write reversed condition lol
+        if ((weaponState == 'Default' and not isMeleeWeapon and not isCyberwareWeapon) or weaponState == 'Safe' or weaponState == 'QuickMelee' or (weaponState == 'Reload' and data.canUseWeaponReloadEffect)) then
+            if ((not isMeleeWeapon and not isCyberwareWeapon and magazineAmmo == 0 and weaponState == 'Default') or not data.skipDefaultState and weaponState == 'Default') then -- bored to write reversed condition lol
             else
                 weaponObj.rightTriggerType = 'Normal'
                 sendingWeaponType = sendingWeaponType .. 'skipState'
@@ -931,9 +928,9 @@ registerForEvent('onUpdate', function(delta)
     end
 
     if (not isMeleeWeapon and usingWeapon ~= nil and data.canUseNoAmmoWeaponEffect) then
-        local isEmpty = IsMagazineEmpty(usingWeapon)
+        local isEmpty = usingWeapon:IsMagazineEmpty()
 
-        if (isEmpty and weaponState ~= 2) then
+        if (isEmpty and weaponState ~= 'Reload') then
             sendingWeaponType = sendingWeaponType .. 'NoAmmo'
 
             weaponObj.rightTriggerType = 'SemiAutomaticGun'

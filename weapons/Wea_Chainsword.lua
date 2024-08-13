@@ -10,18 +10,18 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(0)(3)(5)(5)'
 
-    if (state == 8 or state == 10 or state == 7 or state == 15) then
-        if (state == 7) then
+    if (state == 'Block' or state == 'Deflect' or state == 'ChargedHold' or state == 'BlockAttack') then
+        if (state == 'ChargedHold') then
             local freq = GetChargeTrigger(name..'7', dilated, false, 0.4, 5, 20)
 
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(1)(9)(3)(3)('.. freq ..')(0)'
-        elseif (state == 15) then
+        elseif (state == 'BlockAttack') then
             local freq = GetChargeTrigger(name..'15', dilated, false, -1, 30, 30)
 
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(1)(9)(4)(4)('.. freq ..')(0)'
-        elseif (state == 8 or state == 10) then
+        elseif (state == 'Block' or state == 'Deflect') then
             local freq = GetChargeTrigger(name..'810', dilated, false, 0.1, 2, 10)
 
             data.leftTriggerType = 'Machine'
@@ -31,16 +31,16 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         GetChargeTrigger(name, dilated, true)
     end
 
-    if (state == 6) then
+    if (state == 'Hold') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(6)(7)(7)'
-    elseif (state == 13) then
+    elseif (state == 'StrongAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(6)(7)(3)'
-    elseif (state == 14) then
+    elseif (state == 'SafeAttack') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(4)(7)(8)'
-    elseif (state == 18) then
+    elseif (state == 'JumpAttack') then
         data.leftTriggerType = 'Choppy'
         data.rightTriggerType = 'Normal'
     end

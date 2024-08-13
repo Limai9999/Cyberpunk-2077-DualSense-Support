@@ -21,35 +21,35 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
             if (isSasquatchHammer) then data.rightForceTrigger = '(0)(2)(6)(7)' end
         end
 
-        if (state == 8) then
+        if (state == 'Block') then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(2)(3)'
 
             if (isSasquatchHammer) then data.leftForceTrigger = '(2)(4)' end
         end
 
-        if (state == 10) then
+        if (state == 'Deflect') then
             data.rightTriggerType = 'Resistance'
             data.rightForceTrigger = '(0)(5)'
 
             if (isSasquatchHammer) then data.rightForceTrigger = '(0)(6)' end
         end
 
-        if (state == 7 or state == 13) then
+        if (state == 'ChargedHold' or state == 'StrongAttack') then
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(5)(5)(7)'
 
             if (isSasquatchHammer) then data.rightForceTrigger = '(0)(5)(6)(8)' end
         end
 
-        if (state == 15) then
+        if (state == 'BlockAttack') then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(2)(6)'
 
             if (isSasquatchHammer) then data.leftForceTrigger = '(2)(7)' end
         end
 
-        if (state == 20) then
+        if (state == 'DeflectAttack') then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(7)'
 

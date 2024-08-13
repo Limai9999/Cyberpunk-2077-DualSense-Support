@@ -8,7 +8,7 @@ local afterShootTimes = 0
 local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Shotgun')
 
-    if (state == 6) then return data end
+    if (state == 'Safe') then return data end
 
     data.leftTriggerType = 'Resistance'
     data.leftForceTrigger = '(1)(1)'
@@ -20,7 +20,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     data.canUseWeaponReloadEffect = false
     data.canUseNoAmmoWeaponEffect = false
 
-    if (savedWeaponName ~= name or state ~= 8) then
+    if (savedWeaponName ~= name or state ~= 'Shoot') then
         resistanceEnabled = true
         resistanceTimes = 0
     end
@@ -31,7 +31,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         -- * Modded Weapon: Game.AddToInventory("Items.SJ_PlasmaShotgun")	https://www.nexusmods.com/cyberpunk2077/mods/15889
         local isPlasmaShotgun = FindInString(itemName, 'PlasmaShotgun')
 
-        data.skipZeroState = false
+        data.skipDefaultState = false
 
         data.leftTriggerType = 'Resistance'
         data.leftForceTrigger = '(1)(3)'
@@ -41,7 +41,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         local isMox = FindInString(itemName, 'Mox')
         local isGuts = FindInString(itemName, 'Edgerunners')
 
-        if (state ~= 8 and state ~= 4 and state ~= 0) then
+        if (state ~= 'Shoot' and state ~= 'NoAmmo' and state ~= 'Default') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
@@ -58,7 +58,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.leftForceTrigger = '(1)(2)'
         end
 
-        if (state == 8 or state == 4 or state == 0) then
+        if (state == 'Shoot' or state == 'NoAmmo' or state == 'Default') then
             if (isPlasmaShotgun) then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'840', 10, dilated, false)
 
@@ -109,7 +109,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(3)(5)(5)'
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             freq = GetFrequency(attackSpeed, dilated, name)
             data.leftTriggerType = 'Machine'
             data.leftForceTrigger = '(2)(9)(2)(2)('.. freq ..')(0)'
@@ -124,11 +124,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         local isBaXingChong = FindInString(itemName, 'Eight_Star')
 
-        if (state ~= 8 and state ~= 4) then
+        if (state ~= 'Shoot' and state ~= 'NoAmmo') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state == 8 or state == 4) then
+        if (state == 'Shoot' or state == 'NoAmmo') then
             data.leftForceTrigger = '(1)(6)'
             data.rightForceTrigger = '(1)(6)(8)(8)'
 
@@ -158,7 +158,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(2)(6)(6)'
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             if (dilated) then
                 freq = GetFrequency(attackSpeed + 1, dilated, name, true)
             else
@@ -196,11 +196,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(1)(4)(7)(4)'
         end
 
-        if (state ~= 8 and state ~= 4) then
+        if (state ~= 'Shoot' and state ~= 'NoAmmo') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state == 8 or state == 4) then
+        if (state == 'Shoot' or state == 'NoAmmo') then
             local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84', 20, dilated, false)
 
             if (afterShootTimes < shootTriggerActiveForTimes) then

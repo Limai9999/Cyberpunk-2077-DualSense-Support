@@ -29,11 +29,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(1)(4)(5)(6)'
 
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 16, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -57,11 +57,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(1)(4)(3)(6)'
 
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 16, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -88,11 +88,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(0)(4)(5)(4)'
 
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 15, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -129,18 +129,18 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                     data.rightTriggerType = 'Bow'
                     data.rightForceTrigger = '(1)(4)(3)(2)'
 
-                    if (state == 8) then
+                    if (state == 'Shoot') then
                         data.leftTriggerType = 'Normal'
                         data.rightTriggerType = 'Bow'
                         data.rightForceTrigger = '(1)(5)(4)(3)'
                     end
                 end
             elseif (isDeathAndTaxes) then
-                if (state ~= 8) then
+                if (state ~= 'Shoot') then
                     CalcFixedTimeIndex(name, 0, dilated, true)
                 end
 
-                if (state == 8) then
+                if (state == 'Shoot') then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'84burst', 20, dilated, false)
 
                     if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -159,11 +159,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                     afterShootTimes = 0
                 end
             else
-                if (state ~= 8 or state ~= 4) then
+                if (state ~= 'Shoot' or state ~= 'NoAmmo') then
                     CalcFixedTimeIndex(name, 0, dilated, true)
                 end
 
-                if (state == 8 or state == 4) then
+                if (state == 'Shoot' or state == 'NoAmmo') then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
 
                     if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -225,7 +225,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (triggerType == 'Charge') then
-            if (state == 1) then
+            if (state == 'Charging') then
                 freq = GetChargeTrigger(name, dilated, false, 0.4, 2, 15)
                 data.rightTriggerType = 'Galloping'
                 data.rightForceTrigger = '(3)(9)(1)(2)('.. freq ..')'
@@ -233,11 +233,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 GetChargeTrigger(name, dilated, true)
             end
 
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -255,7 +255,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (triggerType == 'FullAuto') then
-            if (state == 8) then
+            if (state == 'Shoot') then
                 freq = GetFrequency(attackSpeed, dilated, name, true)
 
                 data.leftTriggerType = 'Machine'
@@ -284,7 +284,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(2)(4)(1)(3)'
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 if (triggerType == 'Burst') then
                     freq = GetFrequency(attackSpeed - 1, dilated, name)
                 else
@@ -321,7 +321,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightTriggerType = 'Bow'
             data.rightForceTrigger = '(1)(4)(7)(5)'
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 freq = GetFrequency(attackSpeed, dilated, name)
                 data.rightTriggerType = 'AutomaticGun'
                 data.rightForceTrigger = '(5)(6)('.. freq ..')'
@@ -331,7 +331,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(3)(4)'
 
-        local canUseFireTrigger = true
+        local canUseShootTrigger = true
         local initialFrequency = 0
 
         local isVooDoo = FindInString(itemName, 'VooDoo')
@@ -343,7 +343,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             local chaoUsedFireTriggerTimesEnd = CalcTimeIndex(55)
 
             if (chaoUsedFireTriggerTimes >= chaoUsedFireTriggerTimesStart and chaoUsedFireTriggerTimes <= chaoUsedFireTriggerTimesEnd) then
-                canUseFireTrigger = false
+                canUseShootTrigger = false
             end
 
             if (chaoUsedFireTriggerTimes > chaoUsedFireTriggerTimesEnd) then
@@ -356,7 +356,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             local chaoUsedFireTriggerTimesEnd = CalcTimeIndex(70)
 
             if (chaoUsedFireTriggerTimes >= chaoUsedFireTriggerTimesStart and chaoUsedFireTriggerTimes <= chaoUsedFireTriggerTimesEnd) then
-                canUseFireTrigger = false
+                canUseShootTrigger = false
             end
 
             if (chaoUsedFireTriggerTimes > chaoUsedFireTriggerTimesEnd) then
@@ -364,13 +364,13 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             chaoUsedFireTriggerTimes = chaoUsedFireTriggerTimes + 1
         else
             chaoUsedFireTriggerTimes = 0
         end
 
-        if (state == 8 and canUseFireTrigger) then
+        if (state == 'Shoot' and canUseShootTrigger) then
             if (dilated) then
                 freq = GetFrequency(initialFrequency + 2, dilated, name)
             else
@@ -387,7 +387,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(0)(4)(6)(8)'
 
-        if (state == 1) then
+        if (state == 'Charging') then
             freq = GetChargeTrigger(name, dilated, false, 0.4, 2, 15)
             data.rightTriggerType = 'Galloping'
             data.rightForceTrigger = '(3)(9)(1)(2)('.. freq ..')'
@@ -395,7 +395,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             GetChargeTrigger(name, dilated, true)
         end
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(2)(5)'
 
@@ -415,11 +415,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         local healthPercentage = healthValue / fullHealthValue
         local isLowHealth = healthPercentage < 0.25
 
-        if (not isPerfectCharged and state ~= 8 and state ~= 4 and not isAmbition and not HasSentQuickHackUsingWeapon) then
+        if (not isPerfectCharged and state ~= 'Shoot' and state ~= 'NoAmmo' and not isAmbition and not HasSentQuickHackUsingWeapon) then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state == 1) then
+        if (state == 'Charging') then
             data.rightTriggerType = 'Galloping'
 
             if (dilated) then
@@ -443,7 +443,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             GetChargeTrigger(name, dilated, true)
         end
 
-        if (state == 8 or state == 4) then
+        if (state == 'Shoot' or state == 'NoAmmo') then
             if (isAiming) then
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(4)(1)'
@@ -522,7 +522,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
     elseif (name == 'w_handgun_militech_omaha') then
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(7)(5)'
-        if (state == 1) then
+        if (state == 'Charging') then
             freq = GetChargeTrigger(name, dilated, false, 0.1, 4, 20)
 
             data.leftTriggerType = 'Machine'
@@ -533,7 +533,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             GetChargeTrigger(name, dilated, true)
         end
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             if (triggerType == 'Charge') then
                 freq = GetFrequency(20, dilated, name)
                 data.leftTriggerType = 'Machine'
@@ -552,11 +552,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         if (isKongou) then data.rightForceTrigger = '(2)(4)(4)(4)' end
 
-        if (state ~= 8) then
+        if (state ~= 'Shoot') then
             CalcFixedTimeIndex(name, 0, dilated, true)
         end
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             if (isKongou) then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 12, false, false)
 
@@ -587,14 +587,14 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightForceTrigger = '(2)(4)(6)(5)'
 
         if (triggerType == 'SemiAuto') then
-            if (state == 8) then
+            if (state == 'Shoot') then
                 data.rightTriggerType = 'Bow'
                 data.rightForceTrigger = '(4)(8)(2)(4)'
             end
         end
 
         if (triggerType == 'Charge' or triggerType == 'FullAuto') then
-            if (state == 1) then
+            if (state == 'Charging') then
                 data.rightTriggerType = 'Galloping'
 
                 if (dilated) then
@@ -608,7 +608,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 GetChargeTrigger(name, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 freq = GetFrequency(attackSpeed, dilated, name, true)
 
                 data.rightTriggerType = 'Machine'
@@ -617,11 +617,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
     elseif (name == 'w_handgun_militech_ticon') then
         if (triggerType == 'Burst') then
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 35, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -636,11 +636,11 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 afterShootTimes = 0
             end
         elseif (triggerType == 'Charge') then
-            if (state ~= 8) then
+            if (state ~= 'Shoot') then
                 CalcFixedTimeIndex(name, 0, dilated, true)
             end
 
-            if (state == 1) then
+            if (state == 'Charging') then
                 data.rightTriggerType = 'Galloping'
 
                 if (dilated) then
@@ -654,7 +654,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 GetChargeTrigger(name, dilated, true)
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(3)(1)'
 
@@ -663,7 +663,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 data.rightForceTrigger = '(3)(8)('.. freq ..')'
             end
 
-            if (state == 8) then
+            if (state == 'Shoot') then
                 local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 20, dilated, false)
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
@@ -684,7 +684,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(2)(4)(6)(6)'
 
-        if (state == 8) then
+        if (state == 'Shoot') then
             freq = GetFrequency(3, dilated, name)
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
