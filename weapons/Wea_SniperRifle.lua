@@ -205,9 +205,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
                 if (afterShootTimes < shootTriggerActiveForTimes) then
                     if (dilated) then
-                        freq = GetFrequency(11, dilated, name)
+                        freq = GetFrequency(11, dilated, name, false, 'Burst')
                     else
-                        freq = GetFrequency(10, dilated, name)
+                        freq = GetFrequency(10, dilated, name, false, 'Burst')
                     end
 
                     data.leftTriggerType = 'Machine'

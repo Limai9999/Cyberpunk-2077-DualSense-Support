@@ -5,7 +5,7 @@ local currentFreq = 0
 
 local getIndex = 0
 
-local function GetFrequency(freq, dilation, executorString, useGradualTimeDilation)
+local function GetFrequency(freq, dilation, executorString, useGradualTimeDilation, reason)
     if (savedExecutorString ~= executorString or dilation ~= savedDilation) then
         savedExecutorString = executorString
         currentFreq = freq
@@ -15,8 +15,23 @@ local function GetFrequency(freq, dilation, executorString, useGradualTimeDilati
 
     local newFreq = freq
 
+    local isDilatedBySandevistan = Game.GetTimeSystem():IsTimeDilationActive('sandevistan')
+
     if (dilation) then
-        newFreq = math.floor(freq * TimeDilation)
+        if (isDilatedBySandevistan) then useGradualTimeDilation = false end
+
+        if (isDilatedBySandevistan) then
+            if (reason == 'Burst') then
+                newFreq = math.floor(freq * (1 + TimeDilation))
+            elseif (reason == 'Charge') then
+                -- No time dilation
+                return freq
+            else
+                newFreq = math.floor(freq * TimeDilation)
+            end
+        else
+            newFreq = math.floor(freq * TimeDilation)
+        end
 
         local dilationX20 = CalcTimeIndex(TimeDilation * 20)
 
@@ -45,8 +60,8 @@ local function GetFrequency(freq, dilation, executorString, useGradualTimeDilati
     return newFreq
 end
 
-local function FormatFrequency(freq, dilation, executorString, useGradualTimeDilation)
-    local frequency = GetFrequency(freq, dilation, executorString, useGradualTimeDilation)
+local function FormatFrequency(freq, dilation, executorString, useGradualTimeDilation, reason)
+    local frequency = GetFrequency(freq, dilation, executorString, useGradualTimeDilation, reason)
     frequency = math.floor(frequency)
 
     if (frequency < 1) then frequency = 1 end

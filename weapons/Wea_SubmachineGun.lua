@@ -244,7 +244,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
 
                     if (afterShootTimes < shootTriggerActiveForTimes) then
-                        freq = GetFrequency(attackSpeed * 4, dilated, name)
+                        freq = GetFrequency(attackSpeed * 4, dilated, name, false, 'Burst')
 
                         data.rightTriggerType = 'Machine'
                         data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
