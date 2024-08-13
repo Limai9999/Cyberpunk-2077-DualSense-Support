@@ -3,8 +3,8 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
 
     local canPerformRelicAttack = CanPerformRelicAttack(usingWeapon)
 
-    local stamina = GetState('Stamina')
-    local state = GetState('MeleeWeapon')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     data.leftTriggerType = 'Bow'
     data.leftForceTrigger = '(0)(1)(4)(5)'

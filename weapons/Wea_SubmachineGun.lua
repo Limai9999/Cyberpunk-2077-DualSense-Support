@@ -145,9 +145,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         if (triggerType == 'Burst') then
             if (state == 'Shoot') then
                 if (isRaiju) then
-                    freq = GetFrequency(attackSpeed * 1.8, dilated, name)
+                    freq = GetFrequency(attackSpeed * 1.8, dilated, name, false, 'Burst')
                 else
-                    freq = GetFrequency(attackSpeed * 1.3, dilated, name)
+                    freq = GetFrequency(attackSpeed * 1.3, dilated, name, false, 'Burst')
                 end
 
                 data.rightTriggerType = 'Machine'

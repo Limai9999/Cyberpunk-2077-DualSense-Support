@@ -1,8 +1,8 @@
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config, isPerfectCharged, usingWeapon, itemName)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Hammer')
 
-    local state = GetState('MeleeWeapon')
-    local stamina = GetState('Stamina')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
 
     if (name == 'w_melee_hammer') then
         local isSasquatchHammer = FindInString(itemName, 'boss_hammer')

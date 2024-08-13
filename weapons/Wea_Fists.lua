@@ -1,8 +1,8 @@
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-RPG-Items-Types-Wea_Fists')
 
-    local stamina = GetState('Stamina')
-    local state = GetState('MeleeWeapon')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     data.leftTriggerType = 'Bow'
     data.leftForceTrigger = '(0)(1)(3)(2)'

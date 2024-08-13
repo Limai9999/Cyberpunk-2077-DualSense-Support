@@ -3,8 +3,8 @@ local afterShootTimes = 0
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-Items-Item Type-Wea_Sword')
 
-    local stamina = GetState('Stamina')
-    local state = GetState('MeleeWeapon')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     if (name == 'w_melee_katana') then
         data.leftTriggerType = 'Bow'

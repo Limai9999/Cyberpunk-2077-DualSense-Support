@@ -7,7 +7,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     data.leftForceTrigger = '(0)(2)(2)(1)'
     data.rightTriggerType = 'Choppy'
 
-    local state = GetState('MeleeWeapon')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     if (name == 'w_melee_knife') then
         if (state ~= 'ThrowAttack') then

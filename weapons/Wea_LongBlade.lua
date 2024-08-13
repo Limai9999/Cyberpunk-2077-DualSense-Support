@@ -1,7 +1,7 @@
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-Weapons-Melee-DisplayName-Preset_Machete')
 
-    local stamina = GetState('Stamina')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
 
     data.leftTriggerType = 'Bow'
     data.leftForceTrigger = '(0)(1)(4)(4)'

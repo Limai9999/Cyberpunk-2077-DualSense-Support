@@ -6,8 +6,8 @@ local timesAfterThrow = 0
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-Items-Item Type-Wea_Axe')
 
-    local stamina = GetState('Stamina')
-    local state = GetState('MeleeWeapon')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     data.leftTriggerType = 'Resistance'
     data.leftForceTrigger = '(0)(2)'

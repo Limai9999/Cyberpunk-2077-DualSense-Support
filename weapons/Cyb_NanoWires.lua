@@ -9,8 +9,8 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(1)(3)(4)(5)'
 
-    local stamina = GetState('Stamina')
-    local state = GetState('MeleeWeapon');
+    local stamina = GetState('Stamina', 'gamePSMStamina')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon');
 
     if (state ~= 'Hold' and state ~= 'Deflect' and state ~= 'BlockAttack' and state ~= 'ChargedHold' and state ~= 'StrongAttack') then GetChargeTrigger(name, false, true) end
 

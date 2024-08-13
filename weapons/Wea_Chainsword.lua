@@ -3,7 +3,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
 
     if (not name) then return data end
 
-    local state = GetState('MeleeWeapon')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     data.leftTriggerType = 'Resistance'
     data.leftForceTrigger = '(1)(1)'

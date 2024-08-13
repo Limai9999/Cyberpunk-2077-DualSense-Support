@@ -1,7 +1,7 @@
 local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGlitched, attackSpeed, config)
     data.type = GetText('Gameplay-Items-Item Type-Wea_Machete')
 
-    local state = GetState('MeleeWeapon')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     data.leftTriggerType = 'Bow'
     data.leftForceTrigger = '(0)(2)(4)(2)'

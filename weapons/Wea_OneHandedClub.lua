@@ -11,7 +11,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
     data.rightTriggerType = 'Bow'
     data.rightForceTrigger = '(0)(1)(8)(5)'
 
-    local stamina = GetState('Stamina')
+    local stamina = GetState('Stamina', 'gamePSMStamina')
 
     if (stamina == 'Exhausted') then
         data.leftForceTrigger = '(1)(4)(8)(8)'
@@ -23,7 +23,7 @@ local function Weapon(data, name, isAiming, _, dilated, triggerType, isWeaponGli
         if (stamina == 'Exhausted') then data.rightTriggerType = 'Hardest' end
     end
 
-    local state = GetState('MeleeWeapon')
+    local state = GetState('MeleeWeapon', 'gamePSMMeleeWeapon')
 
     local freq = 0
 
