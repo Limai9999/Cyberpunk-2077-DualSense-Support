@@ -2,11 +2,16 @@ local savedZone = ''
 local startedHandlingChangeDate = 0
 
 local function HandleZoneChange()
-    -- ! TODO: HELP: SOS: I'm unable to find a way to check if player is in SAFE zone. Now: Safe = Public
-
     local currentZone = GetState('Zones', 'gamePSMZones')
 
     if (currentZone == 'Any' or currentZone == 'Default') then return false end
+
+    if (currentZone == 'Public') then
+        local securityAreaType = FromVariant(Game.GetBlackboardSystem():GetLocalInstanced(GetPlayer():GetEntityID(), Game.GetAllBlackboardDefs().PlayerStateMachine):GetVariant(Game.GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData)).securityAreaType
+        local areaTypeString = EnumValueToString('ESecurityAreaType', EnumInt(securityAreaType))
+
+        if (areaTypeString == 'SAFE') then currentZone = 'Safe' end
+    end
 
     if (currentZone == savedZone) then
         local nowTime = os.time()
@@ -23,6 +28,9 @@ local function HandleZoneChange()
         return '('..r..')'..'('..g..')'..'('..b..')'
     elseif (currentZone == 'Restricted' or currentZone == 'Dangerous') then
         local r, g, b = PulseLED('ZoneRestricted', 10, 255, 10, 5, 20, 15)
+        return '('..r..')'..'('..g..')'..'('..b..')'
+    elseif (currentZone == 'Safe') then
+        local r, g, b = PulseLED('ZoneSafe', 10, 50, 255, 30, 20, 15)
         return '('..r..')'..'('..g..')'..'('..b..')'
     end
 end
