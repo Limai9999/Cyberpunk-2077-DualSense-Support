@@ -16,7 +16,7 @@ local function StartObservers()
 
         local isBraindance = state.isBraindance
 
-        if (isBraindance) then IsBD = true end
+        IsBD = isBraindance
 
         if (isMenu) then
             IsBD = false
