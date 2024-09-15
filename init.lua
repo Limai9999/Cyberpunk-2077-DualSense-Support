@@ -510,7 +510,7 @@ registerForEvent('onUpdate', function(delta)
         local vehicleComponent = vehicle.vehicleComponent
         local hasFlatTire = vehicleComponent.HasFlatTire(vehicle:GetEntityID())
 
-        print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType, GearboxValue, hasFlatTire)
+        -- print(isOnRoad, isOnPavement, isEngineTurnedOn, isVehicleTurnedOn, isDestroyed, vehicleType, GearboxValue, hasFlatTire)
 
         local vehType = config.vehicleSettings[vehicleType] or config.vehicleSettings['default']
         local vehData = nil;
