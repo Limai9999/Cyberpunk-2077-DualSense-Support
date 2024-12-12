@@ -84,17 +84,17 @@ local function SetupNativeSettings()
     -- Extra Settings
     NS.addSubcategory(extraSettings, GetText('Mod-DualSense-NS-Subcategory-ExtraSettings'))
 
-    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-TouchpadLED'), GetText('Mod-DualSense-NS-TouchpadLED-Descr'), config.touchpadLED, true, function(state)
+    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-TouchpadLED'), GetText('Mod-DualSense-NS-TouchpadLED-Descr'), config.touchpadLED, false, function(state)
         config.touchpadLED = state
         ManageSettings.saveFile(config)
     end)
 
-    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-MicLED'), GetText('Mod-DualSense-NS-MicLED-Descr'), config.micLED, true, function(state)
+    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-MicLED'), GetText('Mod-DualSense-NS-MicLED-Descr'), config.micLED, false, function(state)
         config.micLED = state
         ManageSettings.saveFile(config)
     end)
 
-    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-PlayerLED'), GetText('Mod-DualSense-NS-PlayerLED-Descr'), config.playerLED, true, function(state)
+    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-PlayerLED'), GetText('Mod-DualSense-NS-PlayerLED-Descr'), config.playerLED, false, function(state)
         config.playerLED = state
         ManageSettings.saveFile(config)
     end)
