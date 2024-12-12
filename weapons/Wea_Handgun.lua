@@ -395,11 +395,24 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             GetChargeTrigger(name, dilated, true)
         end
 
-        if (state == 'Shoot') then
-            data.leftTriggerType = 'Resistance'
-            data.leftForceTrigger = '(2)(5)'
+        if (state ~= 'Shoot') then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
 
-            data.rightForceTrigger = '(0)(5)(6)(8)'
+        if (state == 'Shoot') then
+            local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 30, dilated, false)
+
+            if (afterShootTimes < shootTriggerActiveForTimes) then
+                data.leftTriggerType = 'Resistance'
+                data.leftForceTrigger = '(2)(5)'
+
+                data.rightTriggerType = 'Resistance'
+                data.rightForceTrigger = '(1)(8)'
+            end
+
+            afterShootTimes = afterShootTimes + 1
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_handgun_arasaka_kenshin') then
         data.rightTriggerType = 'Bow'
@@ -557,22 +570,29 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         end
 
         if (state == 'Shoot') then
-            if (isKongou) then
-                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 12, false, false)
+            if (triggerType == 'FullAuto') then
+                freq = GetFrequency(2, dilated, name)
 
-                data.rightTriggerType = 'Bow'
-                data.rightForceTrigger = '(2)(5)(4)(3)'
-
-                if (afterShootTimes < shootTriggerActiveForTimes) then
-                    data.leftTriggerType = 'Resistance'
-                    data.leftForceTrigger = '(7)(1)'
-                end
-
-                afterShootTimes = afterShootTimes + 1
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(4)(4)('.. freq ..')(0)'
             else
-                data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(5)(1)'
-                data.rightForceTrigger = '(2)(5)(6)(6)'
+                if (isKongou) then
+                    local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 12, false, false)
+
+                    data.rightTriggerType = 'Bow'
+                    data.rightForceTrigger = '(2)(5)(4)(3)'
+
+                    if (afterShootTimes < shootTriggerActiveForTimes) then
+                        data.leftTriggerType = 'Resistance'
+                        data.leftForceTrigger = '(7)(1)'
+                    end
+
+                    afterShootTimes = afterShootTimes + 1
+                else
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(5)(1)'
+                    data.rightForceTrigger = '(2)(5)(6)(6)'
+                end
             end
         else
             afterShootTimes = 0

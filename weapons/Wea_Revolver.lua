@@ -81,7 +81,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(1)(7)(3)(4)'
         end
 
-        if (isAiming) then
+        if (triggerType == 'FullAuto' or isAiming) then
             data.leftTriggerType = 'Bow'
             data.leftForceTrigger = '(0)(3)(2)(2)'
 
@@ -96,8 +96,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             if (state == 'Shoot') then
                 freq = GetFrequency(attackSpeed, dilated, name, true)
 
-                data.leftTriggerType = 'Machine'
-                data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
+                if (isAiming) then
+                    data.leftTriggerType = 'Machine'
+                    data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
+                end
                 data.rightTriggerType = 'Machine'
                 data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
             end

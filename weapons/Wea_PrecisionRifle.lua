@@ -50,6 +50,8 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
         -- * Modded Weapon: Game.AddToInventory("Items.Achilles_Noxious")	https://www.nexusmods.com/cyberpunk2077/mods/13628?tab=description
         local isAchillesNoxious = FindInString(itemName, 'Achilles_Noxious')
+        -- * Modded Weapon: Game.AddToInventory("Items.Achilles_Blackwall")   https://www.nexusmods.com/cyberpunk2077/mods/15838
+        local isAchillesBlackwall = FindInString(itemName, 'Achilles_Blackwall')
 
         local isWidowMaker = FindInString(itemName, 'Nash')
 
@@ -100,6 +102,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                         data.rightTriggerType = 'Machine'
                         data.rightForceTrigger = '(3)(9)(5)(5)('.. freq ..')(0)'
 
+                        if (isAchillesBlackwall) then
+                            data.rightForceTrigger = '(3)(9)(6)(6)('.. freq ..')(0)'
+                        end
+
                         isPerfectChargedTimes = isPerfectChargedTimes + 1
                     end
                 end
@@ -107,7 +113,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 GetChargeTrigger(name, dilated, true)
             end
 
-            if (isWidowMaker or isAchillesNoxious) then
+            if (isWidowMaker or isAchillesNoxious or isAchillesBlackwall) then
                 if (state == 'Shoot') then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8widow_maker', 25, dilated, false)
 

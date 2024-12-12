@@ -1,5 +1,5 @@
 local function CheckDataFromDSX()
-    local file = io.open('config/dataFromDSX.json', 'r')
+    local file = io.open('config/DSXData.json', 'r')
     if not file then return false end
 
     local data = file:read('*a')

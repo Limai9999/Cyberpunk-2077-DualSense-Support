@@ -31,6 +31,9 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         -- * Modded Weapon: Game.AddToInventory("Items.SJ_PlasmaShotgun")	https://www.nexusmods.com/cyberpunk2077/mods/15889
         local isPlasmaShotgun = FindInString(itemName, 'PlasmaShotgun')
 
+        -- * Modded Weapon: Game.AddToInventory("Items.ZMod_Carnage", 1)   https://www.nexusmods.com/cyberpunk2077/mods/15281
+        local isZMod = FindInString(itemName, 'ZMod_Carnage')
+
         data.skipDefaultState = false
 
         data.leftTriggerType = 'Resistance'
@@ -53,7 +56,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             data.rightForceTrigger = '(0)(4)(6)(6)'
         end
 
-        if (isGuts) then
+        if (isGuts or isZMod) then
             data.leftTriggerType = 'Resistance'
             data.leftForceTrigger = '(1)(2)'
         end
@@ -94,7 +97,7 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                         data.rightForceTrigger = '(0)(7)(6)(6)'
                     end
 
-                    if (isGuts) then
+                    if (isGuts or isZMod) then
                         data.leftTriggerType = 'Resistance'
                         data.leftForceTrigger = '(1)(8)'
                     end
@@ -155,32 +158,55 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
         -- data.canUseWeaponReloadEffect = true
         -- data.canUseNoAmmoWeaponEffect = false
     elseif (name == 'w_rifle_precision__techtronika_pozhar') then
+        -- * Modded Weapon: Game.AddToInventory("Items.Items.ZMod_Grenade_Launcher", 1)   https://www.nexusmods.com/cyberpunk2077/mods/15281
+        local isZModGrenadeLauncher = FindInString(itemName, 'ZMod_Grenade_Launcher')
+
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(2)(6)(6)'
 
-        if (state == 'Shoot') then
-            if (dilated) then
-                freq = GetFrequency(attackSpeed + 1, dilated, name, true)
-            else
-                freq = GetFrequency(attackSpeed, dilated, name, true)
-            end
+        if (state ~= 'Shoot') then
+            CalcFixedTimeIndex(name, 0, dilated, true)
+        end
 
-            if (resistanceEnabled) then
+        if (state == 'Shoot') then
+            if (triggerType == 'SemiAuto' and isZModGrenadeLauncher) then
                 data.leftTriggerType = 'Resistance'
                 data.leftForceTrigger = '(4)(1)'
+
+                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'shoot', 20, dilated, false)
+
+                if (afterShootTimes < shootTriggerActiveForTimes) then
+                    data.rightTriggerType = 'Resistance'
+                    data.rightForceTrigger = '(1)(5)'
+                end
+
+                afterShootTimes = afterShootTimes + 1
             else
-                data.leftTriggerType = 'Normal'
+                if (dilated) then
+                    freq = GetFrequency(attackSpeed + 1, dilated, name, true)
+                else
+                    freq = GetFrequency(attackSpeed, dilated, name, true)
+                end
+    
+                if (resistanceEnabled) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(4)(1)'
+                else
+                    data.leftTriggerType = 'Normal'
+                end
+    
+                resistanceTimes = resistanceTimes + 1
+    
+                if (dilated and resistanceTimes > maxResistanceTimes * 10 * TimeDilation or not dilated and resistanceTimes > maxResistanceTimes) then
+                    resistanceEnabled = not resistanceEnabled
+                    resistanceTimes = 0
+                end
+    
+                data.rightTriggerType = 'Machine'
+                data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
             end
-
-            resistanceTimes = resistanceTimes + 1
-
-            if (dilated and resistanceTimes > maxResistanceTimes * 10 * TimeDilation or not dilated and resistanceTimes > maxResistanceTimes) then
-                resistanceEnabled = not resistanceEnabled
-                resistanceTimes = 0
-            end
-
-            data.rightTriggerType = 'Machine'
-            data.rightForceTrigger = '(4)(9)(5)(5)('.. freq ..')(0)'
+        else
+            afterShootTimes = 0
         end
     elseif (name == 'w_shotgun_constitutional_tactician') then
         data.leftTriggerType = 'Resistance'

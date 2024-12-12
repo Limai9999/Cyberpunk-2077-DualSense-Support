@@ -257,8 +257,15 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
             end
         end
     elseif (name == 'w_smg_midnight_borg') then
+        -- * Modded Weapon: Game.AddToInventory("Items.PS90",1)   https://www.nexusmods.com/cyberpunk2077/mods/17553
+        local isPS90 = FindInString(itemName, 'PS90')
+
         data.rightTriggerType = 'Bow'
         data.rightForceTrigger = '(1)(4)(6)(6)'
+
+        if (isPS90) then
+            data.rightForceTrigger = '(1)(4)(5)(5)'
+        end
 
         if (state == 'Shoot') then
             freq = GetFrequency(attackSpeed, dilated, name)
@@ -268,6 +275,10 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
             data.rightTriggerType = 'Machine'
             data.rightForceTrigger = '(4)(9)(7)(7)('.. freq ..')(0)'
+
+            if (isPS90) then
+                data.rightForceTrigger = '(4)(9)(5)(6)('.. freq ..')(0)'
+            end
         end
     else
         freq = GetFrequency(15, dilated, name)

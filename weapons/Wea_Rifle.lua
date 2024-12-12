@@ -174,16 +174,16 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
 
                 if (state == 'Shoot') then
                     local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
-    
+
                     if (afterShootTimes < shootTriggerActiveForTimes) then
                         freq = GetFrequency(attackSpeed * 2.5, dilated, name)
-    
+
                         data.leftTriggerType = 'Machine'
                         data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
                         data.rightTriggerType = 'Machine'
                         data.rightForceTrigger = '(1)(9)(6)(6)('.. freq ..')(0)'
                     end
-    
+
                     afterShootTimes = afterShootTimes + 1
                 else
                     afterShootTimes = 0
@@ -210,35 +210,75 @@ local function Weapon(data, name, isAiming, state, dilated, triggerType, isWeapo
                 end
             end
         else
-            -- Original
+            if (triggerType == 'FullAuto') then
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(0)(3)(5)(5)'
 
-            data.rightTriggerType = 'Bow'
-            data.rightForceTrigger = '(0)(3)(5)(5)'
+                if (isAiming) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(5)(3)'
+                end
 
-            if (isAiming) then
-                data.leftTriggerType = 'Resistance'
-                data.leftForceTrigger = '(5)(3)'
-            end
+                local canUseShootTrigger = true
 
-            if (state ~= 'Shoot') then
-                CalcFixedTimeIndex(name, 0, dilated, true)
-            end
+                local usedFireTriggerTimesStart = CalcTimeIndex(28)
+                local usedFireTriggerTimesEnd = CalcTimeIndex(48)
 
-            if (state == 'Shoot') then
-                local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
+                if (afterShootTimes >= usedFireTriggerTimesStart and afterShootTimes <= usedFireTriggerTimesEnd) then
+                    canUseShootTrigger = false
+                end
 
-                if (afterShootTimes < shootTriggerActiveForTimes) then
-                    freq = GetFrequency(attackSpeed * 2.5, dilated, name)
+                if (afterShootTimes > usedFireTriggerTimesEnd) then
+                    afterShootTimes = 0
+                end
+
+                if (state == 'Shoot') then
+                    afterShootTimes = afterShootTimes + 1
+                else
+                    afterShootTimes = 0
+                end
+
+                print(afterShootTimes)
+
+                if (state == 'Shoot' and canUseShootTrigger) then
+                    freq = GetFrequency(attackSpeed * 2, dilated, name)
 
                     data.leftTriggerType = 'Machine'
                     data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
                     data.rightTriggerType = 'Machine'
                     data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
                 end
-
-                afterShootTimes = afterShootTimes + 1
             else
-                afterShootTimes = 0
+                -- Original
+
+                data.rightTriggerType = 'Bow'
+                data.rightForceTrigger = '(0)(3)(5)(5)'
+
+                if (isAiming) then
+                    data.leftTriggerType = 'Resistance'
+                    data.leftForceTrigger = '(5)(3)'
+                end
+
+                if (state ~= 'Shoot') then
+                    CalcFixedTimeIndex(name, 0, dilated, true)
+                end
+
+                if (state == 'Shoot') then
+                    local shootTriggerActiveForTimes = CalcFixedTimeIndex(name..'8', 25, dilated, false)
+
+                    if (afterShootTimes < shootTriggerActiveForTimes) then
+                        freq = GetFrequency(attackSpeed * 2.5, dilated, name)
+
+                        data.leftTriggerType = 'Machine'
+                        data.leftForceTrigger = '(1)(9)(2)(2)('.. freq ..')(0)'
+                        data.rightTriggerType = 'Machine'
+                        data.rightForceTrigger = '(1)(9)(7)(7)('.. freq ..')(0)'
+                    end
+
+                    afterShootTimes = afterShootTimes + 1
+                else
+                    afterShootTimes = 0
+                end
             end
         end
     elseif (name == 'w_rifle_assault_nokota_sidewinder') then
