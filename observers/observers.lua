@@ -169,7 +169,10 @@ local function StartObservers()
     end)
 
     GameSession.OnStart(function ()
+        local config = ManageSettings.openFile()
+
         IsLoading = false
+        SetBatteryLevel(BatteryLevel, IsCharging, IsControllerConnected and config.showBatteryWidget)
     end)
 end
 

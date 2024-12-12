@@ -1,5 +1,6 @@
 local function ShowBatteryLevel()
     if (IsOldDSXLaunched) then return end
+    if (true) then return end
 
     if (BatteryLevel == 0) then
         Warn(GetText('Mod-DualSense-Battery-0') .. ' ' .. GetText('Mod-DualSense-NS-BatteryLevel') .. ': ' .. BatteryLevel .. '%', false, true)

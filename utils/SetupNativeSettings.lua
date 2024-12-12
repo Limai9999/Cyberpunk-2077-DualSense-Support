@@ -99,7 +99,6 @@ local function SetupNativeSettings()
         ManageSettings.saveFile(config)
     end)
 
-
     local playerLEDList = {}
 
     for _, v in pairs(PlayerLEDModeList) do
@@ -126,6 +125,11 @@ local function SetupNativeSettings()
 
     NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-Notifications'), GetText('Mod-DualSense-NS-Notifications-Description'), config.showNotifications, true, function(state)
         config.showNotifications = state
+        ManageSettings.saveFile(config)
+    end)
+
+    NS.addSwitch(extraSettings, GetText('Mod-DualSense-NS-BatteryWidget'), GetText('Mod-DualSense-NS-BatteryWidget-Description'), config.showBatteryWidget, true, function(state)
+        config.showBatteryWidget = state
         ManageSettings.saveFile(config)
     end)
 

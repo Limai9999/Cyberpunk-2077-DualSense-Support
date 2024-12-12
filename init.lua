@@ -111,6 +111,7 @@ IsControllerConnected = false
 IsDSXLaunched = false
 IsOldDSXLaunched = false
 BatteryLevel = 0
+IsCharging = false
 UDPClientInstalled = false
 UDPDataExists = false
 
@@ -211,7 +212,7 @@ registerForEvent('onInit', function()
         local nowTime = os.time()
         local saveTime = dsxData.saveDate
 
-        if (nowTime > saveTime + 20) then
+        if (nowTime > saveTime + 7) then
             IsControllerConnected = false
             IsDSXLaunched = false
             IsOldDSXLaunched = false
@@ -223,6 +224,8 @@ registerForEvent('onInit', function()
             IsDSXLaunched = false
             IsOldDSXLaunched = false
             BatteryLevel = 0
+
+            SetBatteryLevel(0, false, false)
         else
             if dsxData.isDSXLaunched ~= IsDSXLaunched or dsxData.isOldDSX ~= IsOldDSXLaunched then
                 local statusString = dsxData.isDSXLaunched and GetText('Mod-DualSense-IsLaunched') or GetText('Mod-DualSense-IsDisabled')
@@ -231,20 +234,23 @@ registerForEvent('onInit', function()
                 -- Warn('DualSenseX ' .. statusString .. oldCheckString)
 
                 Cron.After(5, function()
-                    if (dsxData.BatteryLevel ~= BatteryLevel and dsxData.isDSXLaunched and dsxData.isControllerConnected) then
-                        BatteryLevel = dsxData.BatteryLevel
-                        ShowBatteryLevel()
+                    if (dsxData.batteryLevel ~= BatteryLevel and dsxData.isDSXLaunched and dsxData.isControllerConnected) then
+                        BatteryLevel = dsxData.batteryLevel
+                        -- ShowBatteryLevel()
                     end
                 end, {})
-            elseif (dsxData.BatteryLevel ~= BatteryLevel and dsxData.isDSXLaunched and dsxData.isControllerConnected) then
-                BatteryLevel = dsxData.BatteryLevel
-                ShowBatteryLevel()
+            elseif (dsxData.batteryLevel ~= BatteryLevel and dsxData.isDSXLaunched and dsxData.isControllerConnected) then
+                BatteryLevel = dsxData.batteryLevel
+                -- ShowBatteryLevel()
             end
 
             IsControllerConnected = dsxData.isControllerConnected
             IsDSXLaunched = dsxData.isDSXLaunched
             IsOldDSXLaunched = dsxData.isOldDSX
-            BatteryLevel = dsxData.BatteryLevel
+            BatteryLevel = dsxData.batteryLevel
+            IsCharging = dsxData.isCharging
+
+            SetBatteryLevel(BatteryLevel, IsCharging, IsControllerConnected and config.showBatteryWidget)
 
             -- if (IsOldDSXLaunched) then
             --     config.UDPautostart = false
@@ -253,10 +259,10 @@ registerForEvent('onInit', function()
         end
     end, {})
 
-    Cron.Every(60 * 30, function ()
-        if (not IsDSXLaunched or not IsControllerConnected) then return end
-        ShowBatteryLevel()
-    end, {})
+    -- Cron.Every(60 * 30, function ()
+    --     if (not IsDSXLaunched or not IsControllerConnected) then return end
+    --     -- ShowBatteryLevel()
+    -- end, {})
 
     StartObservers()
 end)

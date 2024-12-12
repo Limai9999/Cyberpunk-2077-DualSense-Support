@@ -38,6 +38,7 @@ local defaultConfig = {
     meleeBulletBlockEffectStrength = 3,
     meleeEntityHitTrigger = true,
     gunsSmartLockOnTrigger = true,
+    showBatteryWidget = true,
 }
 
 local filePath = 'config/settings.json'
